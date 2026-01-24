@@ -35,7 +35,7 @@
                         <div class="relative w-full max-w-md rounded-[2rem] flex flex-col items-center text-center">
                             <!-- logo  -->
                             <div class="w-full mb-6 flex items-center justify-center">
-                                <img src="/images/logo.png" alt="LogLingo Logo">
+                                <img src="{{ asset('/images/logo.png') }}" alt="LogLingo Logo">
                             </div>
                             <!--  description -->
                             <div class="space-y-4">
