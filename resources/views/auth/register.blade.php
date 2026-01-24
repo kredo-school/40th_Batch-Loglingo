@@ -32,10 +32,10 @@
 
                     <!--  left -->
                     <div class="w-full md:w-1/2 flex justify-center">
-                        <div class="relative w-full max-w-md p-8 rounded-[2rem] flex flex-col items-center text-center">
+                        <div class="relative w-full max-w-md rounded-[2rem] flex flex-col items-center text-center">
                             <!-- logo  -->
                             <div class="w-full mb-6 flex items-center justify-center">
-                                <img src="" alt="LogLingo Logo">
+                                <img src="/images/logo.png" alt="LogLingo Logo">
                             </div>
                             <!--  description -->
                             <div class="space-y-4">
