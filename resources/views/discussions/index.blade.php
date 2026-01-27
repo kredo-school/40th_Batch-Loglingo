@@ -6,11 +6,12 @@
             <div class="w-full md:w-2/3">
 
                 <div class="flex justify-between items-end mb-4">
-                    <h2 class="text-2xl text-gray-800 font-bold">Latest posts from following</h2>
+                    <h2 class="text-2xl text-gray-800 font-bold">Latest Discussions</h2>
                     <a href="#" class="text-sm text-black hover:underline">see more</a> {{--★need to create a link to show more posts --}}
                 </div>
 
-                <!-- Post example-->
+                <!-- Discussion example-->
+                 replace this with a discussion card component
                 <x-post-card />
 
             </div>
@@ -19,9 +20,11 @@
             <div class="w-full md:w-1/3 space-y-6">
 
                 <!-- user profile on the right side using blade -->
+                 replace this with teacher-profile component
                 <x-sidebar-profile />
 
                 <!-- suggested users using blade -->
+                 repolace this with teacher list component
                 <x-suggested-users />
 
             </div>
