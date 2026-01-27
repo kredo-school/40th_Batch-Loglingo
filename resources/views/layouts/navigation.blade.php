@@ -1,21 +1,36 @@
 <nav class="bg-[#B178CC] p-3 shadow-lg rounded-[1rem] mx-4 mt-2">
     <div class="max-w-full mx-auto flex justify-between items-center">
 
-        <div class="flex items-center space-x-2">
-            {{-- ★put logo here --}}
+        <a href="{{ route('dashboard')}}" class="flex items-center space-x-2">
+            <img src="{{ asset('images/Logo.png') }}" alt="LogLingo Logo" class="h-12 w-auto rounded-[0.5rem] me-2">
             <span class="text-white  text-3xl font-mansalva">Log Lingo</span>
-        </div>
+        </a>
 
         <div class="hidden sm:flex space-x-12 text-white font-bold">
-            <a href="#" class="hover:text-gray-800 text-[27px]">Post</a>
-            <a href="#" class="hover:text-gray-800 text-[27px]">Q&A</a>
-            <a href="#" class="hover:text-gray-800 text-[27px]">Search</a>
-            <a href="#" class="hover:text-gray-800 text-[27px]">Discussion</a>
+            {{-- Post --}}
+            <a href="{{ route('posts.index') }}" class="{{ request()->routeIs('posts.index') ? 'text-gray-800' : 'hover:text-gray-800' }} text-[27px]">Post</a>
+
+            {{-- Q&A --}}
+            <a href="{{ route('questions.index') }}"
+                class="{{ request()->routeIs('questions.index') ? 'text-gray-800' : 'hover:text-gray-800' }} text-[27px]">
+                Q&A
+            </a>
+
+            {{-- Search --}}
+            <a href="{{ route('search') }}"
+                class="{{ request()->routeIs('search') ? 'text-gray-800' : 'hover:text-gray-800' }} text-[27px]">
+                Search
+            </a>
+
+            <a href="{{ route('discussions.index') }}"
+                class="{{ request()->routeIs('discussions.index') ? 'text-gray-800' : 'hover:text-gray-800' }} text-[27px]">
+                Discussion
+            </a>
         </div>
 
         <div class="flex items-center space-x-5 text-[30px]">
-            <button class="text-white hover:text-gray-800"><i class="fa-solid fa-house"></i></button>
-            <button class="text-white hover:text-gray-800"><i class="fa-regular fa-bell"></i></button>
+            <a href="{{ route('dashboard')}}" class="text-white hover:text-gray-800"><i class="fa-solid fa-house"></i></a>
+            <a href="{{ route('dashboard')}}" class="text-white hover:text-gray-800"><i class="fa-regular fa-bell"></i></a>
 
             <x-dropdown align="right" width="48">
                 <x-slot name="trigger">

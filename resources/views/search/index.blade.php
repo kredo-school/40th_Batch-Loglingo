@@ -6,10 +6,10 @@
             <div class="w-full md:w-2/3">
 
                 <div class="flex justify-between items-end mb-4">
-                    <h2 class="text-2xl text-gray-800 font-bold">Latest posts from following</h2>
-                    <a href="#" class="text-sm text-black hover:underline">see more</a> {{--★need to create a link to show more posts --}}
+                    <h2 class="text-2xl text-gray-800 font-bold">Latest posts</h2>
                 </div>
 
+                create a filter function here
                 <!-- Post example-->
                 <x-post-card />
 
@@ -29,3 +29,4 @@
         </div>
     </div>
 </x-app-layout>
+
