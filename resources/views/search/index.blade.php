@@ -5,11 +5,16 @@
             <!-- Left side -->
             <div class="w-full md:w-2/3">
 
-                <div class="flex justify-between items-end mb-4">
-                    <h2 class="text-2xl text-gray-800 font-bold">Latest posts</h2>
+                <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 mb-3">
+                    <div class="flex justify-between items-end m-4">
+                        <h2 class="text-[24px] font-bold">Latest posts</h2>
+                        <a href="{{ route('posts.index') }}" class="text-sm text-black hover:underline">see more</a> {{--★need to adjust the route --}}
+                    </div>
                 </div>
 
-                create a filter function here
+                <!-- Language filter -->
+                <x-language-filter :action="route('search')" /> {{--★need to adjust the route --}}
+
                 <!-- Post example-->
                 <x-post-card />
 
@@ -29,4 +34,3 @@
         </div>
     </div>
 </x-app-layout>
-

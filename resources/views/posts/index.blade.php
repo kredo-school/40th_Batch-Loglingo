@@ -5,20 +5,27 @@
             <!-- Left side -->
             <div class="w-full md:w-2/3">
 
-                <div class="flex justify-between items-end mb-4">
-                    <h2 class="text-2xl text-gray-800 font-bold">More posts</h2>
+                <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 mb-3">
+                    <div class="flex justify-between items-end m-4">
+                        <h2 class="text-[24px] font-bold">More posts from following</h2>
+                        <a href="{{ route('dashboard')}}" class="text-sm text-black hover:underline">see latest</a>
+                    </div>
                 </div>
 
-                <!-- Question example-->
-                 show more posts here
-                 <x-post-card />
+                <!-- Post example-->
+                <x-post-card />
+                <br>
+                <x-post-card />
+                <br>
+                <x-post-card />
+
             </div>
 
             <!-- right side -->
             <div class="w-full md:w-1/3 space-y-6">
 
                 <!-- user profile on the right side using blade -->
-                <x-sidebar-profile /> 
+                <x-sidebar-profile />
 
                 <!-- suggested users using blade -->
                 <x-suggested-users />
