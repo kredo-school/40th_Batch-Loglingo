@@ -19,7 +19,7 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        //
+        return view('questions.add-question');
     }
 
     /**
@@ -27,7 +27,15 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'q_title' => 'required|max:255',
+            'q_content' => 'required',
+            'tag' => 'required',
+            'written_lang' => 'required'
+        ]);
+
+        // save (activate after create tables)
+        // return redirect()->route('questions.index')->with('status', 'Question posted successfully!');
     }
 
     /**
@@ -61,4 +69,5 @@ class QuestionController extends Controller
     {
         //
     }
+    
 }

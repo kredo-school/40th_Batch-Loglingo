@@ -25,6 +25,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('questions', QuestionController::class); // Q&A things
     Route::get('/search', [SearchController::class, 'index'])->name('search');
     Route::resource('discussions', DiscussionController::class);
+
+
 });
 
 require __DIR__.'/auth.php';
