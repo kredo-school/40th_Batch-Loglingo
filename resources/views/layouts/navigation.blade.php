@@ -30,23 +30,23 @@
 
         <div class="flex items-center space-x-5 text-[30px]">
             <a href="{{ route('dashboard')}}" class="text-white hover:text-gray-800"><i class="fa-solid fa-house"></i></a>
-            <a href="{{ route('dashboard')}}" class="text-white hover:text-gray-800"><i class="fa-regular fa-bell"></i></a>
+            <a href="{{ route('dashboard')}}" class="text-white hover:text-gray-800"><i class="fa-regular fa-bell"></i></a> {{--★need to adjust the route --}}
 
             <x-dropdown align="right" width="48">
                 <x-slot name="trigger">
                     <button class="flex items-center transition duration-150 ease-in-out">
                         <div class="w-11 h-11 rounded-full bg-yellow-400 overflow-hidden shadow-sm hover:opacity-80">
-                            <img src="https://via.placeholder.com/150" alt="user" class="w-full h-full object-cover">
+                            <img src="#" alt="user" class="w-full h-full object-cover">
                         </div>
                     </button>
                 </x-slot>
 
                 <x-slot name="content">
-                    @if(Auth::user()->is_admin) {{-- ★need to adjust --}}
+                    {{-- ★need to adjust @if(Auth::user()->is_admin)  --}}
                     <x-dropdown-link :href="route('dashboard')"> {{-- ★need to adjust the route --}}
                         {{ __('Admin') }}
                     </x-dropdown-link>
-                    @endif
+                    {{-- ★need to adjust @endif  --}}
 
                     <x-dropdown-link :href="route('profile.edit')">
                         {{ __('Profile') }}
