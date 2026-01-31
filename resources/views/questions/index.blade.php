@@ -28,7 +28,7 @@
             <div class="w-full md:w-1/3 space-y-6">
 
                 <!-- user profile on the right side using blade -->
-                <x-sidebar-profile />
+                <x-sidebar-profile-for-questions />
 
                 <!-- suggested users using blade -->
                 <x-suggested-users />

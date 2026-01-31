@@ -1,0 +1,123 @@
+<x-app-layout>
+  <div class="py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="w-full md:w-2/3 mx-auto">
+             {{-- left --}}
+             {{-- card header --}}
+                <div class="max-w-full mx-auto mt-5 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+                <div class="bg-white px-5 py-3 border-b border-gray-200 flex items-center justify-center gap-2">
+                    <img src="{{ asset('/images/baby-octopus.png') }}" alt="LogLingo octopus" class="w-20 h-20  object-contain">  
+                    <h1 class="text-4xl text-gray-800 tracking-wide">
+                    Let's ask a question! 
+                    </h1>
+                    <i class="text-5xl fa-regular fa-circle-question"></i>
+                </div>
+
+             {{-- card body--}}
+             <form action="#" method="post" class="space-y-6" enctype="multipart/form-data">   {{-- action Route --}}
+                 @csrf
+
+                  
+                   {{-- title --}}
+                    <div class="px-4"> 
+                        <label for="q_title" class="block text-xl mb-2">Title</label> 
+                        <input type="text" name="q_title" id="q_title" value="{{ old('q_title') }}" required placeholder="What's this about?" class="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition outline-none">
+                        
+                        @error('q_title')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- content --}}
+                    <div class="px-4"> 
+                        <label for="q_content" class="block text-xl mb-2">Content</label> 
+                        <textarea name="q_content" id="q_content" rows="15" 
+                            placeholder="What is your question?"
+                            class="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition outline-none resize-none">{{ old('q_content')}}</textarea>
+                        
+                        @error('q_content')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                  {{-- tag --}}
+                    <div class="px-4">
+                        <label for="tag" class="block text-xl mb-2">Choose a tag</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-tag absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                            <select name="tag" id="tag" 
+                                class="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition outline-none">
+                                    <option value="" hidden>Which language is this question ABOUT?</option> 
+
+                                    {{-- show language using loop etc --}} 
+                                    <option value="1">Japanese</option> 
+                                    <option value="2">English</option> 
+                                    <option value="3">Spanish</option> 
+                                    <option value="4">Chinese</option> 
+                            
+                            {{-- WILL replace "option" above to below --}}
+                                {{-- <option value="" hidden>Which language is this question ABOUT?</option>
+                                @foreach($languages as $language)
+                                    <option value="{{ $language->id }}">
+                                        {{ $language->name }}
+                                    </option>
+                                @endforeach --}}
+
+                            </select> 
+                        </div> 
+
+                        @error('tag')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+                 
+                    {{-- written language --}}
+                    <div class="px-4">
+                        <label for="written_lang" class="block text-xl mb-2">Choose a language</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-pen-clip absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                            <select name="written_lang" id="written_lang" 
+                                class="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition outline-none">
+                                <option value="" hidden>Which language is this question WRITTEN?</option>
+                                {{-- show language using loop etc --}}
+                                <option value="1">Japanese</option>
+                                <option value="2">English</option>
+                                <option value="3">Spanish</option>
+                                <option value="4">Chinese</option>
+                                
+                                {{-- WILL replace "option" above to below --}}
+                                {{-- <option value="" hidden>Which language is this question WRITTEN?</option>
+                                @foreach($languages as $language)
+                                    <option value="{{ $language->id }}">
+                                        {{ $language->name }}
+                                    </option>
+                                @endforeach --}}
+                            </select>  
+                        </div>
+
+                        @error('written_lang')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    
+                    {{-- save --}}
+                    <div class="px-4 pt-6 pb-4 flex justify-end">
+                        <button type="submit" 
+                            class="px-12 py-1 bg-[#298CE9] border border-[#298CE9] text-white font-bold rounded-xl hover:bg-white  hover:border-[#298CE9] hover:text-[#298CE9] transition-all duration-300 ease-in-out active:translate-y-1">
+                            Post
+                        </button>
+                    </div>
+
+                    
+                </form>
+
+
+               
+            </div>
+        </div>
+    </div>
+    
+
+
+</x-app-layout> 
