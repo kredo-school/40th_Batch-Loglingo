@@ -13,14 +13,14 @@
     {{-- content --}}
     <div class="flex-1 flex flex-col">
       <div class="flex justify-between items-start mb-2">
-        <a href="#" class="group">
+        <a href=""" class="group">
           <h3 class="font-bold text-gray-700 group-hover:text-[#B178CC] transition-colors">user name</h3> {{--★$post->user->name --}}
         </a>
         <span class="text-gray-400 text-[13px] underline">01/17/2026</span> {{-- ★$post->date->format('m/d/Y') --}}
       </div>
 
       {{-- tytle&body  --}}
-      <a href="#" class="group block mt-1">
+      <a href="{{ route('posts.show', 1) }}" class="group block mt-1">
         {{-- title --}}
         <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400">
           New release from Starbucks! {{-- ★$post->title --}}
