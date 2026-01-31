@@ -43,7 +43,7 @@
 
                 <x-slot name="content">
                     {{-- ★need to adjust @if(Auth::user()->is_admin)  --}}
-                    <x-dropdown-link :href="route('dashboard')"> {{-- ★need to adjust the route --}}
+                    <x-dropdown-link :href="route('admin.users.index')"> {{-- ★need to adjust the route --}}
                         {{ __('Admin') }}
                     </x-dropdown-link>
                     {{-- ★need to adjust @endif  --}}
