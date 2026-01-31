@@ -21,7 +21,7 @@
       </div>
 
       {{-- tytle&body  --}}
-      <a href="#" class="group block mt-1">
+      <a href="{{ route('questions.show', 1) }}" class="group block mt-1">
         {{-- title --}}
         <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400 pr-24">
           Is "grab" better than "buy" for coffee? {{-- ★$question->title --}}
