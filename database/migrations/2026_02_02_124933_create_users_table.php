@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
+            $table->longtext('avatar')->nullable();
+            $table->string('introduction', 100)->nullable();
+            $table->tinyInteger('role_id')->default(2)->comment('1:admin| 2:user');
+            $table->foreignId('f_lang')->constrained('languages');
+            $table->foreignId('s_lang')->constrained('languages');
             $table->timestamps();
         });
 
