@@ -11,6 +11,6 @@
   </div>
 
   <a href="{{ route('questions.create') }}" class="block w-full border border-gray-400 hover:bg-[#B178CC] hover:text-white text-center font-bold py-4 mt-4 rounded-[1rem] shadow-md transition-transform hover:scale-[1.02] active:scale-95">
-    <span class="text-[22px]"><i class="fa-regular fa-circle-question"></i></i>Add a question </span>
+    <span class="text-[22px]"><i class="fa-regular fa-circle-question"></i></i> Ask a question </span>
   </a>{{--★create a link to Post a new log page--}}
 </div>
