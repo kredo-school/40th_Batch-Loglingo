@@ -17,22 +17,31 @@ class PostController extends Controller
 
         return view('posts.index');
     }
-
+   
+   
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return view('posts.post-log');
     }
+    
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+         $request->validate([
+            'p_title' => 'required|max:255',
+            'event_date' => 'required',
+            'p_content' => 'required',
+            'tag' => 'required'
+        ]);
     }
+     
 
     /**
      * Display the specified resource.
