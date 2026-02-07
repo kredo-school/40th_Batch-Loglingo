@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Question;
 
 class QuestionController extends Controller
 {
@@ -11,7 +12,14 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        return view('questions.index');
+        $questions = Question::latest()->take(5)->get();
+        return view('questions.index', compact('questions'));
+    }
+
+    public function all()
+    {
+        $questions = \App\Models\Question::with(['user', 'language'])->latest()->paginate(20);
+        return view('questions.all', compact('questions'));
     }
 
     /**

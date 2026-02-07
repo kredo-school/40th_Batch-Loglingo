@@ -23,13 +23,21 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // See more
+    Route::get('/posts/all', [PostController::class, 'all'])->name('posts.all');
+    Route::get('/questions/all', [QuestionController::class, 'all'])->name('questions.all');
+    Route::get('/discussions/all', [DiscussionController::class, 'all'])->name('discussions.all');
 
-    Route::resource('posts', PostController::class); // view create edit
-    Route::resource('questions', QuestionController::class); // Q&A things
-    Route::get('/search', [SearchController::class, 'index'])->name('search');
+    // Resource
+    Route::resource('posts', PostController::class);
+    Route::resource('questions', QuestionController::class);
     Route::resource('discussions', DiscussionController::class);
+
+    Route::get('/search', [SearchController::class, 'index'])->name('search');
 });
 
+
+//admin 
 Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/', [AdminController::class, 'indexUsers'])->name('dashboard');
@@ -42,4 +50,3 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
-
