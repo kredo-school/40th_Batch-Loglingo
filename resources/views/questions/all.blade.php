@@ -7,18 +7,20 @@
 
                 <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 mb-3">
                     <div class="flex justify-between items-end m-4">
-                        <h2 class="text-[24px] font-bold">Latest Q&As</h2>
-                        <a href="{{ route('questions.all') }}" class="text-sm text-black hover:underline">see more</a> {{--★need to adjust the route --}}
+                        <h2 class="text-[24px] font-bold">More Q&As</h2>
+                        <a href="{{ route('questions.index') }}" class="text-sm text-black hover:underline">see latest</a>
                     </div>
                 </div>
 
                 <!-- Language filter -->
-                <x-language-filter :action="route('questions.index')" /> {{--★need to adjust the route --}}
+                <x-language-filter :action="route('questions.index')" />
+                
 
                 <!-- Question example-->
                 @foreach($questions as $question)
                 <x-question-card :question="$question" />
                 <div class="mb-4"></div> @endforeach
+
 
             </div>
 
