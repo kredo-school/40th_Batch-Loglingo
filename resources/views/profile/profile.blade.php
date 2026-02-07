@@ -65,7 +65,10 @@
                 </div> <!-- profile end -->
 
                 <!-- show  -->                
-                <x-profile-show-posts />
+                <!-- show post  --> {{-- <x-profile-show-posts /> --}}
+                {{-- <!-- show questions  -->  <x-profile-show-questions /> --}}
+                <!-- show followings  --> <x-profile-show-following />
+                <!-- show followers  -->
 
             </div>
 
