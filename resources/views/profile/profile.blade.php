@@ -12,63 +12,45 @@
                         <x-profile-user-info :user="$user" />
                     @endif
                                                 
-                        <!-- Tab -->
-                            <div class="mt-4 flex w-full gap-x-2 overflow-x-auto lg:overflow-x-visible no-scrollbar">                               
+                    <!-- Tab -->
+                    <x-profile-tabs :user="$user" />
 
-                            {{-- REPLACEMENT for all each tabs -> make route name --}}
-
-                                {{-- <a href="{{ route('profile.posts', $user->id) }}" class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative {{ request()->routeIs('profile.posts') ? 'text-gray-900 font-semibold' : 'text-gray-500 hover:text-gray-900 hover:font-semibold transition-all duration-200' }}">
-                                    posts
-                                    @if(request()->routeIs('profile.posts'))
-                                        <x-profile-show-post :posts="$posts" />
-                                    @endif
-                                </a> --}}
-
-
-                                {{-- NEED TO REPLACE  --}}
-                                <!-- 1. Posts  -->
-                                <a href="#" 
-                                class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative text-gray-900 font-semibold">
-                                    posts
-                                    <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"></div>
-                                </a>
-
-                                <!-- 2. Questions -->
-                                <a href="#" 
-                                class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl text-gray-500 font-semibold hover:text-gray-900 hover:font-semibold transition-all duration-200">
-                                    questions
-                                </a>
-
-                                <!-- 3. Following  -->
-                                <a href="#" 
-                                class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl text-gray-500 font-semibold hover:text-gray-900 hover:font-semibold transition-all duration-200">
-                                    following
-                                </a>
-
-                                <!-- 4. Followers -->
-                                <a href="#" class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl text-gray-500 font-semibold hover:text-gray-900 hover:font-semibold transition-all duration-200">
-                                    followers
-                                </a>
-
-                                <!-- 5. Bookmarks -->
-                                <a href="#" class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl text-gray-500 font-semibold hover:text-gray-900 hover:font-semibold transition-all duration-200">
-                                    bookmarks
-                                </a>
-
-                                <!-- 6. Notifications -->
-                                <a href="#" class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl text-gray-500 font-semibold hover:text-gray-900 hover:font-semibold transition-all duration-200">
-                                    notifications
-                                </a>
-
-                    </div> <!-- headder end -->
 
                 </div> <!-- profile end -->
+                
 
-                <!-- show  -->                
-                <!-- show post  --> {{-- <x-profile-show-posts /> --}}
-                {{-- <!-- show questions  -->  <x-profile-show-questions /> --}}
-                <!-- show followings  --> <x-profile-show-following />
-                <!-- show followers  -->
+
+                {{-- show tab content --}}
+                 <x-profile-show-following />
+
+                {{-- NEED TO REPLACE --}}
+
+                {{-- <div>
+                @if(request()->routeIs('profile.posts'))
+                    <x-profile-show-posts />
+                @elseif(request()->routeIs('profile.questions'))
+                    <x-profile-show-questions />
+                @elseif(request()->routeIs('profile.following'))
+                    <x-profile-show-following />
+                @elseif(request()->routeIs('profile.followers'))
+                    <x-profile-show-followers />
+                @endif
+                </div> --}}
+
+                {{-- NOTE : route for just making tabs work　(empty route) --}}
+                {{-- // Profile tabs
+                Route::get('/profile/{id}/posts', [ProfileController::class, 'posts'])
+                    ->name('profile.posts');
+
+                Route::get('/profile/{id}/questions', [ProfileController::class, 'questions'])
+                    ->name('profile.questions');
+
+                Route::get('/profile/{id}/following', [ProfileController::class, 'following'])
+                    ->name('profile.following');
+
+                Route::get('/profile/{id}/followers', [ProfileController::class, 'followers'])
+                    ->name('profile.followers'); --}}
+
 
             </div>
 
@@ -85,3 +67,8 @@
         </div>
     </div>
 </x-app-layout>
+
+
+
+
+
