@@ -18,9 +18,11 @@ Route::get('/dashboard', [PostController::class, 'index'])
 
 Route::middleware('auth')->group(function () {
     // Profile
+    Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 
     Route::resource('posts', PostController::class); // view create edit
     Route::resource('questions', QuestionController::class); // Q&A things
@@ -40,3 +42,4 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
