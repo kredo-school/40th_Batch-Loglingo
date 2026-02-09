@@ -15,28 +15,11 @@
                     <!-- Tab -->
                     <x-profile-tabs :user="$user" />
 
-
                 </div> <!-- profile end -->
                 
-
-
-                {{-- show tab content --}}
-                <h1 class="text-2xl">posts</h1>
-                <x-profile-show-posts />
-
-                <h1 class="text-2xl">questions</h1>
-                 <x-profile-show-questions  :question="$user->question"/>
-
-                 <h1 class="text-2xl">following</h1>
-                 <x-profile-show-following  :user="$user"/>
-
-                 <h1 class="text-2xl">followers</h1>
-                 <x-profile-show-followers :user="$user" />
-
-                {{-- TODO: REPLACE --}}
-                {{-- <div>
-                @if(request()->routeIs('profile.posts'))
-                    <x-profile-show-posts />
+                <div>
+                @if(request()->routeIs('profile.show'))
+                    <x-profile-show-posts :posts="$posts" />
                 @elseif(request()->routeIs('profile.questions'))
                     <x-profile-show-questions />
                 @elseif(request()->routeIs('profile.following'))
@@ -44,21 +27,7 @@
                 @elseif(request()->routeIs('profile.followers'))
                     <x-profile-show-followers />
                 @endif
-                </div> --}}
-
-                {{-- NOTE : route for just making tabs work　(empty route) --}}
-                {{-- // Profile tabs
-                Route::get('/profile/{id}/posts', [ProfileController::class, 'posts'])
-                    ->name('profile.posts');
-
-                Route::get('/profile/{id}/questions', [ProfileController::class, 'questions'])
-                    ->name('profile.questions');
-
-                Route::get('/profile/{id}/following', [ProfileController::class, 'following'])
-                    ->name('profile.following');
-
-                Route::get('/profile/{id}/followers', [ProfileController::class, 'followers'])
-                    ->name('profile.followers'); --}}
+                </div>
 
 
             </div>

@@ -12,17 +12,8 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-     /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $user = User::findOrFail($id);
-        return view('profile.profile', compact('user'));
-    }
-
     /**
-     * Display the user's profile form.
+     * Display the user's profile edit form.
      */
      public function edit(Request $request): View
     {
@@ -67,4 +58,42 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+   
+    // tab controllers
+        public function show(User $user)
+        {
+            return view('profile.profile', [
+                'user' => $user,
+                'posts' => $user->posts()->latest()->get(),
+            ]);
+        }
+
+        public function questions(User $user)
+        {
+            return view('profile.profile', [
+                'user' => $user,
+                'questions' => $user->questions()->latest()->get(),
+            ]);
+        }
+
+
+        public function following(User $user)
+        {
+            return view('profile.profile', [
+                'user' => $user,
+                // 'tab' => 'following',
+                'followings' => collect(), // TODO: inplement later
+            ]);
+        }
+
+        public function followers(User $user)
+        {
+            return view('profile.profile', [
+                'user' => $user,
+                // 'tab' => 'followers',
+                'followers' => collect(), // TODO: inplement later
+            ]);
+        }
+    
+
 }
