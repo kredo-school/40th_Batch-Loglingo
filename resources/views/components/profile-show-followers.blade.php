@@ -1,9 +1,8 @@
 @props(['user'])
 
-{{-- TODO: REPLACE user info & forelse --}}
-
+{{-- TODO: REPLACE user info  forelse --}}
 <div class="space-y-4">
-  {{-- @forelse ($followings as $following) --}}
+  {{-- @forelse ($followers as $follower) --}}
     
     <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-3">
       <div class="flex items-center justify-between">
@@ -14,14 +13,14 @@
           <div>
             <p class="text-[16px] font-bold">
             User name A
-            {{-- {{$followingUser->name }} --}}
+            {{-- {{$followerUser->name }} --}}
             </p>
             <p class="text-[15px]"><i class="fa-solid fa-message text-gray-600"></i> <span>Japanese</span>
-            {{-- <span>{{ $followingUser->firstLanguage->name ?? $followingUser->f_lang }}</span> --}}
+            {{-- <span>{{ $followerUser->firstLanguage->name ?? $followerUser->f_lang }}</span> --}}
             </p>
             <p class="text-[15px]"><i class="fa-solid fa-pen text-gray-600"></i> 
             <span>English</span>
-            {{-- <span>{{ $followingUser->studyLanguage->name ?? $followingUser->s_lang }}</span> --}}
+            {{-- <span>{{ $followerUser->studyLanguage->name ?? $followerUserr->s_lang }}</span> --}}
             </p>
           </div>
         </div>
@@ -33,11 +32,11 @@
         </button>
         {{-- TODO: REPLACE TO BELOW --}}
         {{-- @auth
-          @if(Auth::id() !== $followingUser->id)
+          @if(Auth::id() !== $followerUser->id)
               <div class="pt-4">
-                  @if(Auth::user()->isFollowing($followingUser))
+                  @if(Auth::user()->isFollowing($followerUser))
                       <!-- unfollow -->
-                      <form method="POST" action="{{ route('follow.destroy', $followingUserr) }}">
+                      <form method="POST" action="{{ route('follow.destroy', $followerUser) }}">
                           @csrf
                           @method('DELETE')
                           <button
@@ -47,7 +46,7 @@
                       </form>
                   @else
                       <!-- follow -->
-                      <form method="POST" action="{{ route('follow.store', $followingUser) }}">
+                      <form method="POST" action="{{ route('follow.store', $followerUser) }}">
                           @csrf
                           <button
                               class="px-10 py-1 bg-white border-2 border-[#fda211] text-[#fda211] font-bold rounded-xl hover:border-[#fdbe11] hover:text-[#fdbe11] transition-all duration-300 active:translate-y-1">

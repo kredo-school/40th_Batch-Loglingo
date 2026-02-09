@@ -21,10 +21,19 @@
 
 
                 {{-- show tab content --}}
-                 <x-profile-show-following />
+                <h1 class="text-2xl">posts</h1>
+                <x-profile-show-posts />
 
-                {{-- NEED TO REPLACE --}}
+                <h1 class="text-2xl">questions</h1>
+                 <x-profile-show-questions  :question="$user->question"/>
 
+                 <h1 class="text-2xl">following</h1>
+                 <x-profile-show-following  :user="$user"/>
+
+                 <h1 class="text-2xl">followers</h1>
+                 <x-profile-show-followers :user="$user" />
+
+                {{-- TODO: REPLACE --}}
                 {{-- <div>
                 @if(request()->routeIs('profile.posts'))
                     <x-profile-show-posts />
