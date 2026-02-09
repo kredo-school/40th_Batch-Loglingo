@@ -1,9 +1,7 @@
-<!-- show  -->
-<x-post-card />
 
-{{-- reveil after model & controller are ready  --}}        
+  {{-- TODO: 1.event_date format / 2.created_at diffForHumans / 3. language tag code / 4. report system  --}}
       
-{{-- <div class="space-y-4">
+<div class="space-y-4">
 
     @forelse ($posts as $post)
 
@@ -29,28 +27,31 @@
                     <a href="#" class="group">
                     <h3 class="font-bold text-gray-700 group-hover:text-[#B178CC] transition-colors">{{ $post->user->name }}</h3> 
                     </a>
-                    <span class="text-gray-400 text-[13px] underline"> {{ $post->event_date->format('m/d/Y') }}</span> 
+                    <span class="text-gray-400 text-[13px] underline"> {{ $post->event_date }}</span> 
+                    {{-- {{ $post->event_date->format('m/d/Y') }} --}}
                 </div>
 
                <!--  tytle & body  -->
                 <a href="{{ route('posts.show',  $post->id) }}" class="group block mt-1">
                     <!--  title -->
                     <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400">
-                    {{ $post->title }}
+                    {{ $post->p_title }}
                     </h4>
                     <!-- body -->
                     <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed break-words">
-                    {{ $post->body }}
+                    {{ $post->p_content }}
                     </p>
                 </a>
 
                 <!-- tag & report -->
                 <div class="flex justify-between items-center mt-4 pt-3 border-t border-gray-50">
-                    <p class="text-[12px] text-gray-400">{{ $post->created_at->diffForHumans() }} </p> 
+                    <p class="text-[12px] text-gray-400">{{ $post->created_at }} </p> 
+                    {{-- {{ $post->created_at->diffForHumans() }} --}}
 
                     <div class="flex items-center space-x-3">
                         <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100">
-                            <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $post->language->code}}
+                            <i class="fa-solid fa-tag mr-1 text-gray-400"></i> EN
+                            {{-- {{ $post->language->code}} --}}
                         </span>
                         <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i> <!-- ★add a report system -->
                     </div>
@@ -63,5 +64,5 @@
             No posts yet.
         </p>
     @endforelse
-</div> --}}
+</div>
 

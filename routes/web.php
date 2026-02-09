@@ -18,10 +18,15 @@ Route::get('/dashboard', [PostController::class, 'index'])
 
 Route::middleware('auth')->group(function () {
     // Profile
-    Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Profile tabs
+    Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show'); //default. (dashboard = post tab)
+    Route::get('/profile/{user}/questions', [ProfileController::class, 'questions'])->name('profile.questions');
+    Route::get('/profile/{user}/following', [ProfileController::class, 'following'])->name('profile.following');
+    Route::get('/profile/{user}/followers', [ProfileController::class, 'followers'])->name('profile.followers');
 
     // See more
     Route::get('/posts/all', [PostController::class, 'all'])->name('posts.all');
