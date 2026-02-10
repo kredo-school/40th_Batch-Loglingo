@@ -14,12 +14,17 @@
 
                 <!-- Language filter -->
                 <x-language-filter :action="route('questions.index')" />
-                
+
 
                 <!-- Question example-->
                 @foreach($questions as $question)
                 <x-question-card :question="$question" />
-                <div class="mb-4"></div> @endforeach
+                <div class="mb-4"></div>
+                @endforeach
+
+                <div class="mt-8 px-4">
+                    {{ $questions->links() }}
+                </div>
 
 
             </div>

@@ -23,7 +23,7 @@
       </div>
 
       {{-- tytle&body  --}}
-      <a href="{{ route('questions.show', 1) }}" class="group block mt-1">
+      <a href="{{ route('questions.show', $question->id) }}" class="group block mt-1">
         {{-- title --}}
         <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400 pr-24">
           {{ $question->q_title }}
@@ -36,13 +36,28 @@
 
       {{-- bookmark&tag&report --}}
       <div class="flex justify-between items-center mt-4 pt-3 border-t border-gray-50">
+
+        {{-- created at --}}
         <p class="text-[12px] text-gray-400">{{ $question->created_at->diffForHumans() }}</p>
+
+
         <div class="flex items-center space-x-3">
+          {{-- ★create a bookmark function --}}
           <i class="fa-regular fa-bookmark text-gray-400 hover:text-green-500 cursor-pointer"></i>
-          <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100">
-            <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $question->language->name ?? 'N/A' }}
+
+          {{-- language tag --}}
+          @foreach($question->tags as $tag)
+          <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100 flex items-center">
+            <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->name }}
           </span>
-          <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i> {{-- ★add a report system --}}
+          @endforeach
+
+          @if($question->tags->isEmpty())
+          <span class="text-[12px] px-2 py-1 text-gray-400">No Tags</span>
+          @endif
+
+          {{-- ★create a report system --}}
+          <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
         </div>
       </div>
     </div>

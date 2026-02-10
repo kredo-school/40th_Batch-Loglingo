@@ -12,13 +12,13 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::latest()->take(5)->get();
+        $questions = Question::with(['user','tags'])->latest()->take(5)->get();
         return view('questions.index', compact('questions'));
     }
 
     public function all()
     {
-        $questions = \App\Models\Question::with(['user', 'language'])->latest()->paginate(20);
+        $questions = Question::with(['user', 'tags'])->latest()->paginate(20);
         return view('questions.all', compact('questions'));
     }
 
@@ -51,7 +51,8 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
-        return view('questions.show');
+        $question = Question::with(['user','tags'])->findOrFail($id);
+        return view('questions.show',compact('question'));
     }
 
     /**
@@ -73,8 +74,15 @@ class QuestionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $question = Question::findOrFail($id);
+
+        if (auth()->id() !== $question->user_id){
+            abort(403);
+        }
+        $question->delete();
+
+        return redirect()->route('questions.index');
     }
 }

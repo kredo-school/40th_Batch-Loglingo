@@ -10,4 +10,9 @@ class Language extends Model
     use HasFactory;
 
     protected $fillable = ['name'];
+
+    public function questions()
+    {
+        return $this->belongsToMany(Question::class, 'language_post', 'language_id', 'question_id');
+    }
 }

@@ -18,12 +18,17 @@ class QuestionSeeder extends Seeder
         $english = Language::where('name', 'English')->first();
 
         for ($i = 1; $i <= 25; $i++) {
-        Question::create([
+        $question = Question::create([
             'user_id' => $user->id,
             'written_lang' => ($i % 2 == 0) ? $english->id : $japanese->id,
             'q_title' => "Test Question Title No.{$i}",
             'q_content' => "This is the dummy content for question number {$i}. It helps to check the layout and pagination.",
-        ]);
-    }
+            ]);
+
+            $question->tags()->attach($english->id); 
+
+        }
+
+        
     }
 }
