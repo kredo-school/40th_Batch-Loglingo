@@ -51,6 +51,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/posts', [AdminController::class, 'indexPosts'])->name('posts.index');
     Route::get('/qna', [AdminController::class, 'indexQna'])->name('qna.index');
     Route::get('/tags', [AdminController::class, 'indexTags'])->name('tags.index');
+    Route::post('/tags', [AdminController::class, 'storeTag'])->name('tags.store');
     Route::get('/discussions', [AdminController::class, 'indexDiscussions'])->name('discussions.index');
 });
 

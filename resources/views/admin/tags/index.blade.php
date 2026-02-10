@@ -1,16 +1,29 @@
 <x-admin-layout>
 
-    <div class="mb-6 flex items-center space-x-4">
+    @if (session('status'))
+    <div class="mb-4 ms-6 text-green-600 font-bold">
+        {{ session('status') }}
+    </div>
+    @endif
+
+    <form action="{{ route('admin.tags.store') }}" method="POST" class="mb-6 flex items-center space-x-4">
+        @csrf
         <div class="flex-1 max-w-md">
             <input type="text"
+                name="name"
+                required
                 placeholder="Add a new tag(language)"
                 class="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-[1rem] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400">
+
+            @error('name')
+            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
         </div>
         <button class="bg-[#3b82f6] hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-[1rem] flex items-center transition-colors">
             <span class="mr-2 text-[20px]">+</span>
             Add
         </button>
-    </div>
+    </form>
 
 
     <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100">
@@ -27,20 +40,21 @@
             </thead>
             <tbody class="divide-y divide-gray-100">
 
+                @foreach($languages as $language)
                 {{-- user example1--}}
                 <tr x-data="{ active: true, open: false, showModal: false}" class="hover:bg-gray-50 transition-colors">
 
                     {{-- number--}}
-                    <td class="px-6 py-4 text-gray-600 text-center text-sm">1</td>
+                    <td class="px-6 py-4 text-gray-600 text-center text-sm">{{ $language->id }}</td>
 
                     {{-- tag name--}}
-                    <td class="px-6 py-4 text-gray-600 text-center text-sm">English</td>
+                    <td class="px-6 py-4 text-gray-600 text-center text-sm">{{ $language->name}}</td>
 
                     {{-- count --}}
-                    <td class="px-6 py-4 text-gray-500 text-center text-sm">100</td>
+                    <td class="px-6 py-4 text-gray-500 text-center text-sm">{{ $language->questions_count }}</td>
 
                     {{-- last updated --}}
-                    <td class="px-6 py-4 text-gray-500 text-center text-sm">2026-1-30 00:47:34</td>
+                    <td class="px-6 py-4 text-gray-500 text-center text-sm">{{ $language->updated_at ? $language->updated_at->format('Y-m-d H:i') : 'no update' }}</td>
 
 
                     {{-- status--}}
@@ -120,38 +134,13 @@
                 </tr>
 
 
+                @endforeach
             </tbody>
         </table>
 
-        {{-- next page (pagenation) --}}
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
-
-
-            <div class="flex items-center justify-between">
-                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div>
-                        <p class="text-sm text-gray-700 class=" leading-5">
-                            Showing <span class="font-medium">1</span> to <span class="font-medium">10</span> of <span class="font-medium">57</span> results
-                        </p>
-                    </div>
-                    <div>
-                        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                            <button class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <span class="sr-only">Previous</span>
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </button>
-                            <button class="relative inline-flex items-center px-4 py-2 border border-blue-500 bg-blue-50 text-sm font-medium text-blue-600 z-10">1</button>
-                            <button class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">2</button>
-                            <button class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">3</button>
-                            <button class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <span class="sr-only">Next</span>
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </button>
-                        </nav>
-                    </div>
-                </div>
-            </div>
+        <!--★ need to updatelater pagenation -->
+        <div class="mt-4">
+            {{ $languages->links() }}
         </div>
-    </div>
 
 </x-admin-layout>
