@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Question;
+use App\Models\Language;
 
 class QuestionController extends Controller
 {
@@ -27,7 +28,9 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        return view('questions.add-question');
+        return view('questions.add-question', [
+        'languages' => Language::all(),
+        ]);
     }
 
     /**
@@ -35,15 +38,26 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([ 
             'q_title' => 'required|max:255',
-            'q_content' => 'required',
-            'tag' => 'required',
-            'written_lang' => 'required'
+            'q_content' => 'required|string',
+            'tag' => 'required|integer|exists:languages,id',
+            'written_lang' => 'required|integer|exists:languages,id',
         ]);
 
-        // save (activate after create tables)
-        // return redirect()->route('questions.index')->with('status', 'Question posted successfully!');
+        Question::create([
+            'user_id' => auth()->id(),
+            'q_title' =>$validated['q_title'],
+            'q_content' => $validated['q_content'],
+            'written_lang' => $validated['written_lang'],
+
+            // TODO: add column later(in migration, put 'language_id' as foreign key)
+            // 'language_id' => $validated['tag'],  
+            // 'is_answered' => false, 
+        ]);
+
+        return redirect() ->route('questions.index')->with('status', 'Question posted successfully!');
+
     }
 
     /**
