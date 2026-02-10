@@ -5,7 +5,7 @@
       {{--left side--}}
       <div class="w-full md:w-2/3 space-y-6">
         <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-8">
-          
+
 
           {{-- post header --}}
           <div class="mb-3">
@@ -14,7 +14,10 @@
 
               <div class="flex-1">
                 <div class="flex justify-between items-center mb-1">
-                  <h3 class="font-bold text-lg text-gray-800">user name</h3> {{-- ★$post->user->name --}}
+                  <a href="{{ route('profile.show',$question->user->id) }}">
+                    <h3 class="font-bold text-lg text-gray-800">{{ $question->user->name }}</h3>
+                  </a>
+
                   <x-answered-badge />
 
                 </div>
@@ -23,44 +26,55 @@
                 {{-- post title --}}
                 <div class="flex justify-between items-center mb-2">
                   <h2 class="text-[20px] font-extrabold text-gray-900 mb-2">
-                    Is "grab" better than "buy" for coffee? {{-- ★$question->title --}}
+                    {{ $question->q_title }}
                   </h2>
-                  {{-- delete ★need to set a route --}}
-                  <form action="#" method="POST" onsubmit="return confirm('Really delete this question?');">
+
+                  {{-- delete button --}}
+                  @if(Auth::id() === $question->user_id)
+                  <form action="{{ route('questions.destroy', $question->id) }}" method="POST" onsubmit="return confirm('Really delete this question?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="bg-red-500 text-white text-sm px-3 py-1 rounded-full font-bold shadow-sm hover:bg-red-600 transition-colors">delete</button>
                   </form>
+                  @endif
 
                 </div>
 
 
                 {{-- footer(post date/tag/report) --}}
                 <div class="flex justify-between items-center w-full">
-                  <p class="text-[13px] text-gray-400">2 days ago</p> {{-- ★$post->created_at->diffForHumans() --}}
 
+                  {{-- created at --}}
+                  <p class="text-[13px] text-gray-400">{{ $question->created_at->diffForHumans() }}</p>
+
+                  {{--★ create a bookmark function --}}
                   <div class="flex items-center space-x-4">
                     <i class="fa-regular fa-bookmark text-gray-400 hover:text-green-500 cursor-pointer"></i>
-                    <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100">
-                      <i class="fa-solid fa-tag mr-1 text-gray-400"></i> EN {{-- ★$post->language_tag --}}
+
+                    {{-- language tag --}}
+                    @foreach($question->tags as $tag)
+                    <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100 flex items-center">
+                      <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->name }}
                     </span>
+                    @endforeach
+
+                    @if($question->tags->isEmpty())
+                    <span class="text-[12px] px-2 py-1 text-gray-400">No Tags</span>
+                    @endif
+
                     {{-- ★create a report function--}}
                     <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
                   </div>
+
                 </div>
+
               </div>
             </div>
           </div>
 
-          {{-- post body --}}
-          <p class="text-gray-700 leading-relaxed pb-2 mb-5 border-b">
-            I went to Starbucks today to try their new drink! The new flavor is a delightful blend of roasted
-            hojicha and creamy caramel. From the very first sip, the nutty aroma of the tea spread through
-            my mouth, perfectly balanced by the rich sweetness of the sauce. It wasn't too heavy,
-            making it an ideal treat for a relaxing afternoon. The crunchy topping added a fun texture,
-            and I found myself finishing the whole cup in no time! It's a limited-time offer, so if you're a fan of
-            tea-based lattes, you should definitely grab one before it's gone.
-            I'm already thinking about going back tomorrow to hit a 2-day streak!{{-- ★$post->body --}} {{-- ★$post->body --}}
+          {{-- question body --}}
+          <p class="text-gray-700 leading-relaxed pb-2 mb-5 border-b break-words"> {{ $question->q_content }}
+            {{ $question->q_content }} {{ $question->q_content }} {{ $question->q_content }} {{ $question->q_content }} {{ $question->q_content }}
           </p>
 
           {{-- comment form ★need to set a route--}}

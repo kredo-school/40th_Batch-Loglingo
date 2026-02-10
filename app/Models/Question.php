@@ -18,6 +18,11 @@ class Question extends Model
         return $this->belongsTo(Language::class, 'written_lang');
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany(Language::class, 'language_post', 'question_id', 'language_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
