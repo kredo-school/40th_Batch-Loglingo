@@ -48,7 +48,7 @@ class User extends Authenticatable
         ];
     }
 
-    // for tabs
+    // for profile tabs
     public function posts()
     {
         return $this->hasMany(Post::class);
@@ -57,6 +57,18 @@ class User extends Authenticatable
     public function questions()
     {
         return $this->hasMany(Question::class);
+    }
+
+    // user follows many users
+    public function follow()
+    {
+        return $this->hasMany(Follow::class, 'follower_id');
+    }
+
+    // user has many followers    
+    public function followers()
+    {
+        return $this->hasMany(Follow::class, 'following_id');
     }
 
     // public function followings()
@@ -80,4 +92,14 @@ class User extends Authenticatable
     // }
 
 
+
+
+    // return true if $this user is already followed (by logged-in user)
+    public function isFollowed(){
+        return $this->followers()->where('follower_id', Auth::User()->id)->exists();
+    }
+
+    public function followsYou(){
+        return $this->follow()->where('following_id', Auth::user()->id)->exists();
+    }
 }

@@ -30,4 +30,10 @@ class Question extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    // post has many answers
+    public function answers(){
+        return $this->hasMany(Answer::class);
+    }
+    
 }

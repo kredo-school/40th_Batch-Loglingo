@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('password');
             $table->longtext('avatar')->nullable();
             $table->string('introduction', 100)->nullable();
-            $table->tinyInteger('role_id')->default(2)->comment('1:admin| 2:user');
+            $table->tinyInteger('role_id')->default(2)->comment('1:admin| 2:user| 3:teacher');
             $table->foreignId('f_lang')->constrained('languages');
             $table->foreignId('s_lang')->constrained('languages');
             $table->timestamps();
