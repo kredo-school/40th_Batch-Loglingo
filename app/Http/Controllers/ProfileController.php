@@ -64,8 +64,11 @@ class ProfileController extends Controller
         {
             return view('profile.profile', [
                 'user' => $user,
-                'posts' => $user->posts()->latest()->get(),
+                'posts' => $user->posts()->latest()->with('user')->get(),
+                'questions' => $user->questions()->latest()->with('user')->get(),
             ]);
+
+            
         }
 
         public function questions(User $user)
