@@ -3,11 +3,13 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\DiscussionController;
+use App\Http\Controllers\FollowController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -26,6 +28,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // FOLLOW
+    Route::post('/follow/{user_id}/store', [FollowController::class, 'store'])->name('follow.store');
+    Route::delete('/follow/{user_id}/destroy', [FollowController::class, 'destroy'])->name('follow.destroy');
+
     // Profile tabs
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show'); //default. (dashboard = post tab)
     Route::get('/profile/{user}/questions', [ProfileController::class, 'questions'])->name('profile.questions');
@@ -40,6 +46,8 @@ Route::middleware('auth')->group(function () {
     // Resource
     Route::resource('posts', PostController::class);
     Route::resource('questions', QuestionController::class);
+    Route::resource('comments', CommentController::class);
+    Route::resource('answers', AnswerController::class);
     Route::resource('discussions', DiscussionController::class);
 
     Route::get('/search', [SearchController::class, 'index'])->name('search');
@@ -48,8 +56,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/report', [ReportController::class, 'store'])
         // ->middleware('auth')
         ->name('report.store');
+
+
+
     });
 
+
+    
 
 
 
