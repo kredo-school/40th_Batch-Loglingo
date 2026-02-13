@@ -63,7 +63,28 @@
                     @endif
 
                     {{-- ★create a report function--}}
-                    <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
+                    @php
+                        $reportedByMe = auth()->check()
+                            ? $question->reports()
+                                ->where('user_id', auth()->id())
+                                ->exists()
+                            : false;
+                    @endphp
+                    
+                    @if (!$reportedByMe)
+                      <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this?');">
+                          @csrf
+                          <input type="hidden" name="reportable_id" value="{{ $question->id }}">
+                          <input type="hidden" name="reportable_type" value="{{ \App\Models\Question::class }}">
+
+                          <button type="submit">
+                              <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
+                          </button>
+                      </form>
+                    @else
+                    <i class="fa-solid fa-flag text-red-500"></i>
+                    @endif
+
                   </div>
 
                 </div>
@@ -161,8 +182,28 @@
                       <button type="submit" class="bg-red-500 text-white text-[14px] px-3 py-0.5 rounded-full font-bold hover:bg-red-600 transition-colors">delete</button>
                     </form>
 
-                    {{-- ★need to create a report function --}}
-                    <i class="fa-regular fa-flag text-[18px] text-gray-400 hover:text-red-500 cursor-pointer"></i>
+                    {{-- report system --}}
+                    @php
+                        $reportedByMe = auth()->check()
+                            ? $question->reports()
+                                ->where('user_id', auth()->id())
+                                ->exists()
+                            : false;
+                    @endphp
+                    
+                    @if (!$reportedByMe)
+                    <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this?');">
+                        @csrf
+                        <input type="hidden" name="reportable_id" value="{{ $question->id }}">
+                        <input type="hidden" name="reportable_type" value="{{ \App\Models\Question::class }}">
+
+                        <button type="submit">
+                            <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
+                        </button>
+                    </form>
+                    @else
+                    <i class="fa-solid fa-flag text-red-500"></i>
+                    @endif
                   </div>
                 </div>
 

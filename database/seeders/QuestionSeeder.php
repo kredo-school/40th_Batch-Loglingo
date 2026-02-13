@@ -13,9 +13,10 @@ class QuestionSeeder extends Seeder
 
     public function run(): void
     {
-        $user = User::first();
-        $japanese = Language::where('name', 'Japanese')->first();
-        $english = Language::where('name', 'English')->first();
+        $user = User::first() ?? User::factory()->create();
+
+        $japanese = Language::where('name', 'Japanese')->firstOrFail();
+        $english = Language::where('name', 'English')->firstOrFail();
 
         for ($i = 1; $i <= 25; $i++) {
         $question = Question::create([

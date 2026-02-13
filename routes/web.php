@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\DiscussionController;
-use App\Http\Controllers\AdminController;
+
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -39,7 +43,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('discussions', DiscussionController::class);
 
     Route::get('/search', [SearchController::class, 'index'])->name('search');
-});
+
+    // report
+    Route::post('/report', [ReportController::class, 'store'])
+        // ->middleware('auth')
+        ->name('report.store');
+    });
+
+
+
 
 
 //admin 

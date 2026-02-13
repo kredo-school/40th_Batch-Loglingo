@@ -3,7 +3,12 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Comment;
+use App\Models\Language;
+use App\Models\Report;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+
 
 class Post extends Model
 {
@@ -12,7 +17,7 @@ class Post extends Model
         'user_id',
         'p_title',
         'p_content',
-    
+        'event_date',
     ];
 
 
@@ -32,5 +37,11 @@ class Post extends Model
         return $this->belongsToMany(Language::class, 'language_post', 'post_id', 'language_id');
     }
 
-
+    public function reports(): MorphMany
+    {
+        return $this->morphMany(Report::class, 'reportable');
+    }
 }
+
+
+
