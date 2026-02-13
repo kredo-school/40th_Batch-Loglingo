@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,6 +18,8 @@ class DatabaseSeeder extends Seeder
             LanguageSeeder::class,
             UserSeeder::class,
             QuestionSeeder::class,
+            PostSeeder::class,
+            CommentSeeder::class,
         ]);
     }
 }

@@ -48,7 +48,7 @@
                     {{-- language tag --}}
                     @foreach($question->tags as $tag)
                     <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100 flex items-center">
-                        <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->name }}
+                        <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->code }}
                     </span>
                     @endforeach
 
