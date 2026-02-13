@@ -3,8 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\Language;
 use App\Models\User;
+use App\Models\Report;
+use App\Models\Answer;
 
 class Question extends Model
 {
@@ -32,8 +35,14 @@ class Question extends Model
     }
 
     // post has many answers
-    public function answers(){
+    public function answers()
+    {
         return $this->hasMany(Answer::class);
+    }
+
+    public function reports(): MorphMany
+    {
+        return $this->morphMany(Report::class, 'reportable');
     }
     
 }
