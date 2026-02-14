@@ -14,22 +14,37 @@ class AdminController extends Controller
 {
     public function indexUsers()
     {
-        return view('admin.users.index');
+        $users = User::where('role_id',2)
+        ->latest()
+        ->paginate(20);
+
+        return view('admin.users.index', compact('users'));
     }
 
     public function indexTeachers()
     {
-        return view('admin.teachers.index');
+        $teachers = User::where('role_id',3)
+        ->latest()
+        ->paginate(20);
+
+        return view('admin.teachers.index', compact('teachers'));
     }
 
     public function indexPosts()
     {
-        return view('admin.posts.index');
+        $posts = Post::with(['user', 'tags', 'reports', 'comments.reports'])
+            ->latest()
+            ->paginate(20);
+
+        return view('admin.posts.index', compact('posts'));
     }
 
     public function indexQna()
     {
-        $questions = Question::with(['user', 'tags'])->latest()->paginate(20);
+        $questions = Question::with(['user', 'tags', 'reports', 'answers.reports'])
+            ->latest()
+            ->paginate(20);
+
         return view('admin.qna.index', compact('questions'));
     }
 
@@ -55,6 +70,8 @@ class AdminController extends Controller
 
         return back()->with('status', 'New tag added successfully!');
     }
+
+
 
 
 

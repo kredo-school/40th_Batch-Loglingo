@@ -12,22 +12,25 @@
             </thead>
             <tbody class="divide-y divide-gray-100">
 
+                @foreach($users as $user)
+
+
                 {{-- user example1--}}
                 <tr x-data="{ active: true, open: false, showModal: false}" class="hover:bg-gray-50 transition-colors">
 
                     {{-- username--}}
                     <td class="px-6 py-4">
                         <div class="flex items-center space-x-3 justify-center">
-                            <img src="#" alt="user" class="w-10 h-10 rounded-full bg-gray-400 border shadow-sm">
-                            <span class="font-medium text-gray-800">user name</span>
+                            <img src="{{ $user->avatar ?? asset('images/baby-octopus.png')}}" alt="user" class="w-10 h-10 rounded-full  border shadow-sm">
+                            <span class="font-medium text-gray-800">{{ $user->name }}</span>
                         </div>
                     </td>
 
                     {{-- e-mail--}}
-                    <td class="px-6 py-4 text-gray-600 text-center text-sm">user1@gmail.com</td>
+                    <td class="px-6 py-4 text-gray-600 text-center text-sm">{{ $user->email }}</td>
 
                     {{-- created-at --}}
-                    <td class="px-6 py-4 text-gray-500 text-center text-sm">2026-01-30 00:47:34</td>
+                    <td class="px-6 py-4 text-gray-500 text-center text-sm">{{ $user->created_at->format('Y-m-d') }}</td>
 
                     {{-- status--}}
                     <td class="px-6 py-4 text-center">
@@ -50,7 +53,7 @@
                                 class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg z-50 py-1">
 
                                 {{--1 view profile --}}
-                                <a href="#" class="group block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                <a href="{{ route('profile.show',$user->id)}}" class="group block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
                                     <i class="fa-regular fa-eye mr-3 w-5 text-center text-gray-400 group-hover:text-blue-500"></i> View Profile
                                 </a>
 
@@ -61,7 +64,7 @@
                                         <span :class="active ? 'bg-red-500' : 'bg-green-500'"
                                             class="inline-block w-3 h-3 rounded-full"></span>
                                     </div>
-                                    <span x-text="active ? 'Deactivate user1' : 'Activate user1'"></span>
+                                    <span x-text="active ? 'Deactivate {{ $user->name }}' : 'Activate {{ $user->name }}'"></span>
                                 </button>
 
                             </div>
@@ -84,12 +87,12 @@
                                 <div :class="active ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'"
                                     class="px-4 py-3 border-b flex items-center font-bold">
                                     <i :class="active ? 'fa-solid fa-user-slash' : 'fa-solid fa-user-check'" class="mr-2"></i>
-                                    <span x-text="active ? 'Deactivate User' : 'Activate User'"></span>
+                                    <span x-text="active ? 'Deactivate {{ $user->name }}' : 'Activate {{ $user->name }}'"></span>
                                 </div>
 
                                 {{-- Modal Body --}}
                                 <div class="p-6 text-left">
-                                    <p class="text-gray-700">Are you sure you want to <span x-text="active ? 'deactivate' : 'activate'" class="font-bold"></span> <span class="font-bold text-black">user1</span>?</p>
+                                    <p class="text-gray-700">Are you sure you want to <span x-text="active ? 'deactivate' : 'activate'" class="font-bold"></span> <span class="font-bold text-black">{{ $user->name }}</span>?</p>
                                 </div>
 
                                 {{-- Modal Footer --}}
@@ -108,40 +111,16 @@
                     </template>
 
                 </tr>
+                @endforeach
 
-       
             </tbody>
         </table>
 
         {{-- next page (pagenation) --}}
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
-
-
-            <div class="flex items-center justify-between">
-                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div>
-                        <p class="text-sm text-gray-700 class=" leading-5">
-                            Showing <span class="font-medium">1</span> to <span class="font-medium">10</span> of <span class="font-medium">57</span> results
-                        </p>
-                    </div>
-                    <div>
-                        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                            <button class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <span class="sr-only">Previous</span>
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </button>
-                            <button class="relative inline-flex items-center px-4 py-2 border border-blue-500 bg-blue-50 text-sm font-medium text-blue-600 z-10">1</button>
-                            <button class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">2</button>
-                            <button class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">3</button>
-                            <button class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <span class="sr-only">Next</span>
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </button>
-                        </nav>
-                    </div>
-                </div>
-            </div>
+        <div class="mt-4">
+            {{ $users->links() }}
         </div>
+
     </div>
 
 </x-admin-layout>

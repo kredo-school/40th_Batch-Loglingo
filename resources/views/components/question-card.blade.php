@@ -4,20 +4,21 @@
 
     <div class="relative bg-white rounded-[1rem] shadow-sm border border-gray-100 p-5 flex space-x-4 transition-all hover:border-gray-200">
 
-        {{-- ★ Answered Badge  @if($question->is_answered)  --}}
+        @if($question->answers->count() > 0)
         <x-answered-badge class="absolute top-4 right-4" />
+        @endif
 
         {{-- user icon --}}
         <div class="flex-shrink-0">
-            <div class="w-16 h-16 rounded-full bg-orange-400 overflow-hidden border-2 border-white shadow-sm">
-                <img src="#" alt="user" class="w-full h-full object-cover">
+            <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-sm">
+                <img src="{{ $question->user->avatar ?? asset('images/baby-octopus.png') }}" alt="user" class="w-full h-full object-cover">
             </div>
         </div>
 
         {{-- content --}}
         <div class="flex-1 flex flex-col">
             <div class="flex justify-between items-start mb-2">
-                <a href="#" class="group">
+                <a href="{{ route('profile.show',$question->user->id) }} " class="group">
                     <h3 class="font-bold text-gray-700 group-hover:text-[#B178CC] transition-colors">{{ $question->user->name }}</h3>
                 </a>
             </div>
@@ -72,7 +73,7 @@
                         <input type="hidden" name="reportable_id" value="{{ $question->id }}">
                         <input type="hidden" name="reportable_type" value="{{ \App\Models\Question::class }}">
 
-                        <button type="submit">
+                        <button type="submit" title="Report this question">
                             <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
                         </button>
                     </form>
