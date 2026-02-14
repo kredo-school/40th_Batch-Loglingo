@@ -43,5 +43,17 @@ class Question extends Model
     {
         return $this->morphMany(Report::class, 'reportable');
     }
-    
+
+    public function getTotalReportsCountAttribute(): int
+    {
+        // number of reports to question
+        $questionReports = $this->reports->count();
+
+        // total report number
+        $answersReports = $this->answers->sum(function ($answer) {
+            return $answer->reports->count();
+        });
+
+        return $questionReports + $answersReports;
+    }
 }

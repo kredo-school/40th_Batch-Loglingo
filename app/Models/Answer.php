@@ -22,7 +22,8 @@ class Answer extends Model
 
     //answer belongs to user
     public function user(){
-        return $this->belongsTo(User::class)->withTrashed();
+        return $this->belongsTo(User::class);
+        // return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function reports(): MorphMany

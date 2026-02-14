@@ -10,15 +10,17 @@
           {{-- post header --}}
           <div class="mb-3">
             <div class="flex items-start space-x-4 w-full">
-              <img src="#" alt="user" class="w-16 h-16 rounded-full object-cover bg-orange-400">
+              <img src="{{ $question->user->avatar ?? asset('images/baby-octopus.png')}}" alt="user" class="w-16 h-16 rounded-full object-cover">
 
               <div class="flex-1">
                 <div class="flex justify-between items-center mb-1">
-                  <a href="{{ route('profile.show',$question->user->id) }}">
+                  <a href="{{ route('profile.show',$question->user->id )}}">
                     <h3 class="font-bold text-lg text-gray-800">{{ $question->user->name }}</h3>
                   </a>
 
+                  @if($question->answers->count() > 0)
                   <x-answered-badge />
+                  @endif
 
                 </div>
 
@@ -54,7 +56,7 @@
                     {{-- language tag --}}
                     @foreach($question->tags as $tag)
                     <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100 flex items-center">
-                      <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->name }}
+                      <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->code }}
                     </span>
                     @endforeach
 
@@ -62,25 +64,25 @@
                     <span class="text-[12px] px-2 py-1 text-gray-400">No Tags</span>
                     @endif
 
-                    {{-- ★create a report function--}}
+                    {{-- report function--}}
                     @php
-                        $reportedByMe = auth()->check()
-                            ? $question->reports()
-                                ->where('user_id', auth()->id())
-                                ->exists()
-                            : false;
+                    $reportedByMe = auth()->check()
+                    ? $question->reports()
+                    ->where('user_id', auth()->id())
+                    ->exists()
+                    : false;
                     @endphp
-                    
-                    @if (!$reportedByMe)
-                      <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this?');">
-                          @csrf
-                          <input type="hidden" name="reportable_id" value="{{ $question->id }}">
-                          <input type="hidden" name="reportable_type" value="{{ \App\Models\Question::class }}">
 
-                          <button type="submit">
-                              <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
-                          </button>
-                      </form>
+                    @if (!$reportedByMe)
+                    <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this?');">
+                      @csrf
+                      <input type="hidden" name="reportable_id" value="{{ $question->id }}">
+                      <input type="hidden" name="reportable_type" value="{{ \App\Models\Question::class }}">
+
+                      <button type="submit">
+                        <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
+                      </button>
+                    </form>
                     @else
                     <i class="fa-solid fa-flag text-red-500"></i>
                     @endif
@@ -98,15 +100,18 @@
             {{ $question->q_content }} {{ $question->q_content }} {{ $question->q_content }} {{ $question->q_content }} {{ $question->q_content }}
           </p>
 
-          {{-- comment form ★need to set a route--}}
+          {{-- answer form--}}
+          @if(auth()->check() && auth()->user()->role_id == 3)
           <div class="pb-4 border-b">
-            <form action="#" method="POST">
+            <form action="{{ route('answers.store') }}" method="POST">
               @csrf
+              <input type="hidden" name="question_id" value="{{ $question->id }}">
+
               <div class="flex items-start space-x-4">
-                <img src="#" alt="user" class="w-14 h-14 rounded-full object-cover bg-yellow-400">
+                <img src="{{ auth()->user->avatar ?? asset('images/baby-octopus.png') }}" alt="user" class="w-14 h-14 rounded-full object-cover">
                 <div class="flex-1">
                   <h4 class="font-bold text-s text-gray-700 mb-1">{{ Auth::user()->name }}</h4>
-                  <textarea name="comment" placeholder="write an answer here.." class="w-full border-gray-200 rounded-lg focus:ring-[#B178CC] focus:border-[#B178CC] text-s" rows="5" required></textarea>
+                  <textarea name="a_content" placeholder="write an answer here.." class="w-full border-gray-200 rounded-lg focus:ring-[#B178CC] focus:border-[#B178CC] text-s" rows="5" required></textarea>
                   <div class="flex justify-end mt-2">
                     <button type="submit" class="bg-[#56A5E1] text-white px-6 py-1 rounded-full text-sm font-bold shadow-sm hover:bg-blue-500 transition-colors">Post</button>
                   </div>
@@ -114,92 +119,46 @@
               </div>
             </form>
           </div>
+          @endif
 
           {{-- display answers --}}
-          {{-- answer example1 --}}
+          @foreach($question->answers as $answer)
           <div class="space-y-6">
             <div class="flex items-start space-x-4 border-b py-4">
-              <img src="#" alt="teacher" class="w-12 h-12 rounded-full object-cover bg-blue-400">
+              <img src="{{ $answer->user->avatar ?? asset('images/baby-octopus.png') }}" alt="user" class="w-12 h-12 rounded-full object-cover">
 
               <div class="flex-1">
                 <div class="flex justify-between items-center mb-4">
                   <div class="flex items-center space-x-4">
-                    <h4 class="font-bold text-[16px]">teacher name</h4>
-                    <span class="text-[13px] text-gray-400">2 days ago</span>
+                    <h4 class="font-bold text-[16px]">{{ $answer->user->name }}</h4>
+                    <span class="text-[13px] text-gray-400">{{ $answer->created_at->diffForHumans() }}</span>
                   </div>
 
                   <div class="flex items-center space-x-4">
-                    {{-- delete ★need to set a route --}}
-                    <form action="#" method="POST">
+                    {{-- delete button --}}
+                    @if(Auth::id() === $answer->user_id)
+                    <form action="{{ route('answers.destroy', $answer->id) }}" method="POST" onsubmit="return confirm('Delete this answer?');">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="bg-red-500 text-white text-[14px] px-3 py-0.5 rounded-full font-bold hover:bg-red-600 transition-colors">delete</button>
                     </form>
+                    @endif
 
-                    {{-- ★need to create a report function --}}
-                    <i class="fa-regular fa-flag text-[18px] text-gray-400 hover:text-red-500 cursor-pointer"></i>
-                  </div>
-                </div>
-
-                <div>
-                  <span class="text-s text-gray-700 leading-relaxed">While "buy" is grammatically correct, using "grab" makes your English sound
-                    much more like a native speaker's. "Buy" focuses primarily on the financial
-                    transaction—exchanging money for a product—which can feel a bit formal or
-                    "dry" in a social context. On the other hand, "grab" shifts the focus to the action
-                    and the experience. It implies that the activity is quick, easy, and informal, fitting
-                    perfectly with the lifestyle of getting a coffee on the go. Furthermore, "grab" carries
-                    a sense of spontaneity; it suggests an invitation to hang out without making it
-                    feel like a big, scheduled event. You'll often hear phrases like "Let's grab a bite
-                    " or "Let's grab a drink," where the word serves as a friendly social "lubricant.
-                    " Using "grab" shows that you are comfortable with the casual rhythm of the
-                    language, making the interaction feel more natural and relaxed. So, next time
-                    you're heading to Starbucks, saying "I'm going to grab a coffee" will definitely
-                    make you sound like a pro!
-                    and get that second cup while you still can!</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          {{-- answer example2 --}}
-          <div class="space-y-6">
-            <div class="flex items-start space-x-4 border-b py-4">
-              <img src="#" alt="teacher" class="w-12 h-12 rounded-full object-cover bg-blue-400">
-
-              <div class="flex-1">
-                <div class="flex justify-between items-center mb-4">
-                  <div class="flex items-center space-x-4">
-                    <h4 class="font-bold text-[16px]">teacher name</h4>
-                    <span class="text-[13px] text-gray-400">2 days ago</span>
-                  </div>
-
-                  <div class="flex items-center space-x-4">
-                    {{-- delete ★need to set a route --}}
-                    <form action="#" method="POST">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="bg-red-500 text-white text-[14px] px-3 py-0.5 rounded-full font-bold hover:bg-red-600 transition-colors">delete</button>
-                    </form>
-
-                    {{-- report system --}}
+                    {{-- report function --}}
                     @php
-                        $reportedByMe = auth()->check()
-                            ? $question->reports()
-                                ->where('user_id', auth()->id())
-                                ->exists()
-                            : false;
+                    $reportedByMe = auth()->check()
+                    ? $answer->reports()->where('user_id', auth()->id())->exists()
+                    : false;
                     @endphp
-                    
-                    @if (!$reportedByMe)
-                    <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this?');">
-                        @csrf
-                        <input type="hidden" name="reportable_id" value="{{ $question->id }}">
-                        <input type="hidden" name="reportable_type" value="{{ \App\Models\Question::class }}">
 
-                        <button type="submit">
-                            <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
-                        </button>
+                    @if (!$reportedByMe)
+                    <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Report this answer?');">
+                      @csrf
+                      <input type="hidden" name="reportable_id" value="{{ $answer->id }}">
+                      <input type="hidden" name="reportable_type" value="App\Models\Answer">
+                      <button type="submit">
+                        <i class="fa-regular fa-flag text-[18px] text-gray-400 hover:text-red-500 cursor-pointer"></i>
+                      </button>
                     </form>
                     @else
                     <i class="fa-solid fa-flag text-red-500"></i>
@@ -207,26 +166,13 @@
                   </div>
                 </div>
 
-                <div>
-                  <span class="text-s text-gray-700 leading-relaxed">While "buy" is grammatically correct, using "grab" makes your English sound
-                    much more like a native speaker's. "Buy" focuses primarily on the financial
-                    transaction—exchanging money for a product—which can feel a bit formal or
-                    "dry" in a social context. On the other hand, "grab" shifts the focus to the action
-                    and the experience. It implies that the activity is quick, easy, and informal, fitting
-                    perfectly with the lifestyle of getting a coffee on the go. Furthermore, "grab" carries
-                    a sense of spontaneity; it suggests an invitation to hang out without making it
-                    feel like a big, scheduled event. You’ll often hear phrases like "Let's grab a bite
-                    " or "Let's grab a drink," where the word serves as a friendly social "lubricant.
-                    " Using "grab" shows that you are comfortable with the casual rhythm of the
-                    language, making the interaction feel more natural and relaxed. So, next time
-                    you're heading to Starbucks, saying "I'm going to grab a coffee" will definitely
-                    make you sound like a pro!
-                    and get that second cup while you still can!</span>
+                <div class="text-s text-gray-700 leading-relaxed break-words">
+                  {!! nl2br(e($answer->a_content)) !!}
                 </div>
               </div>
             </div>
           </div>
-
+          @endforeach
 
 
 

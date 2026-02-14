@@ -15,30 +15,52 @@
             </thead>
             <tbody class="divide-y divide-gray-100">
 
-            @php $reports1 = 11; @endphp
+                @php $reports1 = 9; @endphp
 
                 {{-- user example1--}}
-                <tr x-data="{ active: false, open: false, showModal: false, reports: {{ $reports1 }} }"
-                :class="reports >= 10 ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-gray-50'"
-                class="transition-colors">
+                @foreach($posts as $post)
+
+                {{-- @php
+                $totalReports = $post->total_reports_count;
+                @endphp --}}
+
+                <tr x-data="{
+                active: false, 
+                open: false, 
+                showModal: false, 
+                reports: {{ $reports1 }} }"
+                    :class="reports >= 10 ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-gray-50'"
+                    class="transition-colors">
 
                     {{-- report --}}
                     <td class="px-6 py-4 text-center font-bold" :class="reports >=10 ? 'text-red-600' : 'text-gray-600'" x-text="reports"></td>
 
                     {{-- tag --}}
-                    <td class="px-6 py-4 text-gray-600 text-center text-sm">Japanese</td>
+                    <td class="px-6 py-4 text-center">
+                        <div class="flex flex-wrap justify-center gap-1">
+                            @foreach($post->tags as $tag)
+                            <span class="px-2 py-0.5 bg-blue-50 text-gray-600 text-[12px] font-bold rounded border border-blue-100">
+                                {{ $tag->code }}
+                            </span>
+                            @endforeach
+                            @if($post->tags->isEmpty())
+                            <span class="text-gray-400 text-xs">No Tags</span>
+                            @endif
+                        </div>
+                    </td>
+
 
                     {{-- username--}}
-                    <td class="px-6 py-4 text-gray-600 text-center text-sm">user name</td>
+                    <td class="px-6 py-4 text-gray-600 text-center text-sm">{{$post->user->name }}</td>
 
                     {{-- date --}}
-                    <td class="px-6 py-4 text-gray-600 text-center text-sm">2026-1-30</td>
+                    <td class="px-6 py-4 text-gray-600 text-center text-sm">{{ $post->event_date }}</td>
 
                     {{-- title --}}
-                    <td class="px-6 py-4 text-gray-500 text-center text-sm">title of the post</td>
+                    <td class="px-6 py-4 text-gray-500 text-center text-sm">{{ Str::limit($post->p_title, 25) }}</td>
 
                     {{-- created at --}}
-                    <td class="px-6 py-4 text-gray-600 text-center text-sm">2026-1-30 00:47:34</td>
+                    <td class="px-6 py-4 text-gray-600 text-center text-sm">{{ $post->created_at->format('Y-m-d') }}</td>
 
                     {{-- status--}}
                     <td class="px-6 py-4 text-center">
@@ -60,8 +82,8 @@
                             <div x-show="open" @click.away="open = false"
                                 class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg z-50 py-1">
 
-                                {{--1 view profile --}}
-                                <a href="#" class="group block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                {{--1 view post --}}
+                                <a href="{{ route('posts.show',$post->id)}}" class="group block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
                                     <i class="fa-regular fa-eye mr-3 w-5 text-center text-gray-400 group-hover:text-blue-500"></i> View Post
                                 </a>
 
@@ -119,40 +141,17 @@
                     </template>
 
                 </tr>
-
+                @endforeach
 
             </tbody>
         </table>
 
         {{-- next page (pagenation) --}}
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
-
-
-            <div class="flex items-center justify-between">
-                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div>
-                        <p class="text-sm text-gray-700 class=" leading-5">
-                            Showing <span class="font-medium">1</span> to <span class="font-medium">10</span> of <span class="font-medium">57</span> results
-                        </p>
-                    </div>
-                    <div>
-                        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                            <button class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <span class="sr-only">Previous</span>
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </button>
-                            <button class="relative inline-flex items-center px-4 py-2 border border-blue-500 bg-blue-50 text-sm font-medium text-blue-600 z-10">1</button>
-                            <button class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">2</button>
-                            <button class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">3</button>
-                            <button class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <span class="sr-only">Next</span>
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </button>
-                        </nav>
-                    </div>
-                </div>
-            </div>
+        <div class="mt-4">
+            {{ $posts->links() }}
         </div>
+
+
     </div>
 
 </x-admin-layout>

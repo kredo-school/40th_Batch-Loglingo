@@ -15,26 +15,30 @@
             </thead>
             <tbody class="divide-y divide-gray-100">
 
-                  {{--★need to update later  $question->answers->count() --}}
-                  {{--★need to update later  $question->reports->count() --}}
-                @php
-                $reports1 = 1;
-                $answers1 = 2;
-                @endphp
-
                 {{-- user example1--}}
                 @foreach($questions as $question)
 
-                <tr x-data="{ active: false, open: false, showModal: false, reports: {{ $reports1 }} }"
+                @php
+                $totalReports = $question->total_reports_count;
+                @endphp
+
+                <tr x-data="{
+                active: false,
+                open: false,
+                showModal: false, 
+                reports: {{ $totalReports }} }"
                     :class="reports >= 10 ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-gray-50'"
                     class="transition-colors">
 
                     {{-- report --}}
-                    <td class="px-6 py-4 text-center font-bold" :class="reports >=10 ? 'text-red-600' : 'text-gray-600'" x-text="reports"></td>
+                    <td class="px-6 py-4 text-center font-bold {{ $totalReports >= 10 ? 'text-red-600' : 'text-gray-600' }}">
+                        {{ $totalReports }}
+                    </td>
+
 
                     {{-- answer --}}
                     <td class="px-6 py-4 text-center">
-                        @if($answers1 > 0)
+                        @if($question->answers->count() > 0)
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border-2 border-red-500 text-red-500">
                             answered
                         </span>
@@ -51,7 +55,7 @@
                         <div class="flex flex-wrap justify-center gap-1">
                             @foreach($question->tags as $tag)
                             <span class="px-2 py-0.5 bg-blue-50 text-gray-600 text-[12px] font-bold rounded border border-blue-100">
-                                {{ $tag->name }}
+                                {{ $tag->code }}
                             </span>
                             @endforeach
                             @if($question->tags->isEmpty())
@@ -89,8 +93,8 @@
                             <div x-show="open" @click.away="open = false"
                                 class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg z-50 py-1">
 
-                                {{--1 view profile --}}
-                                <a href="{{ route('profile.show', $question->user->id )}}" class="group block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                {{--1 view question --}}
+                                <a href="{{ route('questions.show', $question->id )}}" class="group block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
                                     <i class="fa-regular fa-eye mr-3 w-5 text-center text-gray-400 group-hover:text-blue-500"></i> View Q&A
                                 </a>
 

@@ -20,84 +20,75 @@ class UserSeeder extends Seeder
         $sp = Language::where('name', 'Spanish')->first();
         $cn = Language::where('name', 'Chinese')->first();
 
-        User::firstOrCreate(
-            ['email' => 'user1@gmail.com'], 
-            [
-                'name' => 'Taro Suzuki',
-                'password' => Hash::make('password'),
-                'f_lang' => $jp->id,
-                's_lang' => $en->id,
-                'role_id' => 2,
-            ]
-        );
+        // 1. 既存の重要ユーザー（AdminやTeacher）を先に作成
+        $this->createFixedUsers($en, $jp);
 
-        User::firstOrCreate(
-            ['email' => 'user2@gmail.com'],
-            [
-                'name' => 'John Smith',
-                'password' => Hash::make('password'),
-                'f_lang' => $en->id,
-                's_lang' => $jp->id,
-                'role_id' => 2,
-            ]
-        );
+        // 2. 通報テスト用に、一般ユーザーをさらに20人ほど作成
+        for ($i = 1; $i <= 20; $i++) {
+            User::firstOrCreate(
+                ['email' => "user{$i}@gmail.com"],
+                [
+                    'name' => "Test User {$i}",
+                    'password' => Hash::make('password'),
+                    'f_lang' => $en->id,
+                    's_lang' => $jp->id,
+                    'role_id' => 2, // 一般ユーザー
+                ]
+            );
+        }
+    }
 
-        User::firstOrCreate(
-            ['email' => 'user3@gmail.com'],
-            [
-                'name' => 'Ivano Poletti',
-                'password' => Hash::make('password'),
-                'f_lang' => $sp->id,
-                's_lang' => $en->id,
-                'role_id' => 2,
-            ]
-        );
+    private function createFixedUsers($en, $jp)
+    {
+        // 管理者
+        User::firstOrCreate(['email' => 'admin1@gmail.com'], [
+            'name' => 'admin1',
+            'password' => Hash::make('password'),
+            'f_lang' => $en->id,
+            's_lang' => $jp->id,
+            'role_id' => 1,
+        ]);
 
-        User::firstOrCreate(
-            ['email' => 'user4@gmail.com'],
-            [
-                'name' => 'Jenna Cavill',
-                'password' => Hash::make('password'),
-                'f_lang' => $cn->id,
-                's_lang' => $en->id,
-                'role_id' => 2,
-            ]
-        );
+        User::firstOrCreate(['email' => 'admin2@gmail.com'], [
+            'name' => 'admin2',
+            'password' => Hash::make('password'),
+            'f_lang' => $en->id,
+            's_lang' => $jp->id,
+            'role_id' => 1,
+        ]);
 
-        // teacher
-        User::firstOrCreate(
-            ['email' => 'teacher1@gmail.com'],
-            [
-                'name' => 'Jenna Cavill teacher1',
-                'password' => Hash::make('password'),
-                'f_lang' => $en->id,
-                's_lang' => $jp->id,
-                'role_id' => 3,
-            ]
-        );
+        User::firstOrCreate(['email' => 'admin3@gmail.com'], [
+            'name' => 'admin3',
+            'password' => Hash::make('password'),
+            'f_lang' => $en->id,
+            's_lang' => $jp->id,
+            'role_id' => 1,
+        ]);
 
-        User::firstOrCreate(
-            ['email' => 'teacher2@gmail.com'],
-            [
-                'name' => 'Jenna Cavill teacher2',
-                'password' => Hash::make('password'),
-                'f_lang' => $jp->id,
-                's_lang' => $en->id,
-                'role_id' => 3,
-            ]
-        );
 
-        // admin
-        User::firstOrCreate(
-            ['email' => 'admin1@gmail.com'],
-            [
-                'name' => 'admin1',
-                'password' => Hash::make('password'),
-                'f_lang' => $en->id,
-                's_lang' => $jp->id,
-                'role_id' => 1,
-            ]
-        );
+        // 先生
+        User::firstOrCreate(['email' => 'teacher1@gmail.com'], [
+            'name' => 'Teacher 1',
+            'password' => Hash::make('password'),
+            'f_lang' => $en->id,
+            's_lang' => $jp->id,
+            'role_id' => 3,
+        ]);
 
+        User::firstOrCreate(['email' => 'teacher2@gmail.com'], [
+            'name' => 'Teacher 2',
+            'password' => Hash::make('password'),
+            'f_lang' => $en->id,
+            's_lang' => $jp->id,
+            'role_id' => 3,
+        ]);
+
+        User::firstOrCreate(['email' => 'teacher3@gmail.com'], [
+            'name' => 'Teacher 3',
+            'password' => Hash::make('password'),
+            'f_lang' => $en->id,
+            's_lang' => $jp->id,
+            'role_id' => 3,
+        ]);
     }
 }
