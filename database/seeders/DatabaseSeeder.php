@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Comment;
+use App\Models\Answer;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -20,6 +21,7 @@ class DatabaseSeeder extends Seeder
             QuestionSeeder::class,
             PostSeeder::class,
             CommentSeeder::class,
+            AnswerSeeder::class,
         ]);
     }
 }

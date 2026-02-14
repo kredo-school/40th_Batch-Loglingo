@@ -16,7 +16,6 @@ class Question extends Model
         'q_title',
         'q_content',
         'written_lang',
-    
     ];
 
     public function language()
