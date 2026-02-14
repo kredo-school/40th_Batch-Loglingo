@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Language;
 use App\Models\Report;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 
 class Post extends Model
 {
+     use HasFactory;
 
     protected $fillable = [
         'user_id',
@@ -19,6 +21,11 @@ class Post extends Model
         'p_content',
         'event_date',
     ];
+
+     protected $casts = [
+        'event_date' => 'date', 
+    ];
+
 
 
     public function user()
