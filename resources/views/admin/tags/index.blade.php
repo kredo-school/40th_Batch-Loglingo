@@ -6,23 +6,50 @@
     </div>
     @endif
 
-    <form action="{{ route('admin.tags.store') }}" method="POST" class="mb-6 flex items-center space-x-4">
-        @csrf
-        <div class="flex-1 max-w-md">
-            <input type="text"
-                name="name"
-                required
-                placeholder="Add a new tag(language)"
-                class="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-[1rem] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400">
 
-            @error('name')
-            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-            @enderror
+    <form action="{{ route('admin.tags.store') }}" method="POST" class="mb-6 p-6 bg-teal-50 rounded-[1rem] border border-teal-100">
+        @csrf
+        <h1 class="font-bold mb-4 text-[18px] text-gray-700">Add a new tag</h1>
+
+        <div class="flex flex-wrap items-start gap-4">
+
+
+            <!--Tag name  -->
+            <div class="fex-1 max-w-xs">
+                <input type="text"
+                    name="name"
+                    required
+                    placeholder="Tag (e.g. English)"
+                    value="{{ old('name') }}"
+                    class="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-[1rem] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400">
+                @error('name')
+                <p class="text-red-500 text-xs mt-1 ml-2">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- code name -->
+            <div class="w-35">
+                <input type="text"
+                    name="code"
+                    required
+                    placeholder="Code (e.g. EN)"
+                    value="{{ old('name') }}"
+                    class="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-[1rem] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400">
+                @error('code')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Add button -->
+            <button class="bg-[#3b82f6] hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-[1rem] flex items-center transition-colors">
+                <span class="mr-2 text-[20px]">+</span>
+                Add
+            </button>
+
         </div>
-        <button class="bg-[#3b82f6] hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-[1rem] flex items-center transition-colors">
-            <span class="mr-2 text-[20px]">+</span>
-            Add
-        </button>
+
+        
+
     </form>
 
 
@@ -32,6 +59,7 @@
                 <tr class="border-b border-gray-200">
                     <th class="px-6 py-4 font-bold text-gray-700 text-center">#</th>
                     <th class="px-6 py-4 font-bold text-gray-700 text-center">name</th>
+                    <th class="px-6 py-4 font-bold text-gray-700 text-center">code</th>
                     <th class="px-6 py-4 font-bold text-gray-700 text-center">count</th>
                     <th class="px-6 py-4 font-bold text-gray-700 text-center">last updated</th>
                     <th class="px-6 py-4 font-bold text-gray-700 text-center">status</th>
@@ -49,6 +77,13 @@
 
                     {{-- tag name--}}
                     <td class="px-6 py-4 text-gray-600 text-center text-sm">{{ $language->name}}</td>
+
+                    {{-- tag code--}}
+                    <td class="px-6 py-4 text-gray-600 text-center text-sm">
+                        <span class="px-2 py-0.5 bg-blue-50 text-gray-600 text-[12px] font-bold rounded border border-blue-100">
+                            {{ $language->code }}
+                        </span>
+                    </td>
 
                     {{-- count --}}
                     <td class="px-6 py-4 text-gray-500 text-center text-sm">{{ $language->questions_count }}</td>

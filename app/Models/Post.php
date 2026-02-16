@@ -20,6 +20,7 @@ class Post extends Model
         'p_title',
         'p_content',
         'event_date',
+        'status',
     ];
 
      protected $casts = [

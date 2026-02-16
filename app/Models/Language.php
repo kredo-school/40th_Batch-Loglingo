@@ -13,6 +13,7 @@ class Language extends Model
     protected $fillable = [
         'name',
         'code',
+        'status',
         ];
 
     public function questions()

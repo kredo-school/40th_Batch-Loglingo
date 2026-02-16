@@ -14,18 +14,18 @@ class AdminController extends Controller
 {
     public function indexUsers()
     {
-        $users = User::where('role_id',2)
-        ->latest()
-        ->paginate(20);
+        $users = User::where('role_id', 2)
+            ->latest()
+            ->paginate(20);
 
         return view('admin.users.index', compact('users'));
     }
 
     public function indexTeachers()
     {
-        $teachers = User::where('role_id',3)
-        ->latest()
-        ->paginate(20);
+        $teachers = User::where('role_id', 3)
+            ->latest()
+            ->paginate(20);
 
         return view('admin.teachers.index', compact('teachers'));
     }
@@ -62,13 +62,48 @@ class AdminController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|max:50|unique:languages,name',
+            'code' => 'required|max:10|unique:languages,code',
         ]);
 
         Language::create([
             'name' => $validated['name'],
+            'code' => $validated['code'],
         ]);
 
         return back()->with('status', 'New tag added successfully!');
+    }
+
+    // Status 
+    public function toggleUserStatus(User $user)
+    {
+        $user->status = !$user->status;
+        $user->save();
+
+        return back()->with('status', 'User status has been updated successfully!');
+    }
+
+    public function toggleQuestionStatus(Question $question)
+    {
+        $question->status = !$question->status;
+        $question->save();
+
+        return back()->with('status', 'Question status has been updated successfully!');
+    }
+
+    public function togglePostStatus(Post $post)
+    {
+        $post->status = !$post->status;
+        $post->save();
+
+        return back()->with('status', 'Post status has been updated successfully!');
+    }
+
+    public function toggleLanguageStatus(Language $language)
+    {
+        $language->status = !$language->status;
+        $language->save();
+
+        return back()->with('status', 'Language status has been updated successfully!');
     }
 
 
