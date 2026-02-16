@@ -25,7 +25,7 @@
                 @elseif(request()->routeIs('profile.following'))
                     <x-profile-show-following />
                 @elseif(request()->routeIs('profile.followers'))
-                    <x-profile-show-followers />
+                    <x-profile-show-followers :user='$user' :followers="$followers"/>
                 @endif
                 </div>
 
