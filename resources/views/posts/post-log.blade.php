@@ -12,7 +12,7 @@
                 </div>
 
              {{-- card body--}}
-             <form action="#" method="post" class="space-y-6" enctype="multipart/form-data">   {{-- action Route --}}
+             <form action="{{ route('posts.store') }}" method="post" class="space-y-6" enctype="multipart/form-data">   
                  @csrf
 
                   {{-- event date --}}
@@ -54,21 +54,13 @@
                             <i class="fa-solid fa-tag absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
                             <select name="tag" id="tag" 
                                 class="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition outline-none">
-                                    <option value="" hidden>Language of this log</option> 
-
-                                    {{-- show language using loop etc --}} 
-                                    <option value="1">Japanese</option> 
-                                    <option value="2">English</option> 
-                                    <option value="3">Spanish</option> 
-                                    <option value="4">Chinese</option> 
-                            
-                            {{-- WILL replace "option" above to below --}}
-                                {{-- <option value="" hidden>Which language is this question ABOUT?</option>
+                                    
+                                <option value="" hidden>In which language did you write? </option>
                                 @foreach($languages as $language)
                                     <option value="{{ $language->id }}">
                                         {{ $language->name }}
                                     </option>
-                                @endforeach --}}
+                                @endforeach
 
                             </select> 
                         </div> 

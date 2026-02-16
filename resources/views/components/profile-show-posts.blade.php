@@ -24,11 +24,10 @@
             <div class="flex-1 flex flex-col">
                 <!--  header -->
                 <div class="flex justify-between items-start mb-2">
-                    <a href="#" class="group">
-                    <h3 class="font-bold text-gray-700 group-hover:text-[#B178CC] transition-colors">{{ $post->user->name }}</h3> 
+                    <h3 class="font-bold text-gray-700">{{ $post->user->name }}</h3> 
                     </a>
-                    <span class="text-gray-400 text-[13px] underline"> {{ $post->event_date }}</span> 
-                    {{-- {{ $post->event_date->format('m/d/Y') }} --}}
+                    <span class="text-gray-400 text-[13px] underline"> {{ $post->event_date->format('m/d/Y') }}</span> 
+                   
                 </div>
 
                <!--  tytle & body  -->
@@ -45,8 +44,8 @@
 
                 <!-- tag & report -->
                 <div class="flex justify-between items-center mt-4 pt-3 border-t border-gray-50">
-                    <p class="text-[12px] text-gray-400">{{ $post->created_at }} </p> 
-                    {{-- {{ $post->created_at->diffForHumans() }} --}}
+                    <p class="text-[12px] text-gray-400">{{ $post->created_at->diffForHumans() }} </p> 
+                    
 
                     <div class="flex items-center space-x-3">
                         <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100">
