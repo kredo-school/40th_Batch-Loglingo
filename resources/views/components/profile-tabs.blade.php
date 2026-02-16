@@ -8,7 +8,7 @@
     class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
     {{ request()->routeIs('profile.show') 
             ? 'text-gray-900 font-semibold' 
-            : 'text-gray-500 hover:text-gray-900 hover:font-semibold transition-all duration-200' }}">
+            : 'text-gray-500 hover:text-gray-900 transition-all duration-200' }}">
 
         posts
 
@@ -21,7 +21,7 @@
     class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
     {{ request()->routeIs('profile.questions') 
             ? 'text-gray-900 font-semibold' 
-            : 'text-gray-500 hover:text-gray-900 hover:font-semibold transition-all duration-200' }}">
+            : 'text-gray-500 hover:text-gray-900 transition-all duration-200' }}">
 
         questions
 
@@ -34,7 +34,7 @@
     class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
     {{ request()->routeIs('profile.following') 
             ? 'text-gray-900 font-semibold' 
-            : 'text-gray-500 hover:text-gray-900 hover:font-semibold transition-all duration-200' }}">
+            : 'text-gray-500 hover:text-gray-900 transition-all duration-200' }}">
 
         following
 
@@ -47,7 +47,7 @@
     class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
     {{ request()->routeIs('profile.followers') 
             ? 'text-gray-900 font-semibold' 
-            : 'text-gray-500 hover:text-gray-900 hover:font-semibold transition-all duration-200' }}">
+            : 'text-gray-500 hover:text-gray-900 transition-all duration-200' }}">
 
         followers
 
@@ -61,7 +61,7 @@
     class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
     {{ request()->routeIs('profile.bookmarks') 
             ? 'text-gray-900 font-semibold' 
-            : 'text-gray-500 hover:text-gray-900 hover:font-semibold transition-all duration-200' }}">
+            : 'text-gray-500 hover:text-gray-900 transition-all duration-200' }}">
 
         bookmarks
 
@@ -75,7 +75,7 @@
     class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
     {{ request()->routeIs('profile.notifications') 
             ? 'text-gray-900 font-semibold' 
-            : 'text-gray-500 hover:text-gray-900 hover:font-semibold transition-all duration-200' }}">
+            : 'text-gray-500 hover:text-gray-900 transition-all duration-200' }}">
 
         notifications
 

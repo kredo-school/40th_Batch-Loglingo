@@ -29,8 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // FOLLOW
-    Route::post('/follow/{user_id}/store', [FollowController::class, 'store'])->name('follow.store');
-    Route::delete('/follow/{user_id}/destroy', [FollowController::class, 'destroy'])->name('follow.destroy');
+    Route::post('/follow/{user}/store', [FollowController::class, 'store'])->name('follow.store');
+    Route::delete('/follow/{user}/destroy', [FollowController::class, 'destroy'])->name('follow.destroy');
 
     // Profile tabs
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show'); //default. (dashboard = post tab)

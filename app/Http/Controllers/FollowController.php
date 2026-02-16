@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Follow;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FollowController extends Controller
 {
@@ -26,10 +28,17 @@ class FollowController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    public function store(User $user)
+        {
+            // avoid to follow myself
+            if (Auth::id() === $user->id) {
+                abort(403);
+            }
+
+            Auth::user()->followings()->syncWithoutDetaching([$user->id]);
+
+            return back();
+        }
 
     /**
      * Display the specified resource.
@@ -58,8 +67,11 @@ class FollowController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Follow $follow)
-    {
-        //
-    }
+    public function destroy(User $user)
+        {
+            Auth::user()->followings()->detach($user->id);
+
+            return back();
+        }
+
 }
