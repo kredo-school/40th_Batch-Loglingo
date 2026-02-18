@@ -13,13 +13,22 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::with(['user','tags'])->latest()->take(5)->get();
+        $questions = Question::with(['user','tags'])
+        ->where('status', true)
+        ->latest()
+        ->take(5)
+        ->get();
+
         return view('questions.index', compact('questions'));
     }
 
     public function all()
     {
-        $questions = Question::with(['user', 'tags'])->latest()->paginate(20);
+        $questions = Question::with(['user', 'tags'])
+        ->where('status', true)
+        ->latest()
+        ->paginate(20);
+        
         return view('questions.all', compact('questions'));
     }
 
@@ -29,7 +38,7 @@ class QuestionController extends Controller
     public function create()
     {
         return view('questions.add-question', [
-        'languages' => Language::all(),
+        'languages' => Language::where('status', true)->get(),
         ]);
     }
 
@@ -65,7 +74,10 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
-        $question = Question::with(['user','tags'])->findOrFail($id);
+        $question = Question::with(['user','tags'])
+        ->where('status', true)
+        ->findOrFail($id);
+        
         return view('questions.show',compact('question'));
     }
 

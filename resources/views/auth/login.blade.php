@@ -53,6 +53,8 @@
                             <div class="space-y-1">
                                 <label for="email" class="text-lg">Email</label>
                                 <input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition">
+
+                                <x-input-error :messages="$errors->get('email')" class="mt-2" />
                             </div>
 
                             <!-- Password -->

@@ -15,18 +15,15 @@
             </thead>
             <tbody class="divide-y divide-gray-100">
 
-                {{-- user example1--}}
+
                 @foreach($questions as $question)
 
                 @php
                 $totalReports = $question->total_reports_count;
                 @endphp
 
-                <tr x-data="{
-                active: false,
-                open: false,
-                showModal: false, 
-                reports: {{ $totalReports }} }"
+                {{-- display question--}}
+                <tr x-data="{ active: {{ $question->status ? 'true' : 'false'}}, open: false, showModal: false,reports: {{ $totalReports }} }"
                     :class="reports >= 10 ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-gray-50'"
                     class="transition-colors">
 
@@ -138,14 +135,22 @@
 
                                 {{-- Modal Footer --}}
                                 <div class="px-4 py-3 bg-gray-50 flex justify-end space-x-3">
+
                                     <button @click="showModal = false" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
                                         Cancel
                                     </button>
-                                    <button @click="active = !active; showModal = false"
+
+                                    <form action="{{ route('admin.questions.toggle' , $question->id) }}" method="POST">
+                                        @csrf 
+                                        @method('PATCH')
+                                        <button type="submit"
                                         :class="active ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
                                         class="px-4 py-2 text-sm font-medium text-white rounded-md transition-colors">
                                         <span x-text="active ? 'Deactivate' : 'Activate'"></span>
                                     </button>
+                                    </form>
+                                    
+
                                 </div>
                             </div>
                         </div>

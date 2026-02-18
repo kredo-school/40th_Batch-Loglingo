@@ -49,6 +49,19 @@ class Post extends Model
     {
         return $this->morphMany(Report::class, 'reportable');
     }
+
+    public function getTotalReportsCountAttribute(): int
+    {
+        // number of reports to post
+        $postReports = $this->reports()->count();
+
+        // total report number
+        $commentsReports = $this->comments->sum(function ($comment) {
+            return $comment->reports()->count();
+        });
+
+        return $postReports + $commentsReports;
+    }
 }
 
 
