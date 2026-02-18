@@ -70,6 +70,20 @@ class ProfileController extends Controller
 
             
         }
+        // public function show(User $user)
+        // {
+        //     return view('profile.profile', [
+        //         'user' => $user,
+
+        //         // tabs
+        //         'posts' => $user->posts()->latest()->with('user')->get(),
+        //         'questions' => $user->questions()->latest()->with('user')->get(),
+
+        //         // follow tabs
+        //         'followings' => $user->followings()->get(),
+        //         'followers'  => $user->followers()->get(),
+        //     ]);
+        // }
 
         public function questions(User $user)
         {
@@ -85,16 +99,17 @@ class ProfileController extends Controller
             return view('profile.profile', [
                 'user' => $user,
                 // 'tab' => 'following',
-                'followings' => collect(), // TODO: inplement later
+                'followings' => $user->followings()->get(),
             ]);
         }
+        
 
         public function followers(User $user)
         {
             return view('profile.profile', [
                 'user' => $user,
                 // 'tab' => 'followers',
-                'followers' => collect(), // TODO: inplement later
+                'followers' => $user->followers()->get(),
             ]);
         }
     
