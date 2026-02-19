@@ -12,7 +12,11 @@
           </div>
           <div>
             <p class="text-[16px] font-bold">
-            {{$follower->name }}
+              <a
+                href="{{ route('profile.show', $follower) }}"
+                class="hover:text-[#B178CC] transition-colors">
+                {{ $follower->name }}
+              </a>
             </p>
             <p class="text-[15px]"><i class="fa-solid fa-message text-gray-600"></i> 
             <span>{{ $follower->firstLanguage->name ?? $follower->f_lang }}</span>

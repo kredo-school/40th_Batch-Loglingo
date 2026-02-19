@@ -1,7 +1,7 @@
 <x-app-layout>
     {{-- delete when layout completed ?? --}}
     <div class="py-8">
-        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-8">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-8 justify-center">
             <div class="w-full md:w-2/3">
              {{-- left --}}
              {{-- card header --}}
