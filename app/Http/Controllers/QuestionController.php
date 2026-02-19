@@ -11,25 +11,36 @@ class QuestionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $questions = Question::with(['user','tags'])
-        ->where('status', true)
-        ->latest()
-        ->take(5)
-        ->get();
+        $languages = Language::where('status', true)->get();
 
-        return view('questions.index', compact('questions'));
+        $query = Question::with(['user','tags'])
+        ->where('status',true);
+
+        if($request->has('languages')){
+            $query->whereIn('written_lang',$request->input('languages'));
+        }
+
+        $questions = $query->latest()->take(5)->get();
+
+        return view('questions.index', compact('questions', 'languages'));
     }
 
-    public function all()
+    public function all(Request $request)
     {
-        $questions = Question::with(['user', 'tags'])
-        ->where('status', true)
-        ->latest()
-        ->paginate(20);
+        $languages = Language::where('status', true)->get();
+
+        $query = Question::with(['user', 'tags'])
+        ->where('status', true);
+
+        if ($request->has('languages')){
+            $query->whereIn('written_lang',$request->input('languages'));
+        }
+
+        $questions = $query->latest()->paginate(20);
         
-        return view('questions.all', compact('questions'));
+        return view('questions.all', compact('questions','languages'));
     }
 
     /**

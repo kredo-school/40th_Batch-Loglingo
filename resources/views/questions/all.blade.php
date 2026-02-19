@@ -13,17 +13,33 @@
                 </div>
 
                 <!-- Language filter -->
-                <x-language-filter :action="route('questions.index')" />
+                <x-language-filter :languages="$languages" :action="route('questions.all')" />
 
 
                 <!-- Question example-->
-                @foreach($questions as $question)
+                @forelse($questions as $question)
                 <x-question-card :question="$question" />
                 <div class="mb-4"></div>
-                @endforeach
+
+                @empty
+                <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-12 text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-50 rounded-full mb-4">
+                        <i class="fa-solid fa-magnifying-glass text-3xl text-gray-400"></i>
+                    </div>
+                    <p class="text-gray-500 text-lg font-medium">No questions found.</p>
+                    <p class="text-gray-400 mt-1">Try adjusting your filter.</p>
+
+                    @if(request()->has('languages'))
+                    <a href="{{ route('questions.all') }}" class="inline-block mt-4 text-[#56A5E1] hover:underline text-sm">
+                        Clear all filters
+                    </a>
+                    @endif
+                </div>
+
+                @endforelse
 
                 <div class="mt-8 px-4">
-                    {{ $questions->links() }}
+                    {{ $questions->appends(request()->query())->links() }}
                 </div>
 
 
