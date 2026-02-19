@@ -48,7 +48,7 @@
 
         </div>
 
-        
+
 
     </form>
 
@@ -69,8 +69,9 @@
             <tbody class="divide-y divide-gray-100">
 
                 @foreach($languages as $language)
-                {{-- user example1--}}
-                <tr x-data="{ active: true, open: false, showModal: false}" class="hover:bg-gray-50 transition-colors">
+
+                {{-- display tag--}}
+                <tr x-data="{ active: {{ $language->status ? 'true' : 'false'}}, open: false, showModal: false}" class="hover:bg-gray-50 transition-colors">
 
                     {{-- number--}}
                     <td class="px-6 py-4 text-gray-600 text-center text-sm">{{ $language->id }}</td>
@@ -153,14 +154,21 @@
 
                                 {{-- Modal Footer --}}
                                 <div class="px-4 py-3 bg-gray-50 flex justify-end space-x-3">
+
                                     <button @click="showModal = false" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
                                         Cancel
                                     </button>
-                                    <button @click="active = !active; showModal = false"
-                                        :class="active ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
-                                        class="px-4 py-2 text-sm font-medium text-white rounded-md transition-colors">
-                                        <span x-text="active ? 'Deactivate' : 'Activate'"></span>
-                                    </button>
+
+                                    <form action=" {{ route('admin.languages.toggle', $language->id )}}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit"
+                                            :class="active ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
+                                            class="px-4 py-2 text-sm font-medium text-white rounded-md transition-colors">
+                                            <span x-text="active ? 'Deactivate' : 'Activate'"></span>
+                                        </button>
+                                    </form>
+
                                 </div>
                             </div>
                         </div>
@@ -173,7 +181,7 @@
             </tbody>
         </table>
 
-        <!--★ need to updatelater pagenation -->
+        {{-- next page (pagenation) --}}
         <div class="mt-4">
             {{ $languages->links() }}
         </div>

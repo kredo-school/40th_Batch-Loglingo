@@ -15,8 +15,8 @@
                 @foreach($teachers as $teacher)
 
 
-                {{-- teacher example1--}}
-                <tr x-data="{ active: true, open: false, showModal: false}" class="hover:bg-gray-50 transition-colors">
+                {{-- display teacher--}}
+                <tr x-data="{ active: {{ $teacher->status ? 'true' : 'false'}}, open: false, showModal: false}">
 
                     {{-- teachername--}}
                     <td class="px-6 py-4">
@@ -58,7 +58,7 @@
                                 </a>
 
                                 {{--2 Change status--}}
-                                <button @click="showModal = true"
+                                <button @click="showModal = true" type="button"
                                     class="group w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center transition-colors focus:outline-none">
                                     <div class="mr-3 w-5 flex justify-center items-center">
                                         <span :class="active ? 'bg-red-500' : 'bg-green-500'"
@@ -97,14 +97,21 @@
 
                                 {{-- Modal Footer --}}
                                 <div class="px-4 py-3 bg-gray-50 flex justify-end space-x-3">
+
                                     <button @click="showModal = false" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
                                         Cancel
                                     </button>
-                                    <button @click="active = !active; showModal = false"
+                                    
+                                    <form action="{{ route('admin.users.toggle' , $teacher->id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit"
                                         :class="active ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
                                         class="px-4 py-2 text-sm font-medium text-white rounded-md transition-colors">
                                         <span x-text="active ? 'Deactivate' : 'Activate'"></span>
                                     </button>
+                                    </form>
+
                                 </div>
                             </div>
                         </div>

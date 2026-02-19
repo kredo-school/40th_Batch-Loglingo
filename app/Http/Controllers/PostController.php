@@ -15,14 +15,23 @@ class PostController extends Controller
     public function index(Request $request)
     {
        
-        $posts = Post::with(['user','tags'])->latest()->take(5)->get();
+        $posts = Post::with(['user','tags'])
+        ->where('status', true)
+        ->latest()
+        ->take(5)
+        ->get();
+
         return view('posts.index', compact('posts'));
         
     }
    
     public function all()
     {
-        $posts = Post::with(['user', 'tags'])->latest()->paginate(20);
+        $posts = Post::with(['user', 'tags'])
+        ->where('status', true)
+        ->latest()
+        ->paginate(20);
+
         return view('posts.all', compact('posts'));
     }
    
@@ -32,7 +41,7 @@ class PostController extends Controller
     public function create()
     {
          return view('posts.post-log', [
-        'languages' => Language::all(),
+        'languages' => Language::where('status', true)->get(),
         ]);
     }
     
@@ -71,7 +80,10 @@ class PostController extends Controller
      */
     public function show($id)
     {
-         $post = Post::with(['user', 'tags', 'reports','comments.user'])->findOrFail($id);
+         $post = Post::with(['user', 'tags', 'reports','comments.user'])
+         ->where('status', true)
+         ->findOrFail($id);
+         
          return view('posts.show', compact('post'));        
     }
 

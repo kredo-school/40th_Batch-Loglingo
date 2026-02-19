@@ -56,13 +56,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/report', [ReportController::class, 'store'])
         // ->middleware('auth')
         ->name('report.store');
+});
 
 
 
-    });
-
-
-    
 
 
 
@@ -78,6 +75,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/tags', [AdminController::class, 'indexTags'])->name('tags.index');
     Route::post('/tags', [AdminController::class, 'storeTag'])->name('tags.store');
     Route::get('/discussions', [AdminController::class, 'indexDiscussions'])->name('discussions.index');
+
+    // status
+    Route::patch('/users/{user}/toggle', [AdminController::class, 'toggleUserStatus'])->name('users.toggle');
+    Route::patch('/posts/{post}/toggle', [AdminController::class, 'togglePostStatus'])->name('posts.toggle');
+    Route::patch('/questions/{question}/toggle', [AdminController::class, 'toggleQuestionStatus'])->name('questions.toggle');
+    Route::patch('/languages/{language}/toggle', [AdminController::class, 'toggleLanguageStatus'])->name('languages.toggle');
+    
 });
 
 require __DIR__ . '/auth.php';
