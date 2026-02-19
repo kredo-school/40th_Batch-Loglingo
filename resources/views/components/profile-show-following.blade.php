@@ -11,8 +11,12 @@
             <img src="#" alt="user" class="w-full h-full object-cover">
           </div>
           <div>
-            <p class="text-[16px] font-bold">
-            {{$following->name }}
+           <p class="text-[16px] font-bold">
+              <a
+                href="{{ route('profile.show', $following) }}"
+                class="hover:text-[#B178CC] transition-colors">
+                {{ $following->name }}
+              </a>
             </p>
             <p class="text-[15px]"><i class="fa-solid fa-message text-gray-600"></i> 
             <span>{{ $following->firstLanguage->name ?? $following->f_lang }}</span>

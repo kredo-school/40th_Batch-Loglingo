@@ -48,11 +48,11 @@
         <div class="space-y-1 text-gray-600">
             <div class="flex items-center gap-2">
                 <i class="fa-regular fa-comment text-lg"></i>
-                <span class="text-md">{{ $user->f_lang }}</span>. {{-- NEED TO re-code to show language name after language model is made --}}
+                <span class="text-md">{{ $user->firstLanguage->name ?? $user->f_lang}}</span> 
             </div>
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-pen text-md"></i>
-                <span class="text-md">{{ $user->s_lang }}</span>
+                <span class="text-md">{{ $user->studyLanguage->name ?? $user->s_lang }}</span>
             </div>                                   
         </div>
         

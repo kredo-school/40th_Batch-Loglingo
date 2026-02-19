@@ -3,9 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\User;
+use App\Models\Language;
 use App\Models\Post;
 use App\Models\Question;
-use App\Models\User;
 use App\Models\Follow;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -52,6 +53,17 @@ class User extends Authenticatable
         ];
     }
 
+    // user's language tags
+    public function firstLanguage()
+    {
+        return $this->belongsTo(Language::class, 'f_lang');
+    }
+
+    public function studyLanguage()
+    {
+        return $this->belongsTo(Language::class, 's_lang');
+    }
+
     // for profile tabs
     public function posts()
     {
@@ -63,18 +75,6 @@ class User extends Authenticatable
         return $this->hasMany(Question::class);
     }
 
-    // user follows many users
-    // public function follow()
-    // {
-    //     return $this->hasMany(Follow::class, 'follower_id');
-    // }
-
-    // user has many followers    
-    // public function followers()
-    // {
-    //     return $this->hasMany(Follow::class, 'following_id');
-    // }
-
     public function followings()
     {
         return $this->belongsToMany(
@@ -83,6 +83,13 @@ class User extends Authenticatable
             'follower_id',
             'following_id'
         );
+    }
+
+    public function isFollowing(User $user): bool
+    {
+    return $this->followings()
+        ->where('following_id', $user->id)
+        ->exists();
     }
 
     public function followers()
