@@ -8,17 +8,35 @@
                 <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 mb-3">
                     <div class="flex justify-between items-end m-4">
                         <h2 class="text-[24px] font-bold">Latest Q&As</h2>
-                        <a href="{{ route('questions.all') }}" class="text-sm text-black hover:underline">see more</a> {{--★need to adjust the route --}}
+                        <a href="{{ route('questions.all') }}" class="text-sm text-black hover:underline">see more</a>
                     </div>
                 </div>
 
                 <!-- Language filter -->
-                <x-language-filter :action="route('questions.index')" /> {{--★need to adjust the route --}}
+                <x-language-filter :languages="$languages" :action="route('questions.index')" />
 
                 <!-- Question example-->
-                @foreach($questions as $question)
+                @forelse($questions as $question)
                 <x-question-card :question="$question" />
-                <div class="mb-4"></div> @endforeach
+                <div class="mb-4"></div>
+
+                @empty
+                <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-12 text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-50 rounded-full mb-4">
+                        <i class="fa-solid fa-magnifying-glass text-3xl text-gray-400"></i>
+                    </div>
+                    <p class="text-gray-500 text-lg font-medium">No questions found.</p>
+                    <p class="text-gray-400 mt-1">Try adjusting your filter.</p>
+
+                    @if(request()->has('languages'))
+                    <a href="{{ route('questions.index') }}" class="inline-block mt-4 text-[#56A5E1] hover:underline text-sm">
+                        Clear all filters
+                    </a>
+                    @endif
+                </div>
+
+
+                @endforelse
 
             </div>
 
