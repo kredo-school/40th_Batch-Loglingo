@@ -1,7 +1,11 @@
 <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-6">
   <div class="flex items-center space-x-4">
-    <div class="w-16 h-16 rounded-full bg-yellow-400 border-4 border-white shadow-sm overflow-hidden">
-      <img src="#" alt="user" class="w-full h-full object-cover">
+    <div class="w-16 h-16 rounded-full bg-yellow-400 overflow-hidden">
+      @if(Auth::user()->avatar)
+        <img src="{{ Auth::user()->avatar }}" alt="user" class="w-full h-full object-cover">
+      @else
+        <i class="fa-solid fa-circle-user text-gray-400 text-[4rem] leading-none"></i>
+      @endif
     </div>
     <div>
       <h3 class="text-xl font-bold">{{ Auth::user()->name }}</h3>

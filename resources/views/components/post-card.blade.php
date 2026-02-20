@@ -7,12 +7,12 @@
 
     {{-- user icon --}}
     <div class="flex-shrink-0">
-      <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-sm">
+      <div class="w-16 h-16 rounded-full overflow-hidden">
      
       @if($post->user->avatar)
-        <img src="{{ $post->user->avatar }}" alt="user" class="text-[50px] object-cover">
+        <img src="{{ $post->user->avatar }}" alt="user" class="w-full h-full object-cover">
       @else
-          <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
+          <i class="fa-solid fa-circle-user text-gray-400 text-[4rem] leading-none"></i>
       @endif
 
       </div>

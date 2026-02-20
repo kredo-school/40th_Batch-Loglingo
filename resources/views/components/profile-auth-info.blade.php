@@ -7,7 +7,7 @@
     <div class="shrink-0 flex flex-col items-center">
         @if(Auth::user()->avatar)
             <img src="{{ Auth::user()->avatar }}" alt="avatar"
-                class="w-24 h-24 rounded-full object-cover border-4 border-white">
+                class="w-24 h-24 rounded-full object-cover">
         @else
             <i class="fa-solid fa-circle-user text-gray-400 text-[96px] leading-none"></i>
         @endif
