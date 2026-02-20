@@ -65,7 +65,7 @@
 
                             <!-- forget password? -->
                             <div class="flex justify-end">
-                                <a href="{{ route('password.request') }}" class="text-gray-500 text-end no-underline hover:text-gray-700 transition-colors">Forget password?</a>
+                                <a href="{{ route('password.request') }}" class="text-gray-500 text-end underline underline-offset-4 hover:text-gray-700 transition-colors">Forget password?</a>
                             </div>
 
                             <!-- Submit Button -->

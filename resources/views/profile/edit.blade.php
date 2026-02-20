@@ -14,9 +14,9 @@
                 </div>
 
              {{-- card body--}}
-             <form action="#" method="post" class="space-y-6" enctype="multipart/form-data">   {{-- action Route --}}
+             <form action="{{ route('profile.update') }}" method="post" class="space-y-6" enctype="multipart/form-data">   
                  @csrf
-
+                 @method('PATCH')
                     {{-- avatar --}}
                     <div class="flex mb-6 gap-4">
                         <div class="w-1/3 flex justify-center">
@@ -60,18 +60,18 @@
                                 <option value="" hidden>Select your first language</option> 
 
                                 {{-- show language using loop etc --}} 
-                                <option value="1">Japanese</option> 
+                                {{-- <option value="1">Japanese</option> 
                                 <option value="2">English</option> 
                                 <option value="3">Spanish</option> 
-                                <option value="4">Chinese</option> 
+                                <option value="4">Chinese</option>  --}}
                         
                         {{-- WILL replace "option" above to below --}}
-                            {{-- <option value="" hidden>Select your first language</option>
+                            <option value="" hidden>Select your first language</option>
                             @foreach($languages as $language)
                                 <option value="{{ $language->id }}" {{ old('f_lang', Auth::user()->f_lang) == $language->id ? 'selected' : '' }}>
                                     {{ $language->name }}
                                 </option>
-                            @endforeach --}}
+                            @endforeach
 
                         </select>  
 
@@ -87,18 +87,18 @@
                             class="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition outline-none">
                             <option value="" hidden>Select your language to study</option>
                             {{-- show language using loop etc --}}
-                            <option value="1">Japanese</option>
+                            {{-- <option value="1">Japanese</option>
                             <option value="2">English</option>
                             <option value="3">Spanish</option>
-                            <option value="4">Chinese</option>
+                            <option value="4">Chinese</option> --}}
                             
                             {{-- WILL replace "option" above to below --}}
-                            {{-- <option value="" hidden>Select your first language</option>
+                            <option value="" hidden>Select your first language</option>
                             @foreach($languages as $language)
                                 <option value="{{ $language->id }}" {{ old('s_lang', Auth::user()->s_lang) == $language->id ? 'selected' : '' }}>
                                     {{ $language->name }}
                                 </option>
-                            @endforeach --}}
+                            @endforeach
                         </select>  
 
                         @error('s-lang')

@@ -80,13 +80,13 @@
                                     <i class="fa-solid fa-message absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
                                     <select id="f_lang" name="f_lang" required class="w-full pl-11 pr-10 py-3 appearance-none rounded-2xl border border-gray-300 bg-white focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition outline-none">
 
-                                        <option>Select your language</option>
+                                        {{-- <option>Select your language</option>
                                         <option>Japanese</option>
                                         <option>English</option>
                                         <option>Spanish</option>
-                                        <option>Chinese</option>
+                                        <option>Chinese</option> --}}
                                         {{-- WILL replace "option" above to below --}}
-                                    {{-- <option value="" hidden>
+                                    <option value="" hidden>
                                             Select your language
                                         </option>
 
@@ -94,7 +94,7 @@
                                             <option value="{{ $language->id }}" {{ old('f_lang') == $language->id ? 'selected' : '' }} >
                                                 {{ $language->name }}
                                             </option>
-                                        @endforeach --}}
+                                        @endforeach
                                     </select>
                                     
                                 </div>
@@ -106,13 +106,13 @@
                                 <div class="relative">
                                     <i class="fa-solid fa-pen-clip absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
                                     <select id="s_lang" name="s_lang" required class="w-full pl-11 pr-10 py-3 appearance-none rounded-2xl border border-gray-300 bg-white focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition outline-none">
-                                        <option>Select language to study</option>
+                                        {{-- <option>Select language to study</option>
                                         <option>Japanese</option>
                                         <option>English</option>
                                         <option>Spanish</option>
-                                        <option>Chinese</option>
+                                        <option>Chinese</option> --}}
                                     {{-- WILL replace "option" above to below --}}
-                                    {{-- <option value="" hidden>
+                                    <option value="" hidden>
                                             Select your language
                                         </option>
 
@@ -120,7 +120,7 @@
                                             <option value="{{ $language->id }}" {{ old('s_lang') == $language->id ? 'selected' : '' }} >
                                                 {{ $language->name }}
                                             </option>
-                                        @endforeach --}}
+                                        @endforeach
 
                                     </select>
                                 </div>
