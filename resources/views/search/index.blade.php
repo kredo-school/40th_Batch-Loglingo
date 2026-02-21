@@ -13,10 +13,34 @@
                 </div>
 
                 <!-- Language filter -->
-                <x-language-filter :action="route('search')" /> {{--★need to adjust the route --}}
+                <x-language-filter :languages="$languages" :action="route('search')" />
 
                 <!-- Post example-->
-                <x-post-card />
+                @forelse($posts as $post)
+                <x-post-card :post="$post" />
+                <div class="mb-4"></div>
+
+                @empty
+                <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-12 text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-50 rounded-full mb-4">
+                        <i class="fa-solid fa-magnifying-glass text-3xl text-gray-400"></i>
+                    </div>
+                    <p class="text-gray-500 text-lg font-medium">No posts found.</p>
+                    <p class="text-gray-400 mt-1">Try adjusting your filter.</p>
+
+                    @if(request()->filled('languages'))
+                    <a href="{{ route('search') }}" class="inline-block mt-4 text-[#56A5E1] hover:underline text-sm">
+                        Clear all filters
+                    </a>
+                    @endif
+                </div>
+
+                @endforelse
+
+                <div class="mt-8 px-4">
+                    {{ $posts->appends(request()->query())->links() }}
+                </div>
+
 
             </div>
 
