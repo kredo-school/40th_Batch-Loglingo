@@ -1,7 +1,7 @@
 <nav class="bg-[#B178CC] p-3 shadow-lg rounded-[1rem] mx-4 mt-2">
     <div class="max-w-full mx-auto flex justify-between items-center">
 
-        <a href="{{ route('dashboard')}}" class="flex items-center space-x-2">
+        <a href="{{ route('posts.index')}}" class="flex items-center space-x-2">
             <img src="{{ asset('images/Logo.png') }}" alt="LogLingo Logo" class="h-12 w-auto rounded-[0.5rem] me-2">
             <span class="text-white  text-3xl font-mansalva">Log Lingo</span>
         </a>
@@ -21,7 +21,7 @@
 
             {{-- Search --}}
             <a href="{{ route('search') }}"
-                class="{{ request()->routeIs('search.*') ? 'text-gray-800' : 'hover:text-gray-800' }} text-[27px]">
+                class="{{ request()->routeIs('search') ? 'text-gray-800' : 'hover:text-gray-800' }} text-[27px]">
                 Search
             </a>
 
@@ -32,8 +32,8 @@
         </div>
 
         <div class="flex items-center space-x-5 text-[30px]">
-            <a href="{{ route('dashboard')}}" class="text-white hover:text-gray-800"><i class="fa-solid fa-house"></i></a>
-            <a href="{{ route('dashboard')}}" class="text-white hover:text-gray-800"><i class="fa-regular fa-bell"></i></a> {{--★need to adjust the route --}}
+            <a href="{{ route('posts.index')}}" class="text-white hover:text-gray-800"><i class="fa-solid fa-house"></i></a>
+            <a href="{{ route('posts.index')}}" class="text-white hover:text-gray-800"><i class="fa-regular fa-bell"></i></a> {{--★need to adjust the route --}}
 
             <x-dropdown align="right" width="48">
                 <x-slot name="trigger">
