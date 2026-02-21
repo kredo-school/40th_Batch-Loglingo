@@ -10,8 +10,14 @@
 
         {{-- user icon --}}
         <div class="flex-shrink-0">
-            <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-sm">
-                <img src="{{ $question->user->avatar ?? asset('images/baby-octopus.png') }}" alt="user" class="w-full h-full object-cover">
+            <div class="w-16 h-16 rounded-full overflow-hidden">
+     
+            @if($question->user->avatar)
+                <img src="{{ $question->user->avatar }}" alt="user" class="w-full h-full object-cover">
+            @else
+                <i class="fa-solid fa-circle-user text-gray-400 text-[4rem] leading-none"></i>
+            @endif
+
             </div>
         </div>
 

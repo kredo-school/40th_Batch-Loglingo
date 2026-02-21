@@ -7,8 +7,12 @@
     <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-3">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-3">
-          <div class="w-14 h-14 rounded-full bg-pink-400 border-2 border-white shadow-sm overflow-hidden">
-            <img src="#" alt="user" class="w-full h-full object-cover">
+          <div class="w-14 h-14 rounded-full shadow-sm overflow-hidden">
+            @if($following->avatar)
+              <img src="{{ $following->avatar }}" alt="avatar" class="w-full h-full object-cover">
+            @else
+              <i class="fa-solid fa-circle-user text-gray-400 text-[3.5rem] leading-none"></i>
+            @endif
           </div>
           <div>
            <p class="text-[16px] font-bold">
