@@ -1,15 +1,30 @@
+ {{--@php for see more  --}}
+@php
+  $isAll = request('suggested') === 'all';
+@endphp
+
+{{-- begining of layout --}}
 <div class="space-y-3">
 
   <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100">
     <div class="flex justify-between items-end m-4">
       <h2 class="text-[24px] font-bold">Suggested Users</h2>
-      <a href="#" class="text-sm text-black hover:underline">see more</a> {{--★need to create a link to show more posts --}}
+      @if($isAll)
+        <a href="{{ url()->current() }}" class="text-sm hover:underline">
+          see less
+        </a>
+      @else
+        <a href="{{ request()->fullUrlWithQuery(['suggested' => 'all']) }}"
+          class="text-sm hover:underline">
+          see more
+        </a>
+      @endif
     </div>
   </div>
 
   <div class="space-y-2">
 
-    <!-- user profile example1 -->
+    <!-- user profile -->
     @forelse($users as $user)
     <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-3">
       <div class="flex items-center justify-between">

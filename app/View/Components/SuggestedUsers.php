@@ -9,6 +9,7 @@ use Illuminate\View\Component;
 class SuggestedUsers extends Component
 {
     public $users;
+    public $isAll;
 
     public function __construct()
     {
@@ -16,10 +17,13 @@ class SuggestedUsers extends Component
 
         if (!$authUser) {
             $this->users = collect();
+            $this->isAll = false;
             return;
         }
 
-        // except for：myself,follow,follower
+        $this->isAll = request('suggested') === 'all';
+        $limit = $this->isAll ? 15 : 3;
+
         $excludedIds = collect()
             ->merge($authUser->followings->pluck('id'))
             ->merge($authUser->followers->pluck('id'))
@@ -29,8 +33,7 @@ class SuggestedUsers extends Component
         $this->users = User::query()
             ->where('s_lang', $authUser->s_lang)
             ->whereNotIn('id', $excludedIds)
-            // ->where('status', 'active') 
-            ->limit(3)
+            ->limit($limit)
             ->get();
     }
 
@@ -38,4 +41,6 @@ class SuggestedUsers extends Component
     {
         return view('components.suggested-users');
     }
+
+    
 }
