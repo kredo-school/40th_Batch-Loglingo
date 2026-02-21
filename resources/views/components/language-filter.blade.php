@@ -1,7 +1,7 @@
-@props(['languages', 'action'])
+@props(['languages', 'action', 'label' => '(Question written in)'])
 
 <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-6 mb-6">
-    <p class="text-gray-600 mb-4">Filter (Question written in )</p>
+    <p class="text-gray-600 mb-4">Filter <label>{{ $label }}</label></p>
     
     <form action="{{ $action }}" method="GET">
         <div class="flex flex-wrap items-center gap-6">

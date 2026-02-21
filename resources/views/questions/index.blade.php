@@ -7,7 +7,13 @@
 
                 <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 mb-3">
                     <div class="flex justify-between items-end m-4">
-                        <h2 class="text-[24px] font-bold">Latest Q&As</h2>
+                        <h2 class="text-[24px] font-bold">
+                            @if(request()->filled('languages'))
+                            Latest Q&As in selected languages
+                            @else
+                            Latest Q&As
+                            @endif
+                        </h2>
                         <a href="{{ route('questions.all') }}" class="text-sm text-black hover:underline">see more</a>
                     </div>
                 </div>

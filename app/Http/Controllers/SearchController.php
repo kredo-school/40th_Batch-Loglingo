@@ -16,7 +16,9 @@ class SearchController extends Controller
         ->where('status',true);
 
         if($request->filled('languages')){
-            $query->whereIn('written_lang',$request->input('languages'));
+            $query->whereHas('tags', function ($q) use ($request){
+                $q->whereIn('language_id',$request->input('languages'));
+            });
         }
 
         $posts = $query->latest()->paginate(10);
