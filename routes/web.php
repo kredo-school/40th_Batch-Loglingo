@@ -18,9 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', [PostController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::redirect('/dashboard', '/posts');
 
 Route::middleware('auth')->group(function () {
     // Profile

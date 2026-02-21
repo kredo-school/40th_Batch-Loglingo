@@ -8,13 +8,18 @@
                 <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 mb-3">
                     <div class="flex justify-between items-end m-4">
                         <h2 class="text-[24px] font-bold">Latest posts from following</h2>
-                        <a href="{{ route('posts.index') }}" class="text-sm text-black hover:underline">see more</a>
+                        <a href="{{ route('posts.all')}}" class="text-sm text-black hover:underline">see more</a>
                     </div>
                 </div>
 
                 <!-- Post example-->
-                <x-post-card />
+                 @foreach($posts as $post)
+                    <x-post-card :post="$post"/>
+                    <div class="mb-4"></div> 
+                 @endforeach
 
+               
+                
             </div>
 
             <!-- right side -->
