@@ -7,13 +7,19 @@
 
                 <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 mb-3">
                     <div class="flex justify-between items-end m-4">
-                        <h2 class="text-[24px] font-bold">Latest posts</h2>
-                        <a href="{{ route('posts.index') }}" class="text-sm text-black hover:underline">see more</a> {{--★need to adjust the route --}}
+                        <h2 class="text-[24px] font-bold">
+                            @if(request()->filled('languages'))
+                            All Posts in selected languages
+                            @else
+                            Discover New Connections
+                            @endif
+                        </h2>
+                        <!-- <a href="#" class="text-sm text-black hover:underline">see more</a> -->
                     </div>
                 </div>
 
                 <!-- Language filter -->
-                <x-language-filter :languages="$languages" :action="route('search')" />
+                <x-language-filter :languages="$languages" :action="route('search')" label="(Post written in)" />
 
                 <!-- Post example-->
                 @forelse($posts as $post)
