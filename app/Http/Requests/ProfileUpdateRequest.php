@@ -37,6 +37,16 @@ class ProfileUpdateRequest extends FormRequest
                 'string',
                 'max:500',
             ],
+
+            'f_lang' => [
+                'required', 
+                'string'
+            ],
+
+            's_lang' => [
+                'required', 
+                'string'
+            ],
         ];
     }
 }
