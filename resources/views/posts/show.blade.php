@@ -96,7 +96,7 @@
               <div class="flex items-start space-x-4">
                 
                 @if(Auth::user()->avatar)
-                  <img src="{{ Auth::user()->avatar }}" alt="user" class="text-[50px] rounded-full object-cover bg-yellow-400">
+                  <img src="{{ Auth::user()->avatar }}" alt="user" class="w-12 h-12 rounded-full object-cover">
                 @else
                     <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
                 @endif
@@ -118,7 +118,7 @@
           @foreach($post->comments as $comment)
             <div class="flex items-start space-x-4 border-b py-4">
               @if($comment->user->avatar)
-                <img src="{{ $user->avatar }}" class="text-[50px] ounded-full object-cover bg-orange-400">
+                <img src="{{ $comment->user->avatar }}" class="w-12 h-12 rounded-full object-cover">
               @else
                 <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
               @endif
