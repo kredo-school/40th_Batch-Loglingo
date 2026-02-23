@@ -23,7 +23,7 @@
                 @endphp
 
                 {{-- display question--}}
-                <tr x-data="{ active: {{ $question->status ? 'true' : 'false'}}, open: false, showModal: false,reports: {{ $totalReports }} }"
+                <tr x-data="{ active: {{ $question->status ? 'true' : 'false'}}, open: false, showModal: false, showViewModal: false, reports: {{ $totalReports }} }"
                     :class="reports >= 10 ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-gray-50'"
                     class="transition-colors">
 
@@ -90,10 +90,13 @@
                             <div x-show="open" @click.away="open = false"
                                 class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg z-50 py-1">
 
-                                {{--1 view question --}}
-                                <a href="{{ route('questions.show', $question->id )}}" class="group block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                {{--1 view detail --}}
+                                <!-- <a href="{{ route('questions.show', $question->id )}}" class="group block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
                                     <i class="fa-regular fa-eye mr-3 w-5 text-center text-gray-400 group-hover:text-blue-500"></i> View Q&A
-                                </a>
+                                </a> -->
+                                <button @click="showViewModal = true; open = false" class="group w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                    <i class="fa-regular fa-eye mr-3 w-5 text-center text-gray-400 group-hover:text-blue-500"></i> View Detail
+                                </button>
 
                                 {{--2 Change status--}}
                                 <button @click="showModal = true"
@@ -141,20 +144,114 @@
                                     </button>
 
                                     <form action="{{ route('admin.questions.toggle' , $question->id) }}" method="POST">
-                                        @csrf 
+                                        @csrf
                                         @method('PATCH')
                                         <button type="submit"
-                                        :class="active ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
-                                        class="px-4 py-2 text-sm font-medium text-white rounded-md transition-colors">
-                                        <span x-text="active ? 'Deactivate' : 'Activate'"></span>
-                                    </button>
+                                            :class="active ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
+                                            class="px-4 py-2 text-sm font-medium text-white rounded-md transition-colors">
+                                            <span x-text="active ? 'Deactivate' : 'Activate'"></span>
+                                        </button>
                                     </form>
-                                    
+
 
                                 </div>
                             </div>
                         </div>
                     </template>
+
+
+
+                    {{-- --- View Detail Modal --- --}}
+                    <template x-teleport="body">
+                        <div x-show="showViewModal"
+                            class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60"
+                            x-cloak>
+                            <div @click.away="showViewModal = false"
+                                class="bg-[#F9FAFB] rounded-[1.5rem] shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col transform transition-all">
+
+                                {{-- Modal Header --}}
+                                <div class="px-8 py-4 bg-white border-b flex justify-between items-center">
+                                    <h3 class="font-extrabold text-xl text-gray-800 italic">LogLingo <span class="text-gray-400 font-normal ml-2 text-sm not-italic">| Inspection Mode</span></h3>
+                                    <button @click="showViewModal = false" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+                                        <i class="fa-solid fa-xmark text-gray-400"></i>
+                                    </button>
+                                </div>
+
+                                {{-- Modal Body (Scrollable) --}}
+                                <div class="p-8 overflow-y-auto custom-scrollbar">
+
+                                    {{-- --- Question Part --- --}}
+                                    <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-8 mb-6 relative">
+                                        {{-- Question Report Count (右上) --}}
+                                        <div class="absolute top-4 right-8 flex items-center space-x-1 px-3 py-1 bg-red-50 text-red-600 rounded-full border border-red-100">
+                                            <i class="fa-solid fa-flag text-xs"></i>
+                                            <span class="text-xs font-bold">Reports: {{ $question->reports_count ?? $question->reports->count() }}</span>
+                                        </div>
+
+                                        <div class="flex items-start space-x-4 w-full mb-4 mt-2">
+                                            <img src="{{ $question->user->avatar ?? asset('images/baby-octopus.png') }}" class="w-16 h-16 rounded-full object-cover shadow-sm">
+                                            <div class="flex-1">
+                                                <div class="flex justify-between items-center mb-1">
+                                                    <h3 class="font-bold text-lg text-gray-800">{{ $question->user->name }}</h3>
+                                                </div>
+                                                <h2 class="text-[22px] font-extrabold text-gray-900 mb-2 leading-tight">{{ $question->q_title }}</h2>
+                                                <div class="flex items-center space-x-4">
+                                                    <p class="text-[13px] text-gray-400">{{ $question->created_at->diffForHumans() }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-gray-700 leading-relaxed text-base break-words pt-4 border-t border-gray-50">
+                                            {!! nl2br(e($question->q_content)) !!}
+                                        </div>
+                                    </div>
+
+                                    {{-- --- Answers Part --- --}}
+                                    <div class="space-y-4">
+                                        <h4 class="px-4 font-bold text-gray-500 text-sm uppercase tracking-widest flex items-center">
+                                            <i class="fa-solid fa-comments mr-2"></i> Community Answers
+                                        </h4>
+
+                                        @forelse($question->answers as $answer)
+                                        <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-6 flex items-start space-x-4 mx-4 relative">
+                                            {{-- Answer Report Count (右上) --}}
+                                            <div class="absolute top-4 right-6 flex items-center space-x-1 px-2 py-0.5 bg-red-50 text-red-500 rounded-full border border-red-100">
+                                                <i class="fa-solid fa-flag text-[10px]"></i>
+                                                <span class="text-[11px] font-bold">{{ $answer->reports_count ?? $answer->reports->count() }}</span>
+                                            </div>
+
+                                            <img src="{{ $answer->user->avatar ?? asset('images/baby-octopus.png') }}" class="w-12 h-12 rounded-full object-cover border border-gray-50">
+                                            <div class="flex-1">
+                                                <div class="flex justify-between items-center mb-2 pr-16"> {{-- バッジと被らないように右余白追加 --}}
+                                                    <div class="flex items-center space-x-2">
+                                                        <h4 class="font-bold text-gray-800 text-[15px]">{{ $answer->user->name }}</h4>
+                                                        <span class="text-[12px] text-gray-400">{{ $answer->created_at->diffForHumans() }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="text-gray-600 text-sm leading-relaxed">
+                                                    {!! nl2br(e($answer->a_content)) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @empty
+                                        <div class="text-center py-10">
+                                            <p class="text-gray-400 italic">No community feedback yet.</p>
+                                        </div>
+                                        @endforelse
+                                    </div>
+                                </div>
+                                
+
+                                {{-- Modal Footer --}}
+                                <div class="px-8 py-4 bg-white border-t flex justify-end">
+                                    <button @click="showViewModal = false" class="px-6 py-2 bg-gray-900 text-white rounded-full text-sm font-bold hover:bg-gray-800 transition-all shadow-md">
+                                        Finish Review
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+
 
                 </tr>
                 @endforeach
