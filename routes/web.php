@@ -9,6 +9,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\DiscussionController;
+use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\FollowController;
 
 
@@ -54,6 +55,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/report', [ReportController::class, 'store'])
         // ->middleware('auth')
         ->name('report.store');
+
+    // resolve
+    Route::patch('/discussions/{discussion}/resolve', [DiscussionController::class, 'resolve'])->name('discussions.resolve');
+
+    // reply
+    Route::post('/discussions/{discussion}/replies', [ReplyController::class, 'store'])->name('replies.store');
+
 });
 
 
@@ -79,6 +87,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::patch('/posts/{post}/toggle', [AdminController::class, 'togglePostStatus'])->name('posts.toggle');
     Route::patch('/questions/{question}/toggle', [AdminController::class, 'toggleQuestionStatus'])->name('questions.toggle');
     Route::patch('/languages/{language}/toggle', [AdminController::class, 'toggleLanguageStatus'])->name('languages.toggle');
+    Route::patch('/discussions/{discussion}/toggle', [AdminController::class, 'toggleDiscussionStatus'])->name('discussions.toggle');
     
 });
 

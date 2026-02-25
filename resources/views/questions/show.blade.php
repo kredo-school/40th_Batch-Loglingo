@@ -24,7 +24,6 @@
 
                 </div>
 
-
                 {{-- post title --}}
                 <div class="flex justify-between items-center mb-2">
                   <h2 class="text-[20px] font-extrabold text-gray-900 mb-2">
@@ -96,9 +95,23 @@
           </div>
 
           {{-- question body --}}
-          <p class="text-gray-700 leading-relaxed pb-2 mb-5 border-b break-words"> {{ $question->q_content }}
-            {{ $question->q_content }} {{ $question->q_content }} {{ $question->q_content }} {{ $question->q_content }} {{ $question->q_content }}
-          </p>
+          <div class="pb-2 mb-5 border-b">
+            <p class="text-gray-700 leading-relaxed break-words">
+              {{ $question->q_content }}
+            </p>
+
+            {{-- Start Discussion button --}}
+            @if(auth()->check() && auth()->user()->role_id == 3)
+            <div class="flex justify-end">
+              <a href="{{ route('discussions.create', ['question_id' => $question->id]) }}"
+                class="inline-flex items-center my-2 px-4 py-2 bg-purple-400 border border-transparent rounded-full font-bold text-xs text-white uppercase tracking-widest hover:bg-purple-700 active:bg-purple-900 focus:outline-none focus:border-purple-900 focus:ring ring-purple-300 disabled:opacity-25 transition ease-in-out duration-150 shadow-sm">
+                <i class="fa-solid fa-quote-left mr-2"></i> Start Discussion
+              </a>
+              @endif
+            </div>
+
+          </div>
+
 
           {{-- answer form--}}
           @if(auth()->check() && auth()->user()->role_id == 3)

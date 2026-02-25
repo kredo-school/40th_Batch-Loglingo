@@ -25,10 +25,13 @@
                 Search
             </a>
 
+            {{-- Discussion --}}
+            @if(Auth::user()->role_id == 3)
             <a href="{{ route('discussions.index') }}"
                 class="{{ request()->routeIs('discussions.*') ? 'text-gray-800' : 'hover:text-gray-800' }} text-[27px]">
                 Discussion
             </a>
+            @endif
         </div>
 
         <div class="flex items-center space-x-5 text-[30px]">
