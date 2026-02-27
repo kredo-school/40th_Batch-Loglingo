@@ -8,7 +8,7 @@
                 <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 mb-3">
                     <div class="flex justify-between items-end m-4">
                         <h2 class="text-[24px] font-bold">Latest Discussions</h2>
-                        <a href="{{ route('discussions.all') }}" class="text-sm text-black hover:underline">see more</a> {{--★need to adjust the route --}}
+                        <a href="{{ route('discussions.index') }}" class="text-sm text-black hover:underline">see latest</a>
                     </div>
                 </div>
 
