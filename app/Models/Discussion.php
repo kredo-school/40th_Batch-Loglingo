@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Reply;
 use App\Models\Question;
+use App\Models\Language;
 
 class Discussion extends Model
 {
@@ -31,5 +32,10 @@ class Discussion extends Model
     public function question()
     {
         return $this->belongsTo(Question::class);
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Language::class, 'language_post', 'discussion_id', 'language_id',);
     }
 }

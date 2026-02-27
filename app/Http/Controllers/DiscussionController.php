@@ -5,48 +5,53 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Question;
 use App\Models\Discussion;
+use App\Models\Language;
 
 class DiscussionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $discussions = Discussion::with(['user', 'replies', 'question.tags'])
             ->where('status', true)
             ->latest()
-            ->paginate(10);
+            ->paginate(5);
 
         return view('discussions.index', compact('discussions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function all()
+    {
+        $discussions = Discussion::with(['user', 'replies', 'question.tags'])
+            ->where('status', true)
+            ->latest()
+            ->paginate(20);
+
+        return view('discussions.all', compact('discussions'));
+    }
+
     public function create(Request $request)
     {
         $question = null;
 
         if ($request->has('question_id')) {
-            $question = Question::with('user')->findOrFail($request->question_id);
+            $question = Question::with('user','tags')->findOrFail($request->question_id);
         }
 
-        return view('discussions.create', compact('question'));
+        $languages = Language::all();
+
+        return view('discussions.create', compact('question','languages'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
             'd_title' => 'required|max:255',
             'd_content' => 'required',
             'question_id' => 'nullable|exists:questions,id',
+            'language_ids' => 'required_without:question_id|array',
         ]);
 
-        Discussion::create([
+        $discussion = Discussion::create([
             'user_id' => auth()->id(),
             'question_id' => $request->question_id,
             'd_title' => $request->d_title,
@@ -55,15 +60,20 @@ class DiscussionController extends Controller
             'status' => true,
         ]);
 
+        if ($request->question_id) {
+            $question = Question::findOrFail($request->question_id);
+            $langIds = $question->tags->pluck('id')->toArray();
+            $discussion->tags()->sync($langIds);
+        } else {
+            $discussion->tags()->sync($request->language_ids);
+        }
+
         return redirect()->route('discussions.index')->with('success', 'Discussion started!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Discussion $discussion)
     {
-        $discussion->load(['user', 'question.user', 'replies.user']);
+        $discussion->load(['user', 'question.user', 'question.tags', 'replies.user']);
 
         return view('discussions.show', compact('discussion'));
     }
@@ -79,11 +89,6 @@ class DiscussionController extends Controller
         return back()->with('success', 'Discussion marked as resolved!');
     }
 
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Discussion $discussion)
     {
         if (auth()->id() !== $discussion->user_id) {

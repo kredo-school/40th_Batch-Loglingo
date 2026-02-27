@@ -12,6 +12,7 @@ use App\Models\Discussion;
 
 class AdminController extends Controller
 {
+    // Index pages
     public function indexUsers()
     {
         $users = User::where('role_id', 2)
@@ -48,7 +49,15 @@ class AdminController extends Controller
         return view('admin.qna.index', compact('questions'));
     }
 
-    // tags
+    public function indexDiscussions()
+    {
+        $discussions = Discussion::with(['user', 'question.user', 'question.tags', 'replies.user'])
+            ->latest()
+            ->paginate(20);
+
+        return view('admin.discussions.index', compact('discussions'));
+    }
+
     public function indexTags()
     {
         $languages = Language::withCount(['questions'])
@@ -58,6 +67,7 @@ class AdminController extends Controller
         return view('admin.tags.index', compact('languages'));
     }
 
+    // store tags
     public function storeTag(Request $request)
     {
         $validated = $request->validate([
@@ -73,7 +83,8 @@ class AdminController extends Controller
         return back()->with('status', 'New tag added successfully!');
     }
 
-    // Status 
+
+    // change status 
     public function toggleUserStatus(User $user)
     {
         $user->status = !$user->status;
@@ -106,12 +117,11 @@ class AdminController extends Controller
         return back()->with('status', 'Language status has been updated successfully!');
     }
 
-
-
-
-
-    public function indexDiscussions()
+    public function toggleDiscussionStatus(Discussion $discussion)
     {
-        return view('admin.discussions.index');
+        $discussion->status = !$discussion->status;
+        $discussion->save();
+
+        return back()->with('success', 'Discussion status has been updated successfully!');
     }
 }
