@@ -20,10 +20,9 @@
     <div class="flex-1 flex flex-col">
       <div class="flex justify-between items-start mb-2">
         <div class="flex flex-col">
-          <a href="#" class="group">
+          <a href="{{ route('profile.show' , $discussion->user->id)}}" class="group">
             <h3 class="font-bold text-gray-700 group-hover:text-[#B178CC] transition-colors text-sm">
               {{ $discussion->user->name }}
-              <span class="ml-1 text-[10px] bg-purple-600 text-white px-2 py-0.5 rounded-full uppercase tracking-tighter">Teacher</span>
             </h3>
           </a>
 
@@ -43,14 +42,17 @@
           {{ $discussion->d_title }}
         </h4>
         {{-- body --}}
-        <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed">
+        <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed break-words">
           {{ $discussion->d_content }}
         </p>
       </a>
 
       {{-- footer --}}
       <div class="flex justify-between items-center mt-4 pt-3 border-t border-gray-50">
+
+        {{-- created at --}}
         <p class="text-[12px] text-gray-400">{{ $discussion->created_at->diffForHumans() }}</p>
+
 
         <div class="flex items-center space-x-3">
           {{-- replies --}}
@@ -59,11 +61,18 @@
           </span>
 
           {{-- language tag --}}
-          @if($discussion->question && $discussion->question->tags->isNotEmpty())
-          <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100">
-            <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $discussion->question->tags->first()->code }}
+          @foreach($discussion->tags as $tag)
+          <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100 flex items-center">
+            <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->code }}
           </span>
+          @endforeach
+
+          @if($discussion->tags->isEmpty())
+          <span class="text-[12px] px-2 py-1 text-gray-400">No Tags</span>
           @endif
+
+
+          {{-- report --}}
           <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
         </div>
       </div>

@@ -65,16 +65,14 @@ class QuestionController extends Controller
             'written_lang' => 'required|integer|exists:languages,id',
         ]);
 
-        Question::create([
+        $question = Question::create([
             'user_id' => auth()->id(),
             'q_title' =>$validated['q_title'],
             'q_content' => $validated['q_content'],
             'written_lang' => $validated['written_lang'],
-
-            // TODO: add column later(in migration, put 'language_id' as foreign key)
-            // 'language_id' => $validated['tag'],  
-            // 'is_answered' => false, 
         ]);
+
+        $question->tags()->attach($validated['tag']);
 
         return redirect() ->route('questions.index')->with('status', 'Question posted successfully!');
 

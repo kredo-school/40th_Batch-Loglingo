@@ -9,14 +9,23 @@ use App\Models\Language;
 
 class DiscussionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $discussions = Discussion::with(['user', 'replies', 'question.tags'])
-            ->where('status', true)
-            ->latest()
-            ->paginate(5);
+        $query = Discussion::with(['user', 'replies', 'question.tags', 'tags'])
+            ->where('status', true);
 
-        return view('discussions.index', compact('discussions'));
+        if ($request->filled('languages')) {
+            $selectedLangs = $request->languages;
+
+            $query->whereHas('tags', function ($q) use ($selectedLangs) {
+                $q->whereIn('languages.id', $selectedLangs);
+            });
+        }
+
+        $discussions = $query->latest()->paginate(5);
+        $languages = Language::where('status', true)->get();
+
+        return view('discussions.index', compact('discussions', 'languages'));
     }
 
     public function all()
@@ -34,12 +43,12 @@ class DiscussionController extends Controller
         $question = null;
 
         if ($request->has('question_id')) {
-            $question = Question::with('user','tags')->findOrFail($request->question_id);
+            $question = Question::with('user', 'tags')->findOrFail($request->question_id);
         }
 
         $languages = Language::all();
 
-        return view('discussions.create', compact('question','languages'));
+        return view('discussions.create', compact('question', 'languages'));
     }
 
     public function store(Request $request)
@@ -61,7 +70,7 @@ class DiscussionController extends Controller
         ]);
 
         if ($request->question_id) {
-            $question = Question::findOrFail($request->question_id);
+            $question = Question::with('tags')->findOrFail($request->question_id);
             $langIds = $question->tags->pluck('id')->toArray();
             $discussion->tags()->sync($langIds);
         } else {
@@ -73,6 +82,10 @@ class DiscussionController extends Controller
 
     public function show(Discussion $discussion)
     {
+        if (!$discussion->status && (!auth()->user() || !auth()->user()->is_admin)) {
+            abort(404);
+        }
+
         $discussion->load(['user', 'question.user', 'question.tags', 'replies.user']);
 
         return view('discussions.show', compact('discussion'));
