@@ -38,13 +38,9 @@
       {{-- title&body  --}}
       <a href="{{ route('discussions.show', $discussion->id) }}" class="group block mt-1">
         {{-- title --}}
-        <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400 pr-24">
-          {{ $discussion->d_title }}
-        </h4>
+        <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400 pr-24 break-all whitespace-pre-wrap">{{ $discussion->d_title }}</h4>
         {{-- body --}}
-        <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed break-words">
-          {{ $discussion->d_content }}
-        </p>
+        <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed break-all whitespace-pre-wrap">{{ $discussion->d_content }}</p>
       </a>
 
       {{-- footer --}}
@@ -72,8 +68,30 @@
           @endif
 
 
-          {{-- report --}}
-          <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
+          {{-- report discussion --}}
+          @php
+          $reportedByMe = auth()->check()
+          ? $discussion->reports()
+          ->where('user_id', auth()->id())
+          ->exists()
+          : false;
+          @endphp
+
+          @if (!$reportedByMe)
+          <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this?');">
+            @csrf
+            <input type="hidden" name="reportable_id" value="{{ $discussion->id }}">
+            <input type="hidden" name="reportable_type" value="{{ \App\Models\Discussion::class }}">
+
+            <button type="submit" title="Report this question">
+              <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
+            </button>
+          </form>
+          @else
+          <i class="fa-solid fa-flag text-red-500"></i>
+          @endif
+
+
         </div>
       </div>
 

@@ -61,7 +61,8 @@ Route::middleware('auth')->group(function () {
 
     // reply
     Route::post('/discussions/{discussion}/replies', [ReplyController::class, 'store'])->name('replies.store');
-
+    Route::delete('/replies/{reply}', [ReplyController::class, 'destroy'])->name('replies.destroy');
+    
 });
 
 

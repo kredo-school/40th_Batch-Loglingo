@@ -12,6 +12,12 @@
                     </div>
                 </div>
 
+                <!-- language filter -->
+                <x-language-filter
+                    :languages="$languages"
+                    :action="route('discussions.all')"
+                    label="(Language discussed)" />
+
                 <div class="space-y-4">
                     @forelse($discussions as $discussion)
                     <x-discussion-card :discussion="$discussion" />

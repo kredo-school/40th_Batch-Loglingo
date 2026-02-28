@@ -38,4 +38,14 @@ class Discussion extends Model
     {
         return $this->belongsToMany(Language::class, 'language_post', 'discussion_id', 'language_id',);
     }
+
+    public function isReportedByMe()
+    {
+        return $this->reports()->where('user_id', auth()->id())->exists();
+    }
+
+    public function reports()
+    {
+        return $this->morphMany(Report::class, 'reportable');
+    }
 }
