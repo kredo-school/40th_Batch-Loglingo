@@ -23,9 +23,9 @@
                 @elseif(request()->routeIs('profile.questions'))
                     <x-profile-show-questions :questions="$questions" />
                 @elseif(request()->routeIs('profile.following'))
-                    <x-profile-show-following :followings="$followings"/>
+                    <x-profile-show-following :followings="$followings" :count="$user->followings_count"/>
                 @elseif(request()->routeIs('profile.followers'))
-                    <x-profile-show-followers :user="$user" :followers="$followers"/>
+                    <x-profile-show-followers :user="$user" :followers="$followers" :count="$user->followers_count"/>
                 @endif
                 </div>
 

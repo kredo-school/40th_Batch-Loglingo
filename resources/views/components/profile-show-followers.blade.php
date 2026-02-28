@@ -1,9 +1,22 @@
-@props(['user','followers'])
-
+@props(['user','followers', 'count'])
 
 <div class="space-y-4">
+
+  {{-- show the number of followers --}}
+  <div class="px-2 py-1">
+      <h3 class="text-lg font-semibold text-gray-700">
+          {{ $count ?? 0 }} 
+          <span class="text-lg font-normal text-gray-500">
+            @if($count === 1)
+              Follower
+            @else
+              Followers
+            @endif
+          </span>
+      </h3>
+  </div>
+
   @forelse ($followers as $follower)
-    
     <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-3">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-3">

@@ -1,6 +1,6 @@
 <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-6">
   <div class="flex items-center space-x-4">
-    <div class="text-[50px] rounded-full bg-blue-400 overflow-hidden">
+    <div class="text-[50px] rounded-full overflow-hidden">
     @if(Auth::user()->avatar)
         <img src="{{ Auth::user()->avatar }}" alt="teacher" class="w-full h-full object-cover">
       @else
@@ -11,12 +11,12 @@
     </div>
     <div>
       <h3 class="text-xl font-bold">{{ Auth::user()->name }}</h3>
-      <p class="text-sm"><span class="font-bold">3</span> posts</p> {{-- ★show its post count --}}
-      <p class="text-sm"><span class="font-bold">3</span> answers</p> {{-- ★show its answer count --}}
+      <p class="text-sm"><span class="font-bold">{{ Auth::user()->posts_count ?? 0 }}</span> posts</p> 
+      <p class="text-sm"><span class="font-bold">{{ Auth::user()->questions_count ?? 0 }}</span> answers</p> 
     </div>
   </div>
 
-  <a href="{{ route('posts.create') }}" class="block w-full border border-gray-400 hover:bg-[#B178CC] hover:text-white text-center font-bold py-4 mt-4 rounded-[1rem] shadow-md transition-transform hover:scale-[1.02] active:scale-95">
+  <a href="{{ route('posts.create') }}" class="block w-full border border-gray-400 hover:bg-[#B178CC] hover:text-white text-center font-bold py-4 mt-4 rounded-[1rem] transition-transform hover:scale-[1.02] active:scale-95">
     <span class="text-[22px]"><i class="fa-solid fa-pen-to-square mr-2"></i>Post a new log</span>
   </a>{{--★create a link to Post a new log page--}}
 </div>

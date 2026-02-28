@@ -71,6 +71,8 @@ class ProfileController extends Controller
     // tab controllers
         public function show(User $user)
         {
+            $user->loadCount(['posts', 'questions']);
+
             return view('profile.profile', [
                 'user' => $user,
                 'posts' => $user->posts()->latest()->with('user')->get(),
@@ -79,20 +81,6 @@ class ProfileController extends Controller
 
             
         }
-        // public function show(User $user)
-        // {
-        //     return view('profile.profile', [
-        //         'user' => $user,
-
-        //         // tabs
-        //         'posts' => $user->posts()->latest()->with('user')->get(),
-        //         'questions' => $user->questions()->latest()->with('user')->get(),
-
-        //         // follow tabs
-        //         'followings' => $user->followings()->get(),
-        //         'followers'  => $user->followers()->get(),
-        //     ]);
-        // }
 
         public function questions(User $user)
         {
@@ -105,6 +93,8 @@ class ProfileController extends Controller
 
         public function following(User $user)
         {
+            $user->loadCount(['followings']);
+
             return view('profile.profile', [
                 'user' => $user,
                 // 'tab' => 'following',
@@ -115,6 +105,8 @@ class ProfileController extends Controller
 
         public function followers(User $user)
         {
+            $user->loadCount(['followers']);
+            
             return view('profile.profile', [
                 'user' => $user,
                 // 'tab' => 'followers',
