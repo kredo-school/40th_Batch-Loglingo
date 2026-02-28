@@ -11,7 +11,7 @@ class ReplyController extends Controller
     public function store(Request $request, Discussion $discussion)
     {
         $request->validate([
-            'r_content' => 'required|min:5',
+            'r_content' => 'required',
         ]);
 
         Reply::create([
@@ -21,5 +21,16 @@ class ReplyController extends Controller
         ]);
 
         return back()->with('success', 'Your reply has been posted!');
+    }
+
+    public function destroy(Reply $reply)
+    {
+        if (auth()->id() !== $reply->user_id) {
+            abort(403);
+        }
+
+        $reply->delete();
+
+        return back();
     }
 }

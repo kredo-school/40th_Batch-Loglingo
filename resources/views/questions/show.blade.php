@@ -30,9 +30,7 @@
 
                 {{-- post title --}}
                 <div class="flex justify-between items-center mb-2">
-                  <h2 class="text-[20px] font-extrabold text-gray-900 mb-2">
-                    {{ $question->q_title }}
-                  </h2>
+                  <h2 class="text-[20px] font-extrabold text-gray-900 mb-2 break-all whitespace-pre-wrap">{{ $question->q_title }}</h2>
 
                   {{-- delete button --}}
                   @if(Auth::id() === $question->user_id)
@@ -100,9 +98,7 @@
 
           {{-- question body --}}
           <div class="pb-2 mb-5 border-b">
-            <p class="text-gray-700 leading-relaxed break-words">
-              {{ $question->q_content }}
-            </p>
+            <p class="text-gray-700 leading-relaxed  break-all whitespace-pre-wrap">{{ $question->q_content }}</p>
 
             {{-- Start Discussion button --}}
             @if(auth()->check() && auth()->user()->role_id == 3)
@@ -154,7 +150,9 @@
               <div class="flex-1">
                 <div class="flex justify-between items-center mb-4">
                   <div class="flex items-center space-x-4">
-                    <h4 class="font-bold text-[16px]">{{ $answer->user->name }}</h4>
+                    <a href="{{ route('profile.show',$question->user->id )}}">
+                      <h4 class="font-bold text-[16px]">{{ $answer->user->name }}</h4>
+                    </a>
                     <span class="text-[13px] text-gray-400">{{ $answer->created_at->diffForHumans() }}</span>
                   </div>
 
@@ -190,9 +188,7 @@
                   </div>
                 </div>
 
-                <div class="text-s text-gray-700 leading-relaxed break-words">
-                  {!! nl2br(e($answer->a_content)) !!}
-                </div>
+                <div class="text-s text-gray-700 leading-relaxed break-all  whitespace-pre-wrap">{{ $answer->a_content }}</div>
               </div>
             </div>
           </div>

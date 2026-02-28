@@ -21,4 +21,14 @@ class Reply extends Model
     {
         return $this->belongsTo(Discussion::class);
     }
+
+    public function isReportedByMe()
+    {
+        return $this->reports()->where('user_id', auth()->id())->exists();
+    }
+
+    public function reports()
+    {
+        return $this->morphMany(Report::class, 'reportable');
+    }
 }

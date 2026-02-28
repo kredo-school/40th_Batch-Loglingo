@@ -36,9 +36,7 @@
                     {{ $question->q_title }}
                 </h4>
                 {{-- body --}}
-                <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed">
-                    {{ $question->q_content }}
-                </p>
+                <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed break-all whitespace-pre-wrap">{{ $question->q_content }}</p>
             </a>
 
             {{-- bookmark&tag&report --}}

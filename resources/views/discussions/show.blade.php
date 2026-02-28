@@ -31,7 +31,10 @@
 
               <div class="flex-1">
                 <div class="flex justify-between items-center mb-1">
-                  <h3 class="font-bold text-lg text-gray-800">{{ $discussion->user->name }}</h3>
+                  <a href="{{ route('profile.show',$discussion->user->id)}}">
+                    <h3 class="font-bold text-lg text-gray-800">{{ $discussion->user->name }}</h3>
+                  </a>
+
 
                   @if($discussion->is_resolved)
                   <x-resolved-badge />
@@ -65,6 +68,7 @@
                   <p>{{ $discussion->created_at->diffForHumans() }}</p>
 
                   <div class="flex items-center space-x-3">
+                    {{-- Mark resolved --}}
                     @if(Auth::id() === $discussion->user_id && !$discussion->is_resolved)
                     <form action="{{ route('discussions.resolve', $discussion->id) }}" method="POST">
                       @csrf
@@ -72,12 +76,42 @@
                       <button type="submit" class="bg-green-500 text-white text-xs px-3 py-1 rounded-full font-bold hover:bg-green-600">Mark Resolved</button>
                     </form>
                     @endif
-                    <i class="fa-regular fa-flag hover:text-red-500 cursor-pointer"></i>
+
+                    {{-- language tag --}}
+                    @foreach($discussion->tags as $tag)
+                    <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100 flex items-center">
+                      <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->code }}
+                    </span>
+                    @endforeach
+
+                    {{-- report discussion --}}
+                    @php
+                    $reportedByMe = auth()->check()
+                    ? $discussion->reports()
+                    ->where('user_id', auth()->id())
+                    ->exists()
+                    : false;
+                    @endphp
+
+                    @if (!$reportedByMe)
+                    <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this?');">
+                      @csrf
+                      <input type="hidden" name="reportable_id" value="{{ $discussion->id }}">
+                      <input type="hidden" name="reportable_type" value="{{ \App\Models\Discussion::class }}">
+
+                      <button type="submit" title="Report this question">
+                        <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
+                      </button>
+                    </form>
+                    @else
+                    <i class="fa-solid fa-flag text-red-500"></i>
+                    @endif
+
                   </div>
                 </div>
               </div>
             </div>
-            <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ $discussion->d_content }}</p>
+            <p class="text-gray-700 leading-relaxed break-words whitespace-pre-wrap">{{ $discussion->d_content }}</p>
           </div>
 
           {{-- Reply Form --}}
@@ -108,14 +142,16 @@
               <div class="flex-1">
                 <div class="flex justify-between items-center mb-2">
                   <div class="flex items-center space-x-2">
-                    <h4 class="font-bold text-[16px]">{{ $reply->user->name }}</h4>
+                    <a href="{{ route('profile.show',$discussion->user->id)}}">
+                      <h4 class="font-bold text-[16px]">{{ $reply->user->name }}</h4>
+                    </a>
                     <span class="text-[13px] text-gray-400">{{ $reply->created_at->diffForHumans() }}</span>
                   </div>
 
                   <div class="flex items-center space-x-4">
                     {{-- Delete Button --}}
-                    @if(Auth::id() === $discussion->user_id)
-                    <form action="{{ route('discussions.destroy', $discussion->id) }}" method="POST" onsubmit="return confirm('Really delete this discussion?');">
+                    @if(Auth::id() === $reply->user_id)
+                    <form action="{{ route('replies.destroy', $reply->id) }}" method="POST" onsubmit="return confirm('Really delete this reply?');">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="bg-red-500 text-white text-xs px-3 py-1.5 rounded-full font-bold shadow-sm hover:bg-red-600 transition-colors">
@@ -124,15 +160,36 @@
                     </form>
                     @endif
 
-                    {{-- report function --}}
-                    <i class="fa-regular fa-flag text-gray-300 hover:text-red-500 cursor-pointer"></i>
+
+                    {{-- report reply --}}
+                    @php
+                    $reportedByMe = auth()->check()
+                    ? $reply->reports()
+                    ->where('user_id', auth()->id())
+                    ->exists()
+                    : false;
+                    @endphp
+
+                    @if (!$reportedByMe)
+                    <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this?');">
+                      @csrf
+                      <input type="hidden" name="reportable_id" value="{{ $reply->id }}">
+                      <input type="hidden" name="reportable_type" value="{{ \App\Models\Reply::class }}">
+
+                      <button type="submit" title="Report this question">
+                        <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
+                      </button>
+                    </form>
+                    @else
+                    <i class="fa-solid fa-flag text-red-500"></i>
+                    @endif
+
+
                   </div>
 
 
                 </div>
-                <div class="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
-                  {{ $reply->r_content }}
-                </div>
+                <div class="text-sm text-gray-700 leading-relaxed break-all whitespace-pre-wrap">{{ $reply->r_content }}</div>
               </div>
             </div>
             @endforeach

@@ -28,14 +28,23 @@ class DiscussionController extends Controller
         return view('discussions.index', compact('discussions', 'languages'));
     }
 
-    public function all()
+    public function all(Request $request)
     {
-        $discussions = Discussion::with(['user', 'replies', 'question.tags'])
-            ->where('status', true)
-            ->latest()
-            ->paginate(20);
+        $query = Discussion::with(['user', 'replies', 'question.tags', 'tags'])
+            ->where('status', true);
 
-        return view('discussions.all', compact('discussions'));
+        if ($request->filled('languages')) {
+            $selectedLangs = $request->languages;
+
+            $query->whereHas('tags', function ($q) use ($selectedLangs) {
+                $q->whereIn('languages.id', $selectedLangs);
+            });
+        }
+
+        $discussions = $query->latest()->paginate(20);
+        $languages = Language::where('status', true)->get();
+
+        return view('discussions.all', compact('discussions', 'languages'));
     }
 
     public function create(Request $request)
