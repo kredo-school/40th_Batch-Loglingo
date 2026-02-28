@@ -14,8 +14,11 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-       
+        // get following users
+       $followingIds = auth()->user()->followings()->pluck('users.id');
+
         $posts = Post::with(['user','tags'])
+        ->whereIn('user_id', $followingIds)
         ->where('status', true)
         ->latest()
         ->take(5)
@@ -27,7 +30,10 @@ class PostController extends Controller
    
     public function all()
     {
+        $followingIds = auth()->user()->followings()->pluck('users.id');
+
         $posts = Post::with(['user', 'tags'])
+        ->whereIn('user_id', $followingIds)
         ->where('status', true)
         ->latest()
         ->paginate(20);
@@ -59,17 +65,16 @@ class PostController extends Controller
             'tag' => 'required|integer|exists:languages,id'
         ]);
 
-         Post::create([
+         $post = Post::create([
             'user_id' => auth()->id(),
             'event_date' => $validated['event_date'], 
             'p_title' =>$validated['p_title'],
             'p_content' => $validated['p_content'],
-            
-
-            // TODO: add column later(in migration, put 'language_id' as foreign key)
-            // 'language_id' => $validated['tag'],  
-            // 'is_answered' => false, 
         ]);
+
+        if ($validated['tag']) {
+            $post->tags()->attach($validated['tag']);
+        }
 
         return redirect() ->route('posts.index')->with('status', 'Your log posted successfully!');
     }

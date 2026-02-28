@@ -7,8 +7,8 @@
 
                 <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 mb-3">
                     <div class="flex justify-between items-end m-4">
-                        <h2 class="text-[24px] font-bold">Latest posts from following</h2>
-                        <a href="{{ route('posts.all')}}" class="text-sm text-black hover:underline">see more</a>
+                        <h2 class="text-[24px] font-bold">All posts from following</h2>
+                        <a href="{{ route('posts.index')}}" class="text-sm text-black hover:underline">see latest</a>
                     </div>
                 </div>
 
@@ -17,8 +17,10 @@
                     <x-post-card :post="$post"/>
                     <div class="mb-4"></div> 
                  @endforeach
-
-               
+                
+                <div class="mt-8 px-4">
+                    {{ $posts->appends(request()->query())->links() }}
+                </div>               
                 
             </div>
 
