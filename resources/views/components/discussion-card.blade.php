@@ -2,22 +2,23 @@
 
 <div class="space-y-4">
 
-  <div class="relative bg-white rounded-[1rem] shadow-sm border border-gray-100 p-5 flex space-x-4 transition-all hover:border-gray-200" mb-4>
-
-    {{-- Resolved Badge --}}
-    @if($discussion->is_resolved)
-    <x-resolved-badge class="absolute top-4 right-4" />
-    @endif
+  <div class="relative bg-white rounded-[1rem] shadow-sm border border-gray-100 p-5 flex items-start space-x-4 transition-all hover:border-gray-200" mb-4>
 
     {{-- user icon --}}
     <div class="flex-shrink-0">
-      <div class="w-16 h-16 rounded-full bg-orange-400 overflow-hidden border-2 border-white shadow-sm">
-        <img src="{{ $discussion->user->avatar ?? asset('images/baby-octopus.png') }}" alt="user" class="w-full h-full object-cover">
+      <div class="w-16 h-16 rounded-full overflow-hidden">
+
+        @if($discussion->user->avatar)
+        <img src="{{ $discussion->user->avatar }}" alt="user" class="w-full h-full object-cover">
+        @else
+        <i class="fa-solid fa-circle-user text-gray-400 text-[4rem] leading-none"></i>
+        @endif
+
       </div>
     </div>
 
     {{-- content --}}
-    <div class="flex-1 flex flex-col">
+    <div class="flex-1 min-w-0">
       <div class="flex justify-between items-start mb-2">
         <div class="flex flex-col">
           <a href="{{ route('profile.show' , $discussion->user->id)}}" class="group">
@@ -33,12 +34,17 @@
           </a>
           @endif
         </div>
+
+        {{-- Resolved Badge --}}
+        @if($discussion->is_resolved)
+        <x-resolved-badge class="absolute top-4 right-4" />
+        @endif
       </div>
 
       {{-- title&body  --}}
       <a href="{{ route('discussions.show', $discussion->id) }}" class="group block mt-1">
         {{-- title --}}
-        <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400 pr-24 break-all whitespace-pre-wrap">{{ $discussion->d_title }}</h4>
+        <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400 break-all whitespace-pre-wrap">{{ $discussion->d_title }}</h4>
         {{-- body --}}
         <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed break-all whitespace-pre-wrap">{{ $discussion->d_content }}</p>
       </a>

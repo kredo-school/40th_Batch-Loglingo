@@ -10,13 +10,17 @@
           {{-- post header --}}
           <div class="mb-3">
             <div class="flex items-start space-x-4 w-full">
-              @if($question->user->avatar)
-                <img src="{{ $question->user->avatar }}"  alt="user" class="w-16 h-16 rounded-full object-cover">
-              @else
-                  <i class="fa-solid fa-circle-user text-gray-400 text-[96px] leading-none"></i>
-              @endif
+              <div class="flex-shrink-0">
+                <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-100 shadow-sm">
+                  @if($question->user->avatar)
+                  <img src="{{ $question->user->avatar }}" alt="user" class="w-16 h-16 rounded-full object-cover">
+                  @else
+                  <i class="fa-solid fa-circle-user text-gray-400 text-4xl leading-none"></i>
+                  @endif
+                </div>
+              </div>
 
-              <div class="flex-1">
+              <div class="flex-1 min-w-0">
                 <div class="flex justify-between items-center mb-1">
                   <a href="{{ route('profile.show',$question->user->id )}}">
                     <h3 class="font-bold text-lg text-gray-800">{{ $question->user->name }}</h3>
@@ -30,7 +34,7 @@
 
                 {{-- post title --}}
                 <div class="flex justify-between items-center mb-2">
-                  <h2 class="text-[20px] font-extrabold text-gray-900 mb-2 break-all whitespace-pre-wrap">{{ $question->q_title }}</h2>
+                  <h2 class="text-[20px] font-extrabold text-gray-900 mb-2 break-all whitespace-pre-wrap flex-1">{{ $question->q_title }}</h2>
 
                   {{-- delete button --}}
                   @if(Auth::id() === $question->user_id)
@@ -102,13 +106,13 @@
 
             {{-- Start Discussion button --}}
             @if(auth()->check() && auth()->user()->role_id == 3)
-            <div class="flex justify-end">
+            <div class="flex justify-end mt-4">
               <a href="{{ route('discussions.create', ['question_id' => $question->id]) }}"
                 class="inline-flex items-center my-2 px-4 py-2 bg-purple-400 border border-transparent rounded-full font-bold text-xs text-white uppercase tracking-widest hover:bg-purple-700 active:bg-purple-900 focus:outline-none focus:border-purple-900 focus:ring ring-purple-300 disabled:opacity-25 transition ease-in-out duration-150 shadow-sm">
                 <i class="fa-solid fa-quote-left mr-2"></i> Start Discussion
               </a>
+              </div>
               @endif
-            </div>
 
           </div>
 
@@ -122,9 +126,9 @@
 
               <div class="flex items-start space-x-4">
                 @if($question->user->avatar)
-                <img src="{{ $question->user->avatar }}"  alt="user" class="w-16 h-16 rounded-full object-cover">
+                <img src="{{ $question->user->avatar }}" alt="user" class="w-12 h-12 rounded-full object-cover">
                 @else
-                  <i class="fa-solid fa-circle-user text-gray-400 text-[96px] leading-none"></i>
+                <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
                 @endif
                 <div class="flex-1">
                   <h4 class="font-bold text-s text-gray-700 mb-1">{{ Auth::user()->name }}</h4>
@@ -143,9 +147,9 @@
           <div class="space-y-6">
             <div class="flex items-start space-x-4 border-b py-4">
               @if($answer->user->avatar)
-                <img src="{{ $qanswer->user->avatar }}"  alt="user" class="w-12 h-12 rounded-full object-cover">
+              <img src="{{ $answer->user->avatar }}" alt="teacher" class="w-12 h-12 rounded-full object-cover">
               @else
-                  <i class="fa-solid fa-circle-user text-gray-400 text-[96px] leading-none"></i>
+              <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
               @endif
               <div class="flex-1">
                 <div class="flex justify-between items-center mb-4">
