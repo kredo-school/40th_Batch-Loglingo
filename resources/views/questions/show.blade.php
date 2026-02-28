@@ -10,7 +10,11 @@
           {{-- post header --}}
           <div class="mb-3">
             <div class="flex items-start space-x-4 w-full">
-              <img src="{{ $question->user->avatar ?? asset('images/baby-octopus.png')}}" alt="user" class="w-16 h-16 rounded-full object-cover">
+              @if($question->user->avatar)
+                <img src="{{ $question->user->avatar }}"  alt="user" class="w-16 h-16 rounded-full object-cover">
+              @else
+                  <i class="fa-solid fa-circle-user text-gray-400 text-[96px] leading-none"></i>
+              @endif
 
               <div class="flex-1">
                 <div class="flex justify-between items-center mb-1">
@@ -121,7 +125,11 @@
               <input type="hidden" name="question_id" value="{{ $question->id }}">
 
               <div class="flex items-start space-x-4">
-                <img src="{{ auth()->user->avatar ?? asset('images/baby-octopus.png') }}" alt="user" class="w-14 h-14 rounded-full object-cover">
+                @if($question->user->avatar)
+                <img src="{{ $question->user->avatar }}"  alt="user" class="w-16 h-16 rounded-full object-cover">
+                @else
+                  <i class="fa-solid fa-circle-user text-gray-400 text-[96px] leading-none"></i>
+                @endif
                 <div class="flex-1">
                   <h4 class="font-bold text-s text-gray-700 mb-1">{{ Auth::user()->name }}</h4>
                   <textarea name="a_content" placeholder="write an answer here.." class="w-full border-gray-200 rounded-lg focus:ring-[#B178CC] focus:border-[#B178CC] text-s" rows="5" required></textarea>
@@ -138,8 +146,11 @@
           @foreach($question->answers as $answer)
           <div class="space-y-6">
             <div class="flex items-start space-x-4 border-b py-4">
-              <img src="{{ $answer->user->avatar ?? asset('images/baby-octopus.png') }}" alt="user" class="w-12 h-12 rounded-full object-cover">
-
+              @if($answer->user->avatar)
+                <img src="{{ $qanswer->user->avatar }}"  alt="user" class="w-12 h-12 rounded-full object-cover">
+              @else
+                  <i class="fa-solid fa-circle-user text-gray-400 text-[96px] leading-none"></i>
+              @endif
               <div class="flex-1">
                 <div class="flex justify-between items-center mb-4">
                   <div class="flex items-center space-x-4">
