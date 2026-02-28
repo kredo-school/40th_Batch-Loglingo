@@ -7,16 +7,28 @@
 
                 <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 mb-3">
                     <div class="flex justify-between items-end m-4">
-                        <h2 class="text-[24px] font-bold">Latest posts from following</h2>
-                        <a href="{{ route('posts.all')}}" class="text-sm text-black hover:underline">see more</a>
+                        <h2 class="text-[24px] font-bold">
+                            {{ request()->routeIs('posts.all') ? 'All posts from following' : 'Latest posts from following' }}
+                        </h2>
+                        @if(request()->routeIs('posts.index'))
+                            <a href="{{ route('posts.all')}}" class="text-sm text-black hover:underline">see more</a>
+                        @else
+                            <a href="{{ route('posts.index') }}" class="text-sm text-black hover:underline">see latest</a>
+                        @endif
                     </div>
                 </div>
 
                 <!-- Post example-->
-                 @foreach($posts as $post)
+                 @forelse($posts as $post)
                     <x-post-card :post="$post"/>
                     <div class="mb-4"></div> 
-                 @endforeach
+                 @empty
+                    <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-12 text-center">
+                        <p class="text-gray-500 text-xl font-bold mb-8">No posts yet! </p>                    
+                        <p class="text-gray-500 text-md font-normal"> <i class="fa-solid fa-user-plus text-gray-500"></i> Follow someone to see their updates. </p>     
+                    </div>
+                 @endforelse
+                    
 
                
                 
