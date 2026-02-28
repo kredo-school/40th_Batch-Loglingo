@@ -27,7 +27,11 @@
           {{-- Section A: Discussion Header & Body --}}
           <div class="pb-6 mb-6 border-b">
             <div class="flex items-start space-x-4 mb-4">
-              <img src="{{ $discussion->user->avatar ?? asset('images/baby-octopus.png') }}" class="w-16 h-16 rounded-full object-cover">
+              @if($discussion->user->avatar)
+                <img src="{{ $discussion->user->avatar }}"  alt="user" class="w-16 h-16 rounded-full object-cover">
+              @else
+                  <i class="fa-solid fa-circle-user text-gray-400 text-[96px] leading-none"></i>
+              @endif
 
               <div class="flex-1">
                 <div class="flex justify-between items-center mb-1">
@@ -120,7 +124,15 @@
             <form action="{{ route('replies.store', $discussion->id) }}" method="POST">
               @csrf
               <div class="flex items-start space-x-4">
-                <img src="{{ auth()->user()->avatar ?? asset('images/baby-octopus.png') }}" class="w-14 h-14 rounded-full object-cover">
+                {{-- avatar --}}
+                
+                  @if( auth()->user()->avatar)
+                  <img src="{{ auth()->user()->avatar }}" alt="user" class="w-12 h-12 object-cover">
+                  @else
+                  <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
+                  @endif
+                
+
                 <div class="flex-1">
                   <h4 class="font-bold text-gray-700 mb-2">{{ Auth::user()->name }}</h4>
                   <textarea name="r_content" placeholder="write an insight here.." class="w-full border-gray-200 rounded-lg focus:ring-purple-400 focus:border-purple-400 text-sm" rows="4" required></textarea>
@@ -137,7 +149,12 @@
           <div class="space-y-1">
             @foreach($discussion->replies as $reply)
             <div class="flex items-start space-x-4 border-b last:border-0 py-4">
-              <img src="{{ $reply->user->avatar ?? asset('images/baby-octopus.png') }}" class="w-12 h-12 rounded-full object-cover">
+              {{-- avatar --}}
+                @if( $reply->user->avatar)
+                <img src="{{ $reply->user->avatar }}" alt="user" class="w-12 h-12 rounded-full object-cover">
+                @else
+                <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
+                @endif
 
               <div class="flex-1">
                 <div class="flex justify-between items-center mb-2">
