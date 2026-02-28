@@ -1,7 +1,17 @@
-@props(['followings'])
+@props(['followings', 'count'])
 
 
 <div class="space-y-4">
+{{-- show the number of following --}}
+  <div class="px-2 py-1">
+      <h3 class="text-lg font-semibold text-gray-700">
+          {{ $count ?? 0 }} 
+          <span class="text-lg font-normal text-gray-500">
+              Following
+          </span>
+      </h3>
+  </div>
+
   @forelse ($followings as $following)
     
     <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-3">

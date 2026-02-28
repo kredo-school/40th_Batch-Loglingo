@@ -44,7 +44,7 @@
 
     <!-- user info -->
     <div class="flex-1">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ $user->name }}</h1>
+        <h1 class="text-3xl font-bold text-gray-800 mb-2 whitespace-nowrap">{{ $user->name }}</h1>
         <div class="space-y-1 text-gray-600">
             <div class="flex items-center gap-2">
                 <i class="fa-regular fa-comment text-lg"></i>
@@ -59,9 +59,9 @@
     </div>
 
     <!-- count & octopus -->
-    <div class="hidden lg:flex items-center relative pr-20">
+    <div class="flex items-center relative pr-20 mr-0 xl:mr-28">
         {{-- speach bubble --}}
-        <div class="relative bg-white rounded-xl border border-gray-300 px-4 py-2 shadow-md">
+        <div class="relative bg-white rounded-xl border border-gray-300 px-4 py-2">
 
             <!-- triangle -->
             <span class="absolute top-1/2 -right-2 -translate-y-1/2
@@ -76,9 +76,9 @@
                         border-t-transparent border-b-transparent border-l-white"></span>
 
             {{-- SHOW OR NOT / HOW TO COUNT??? --}}
-            <div class="text-sm font-semibold text-gray-700 space-y-0.5">
-                <p>3 posts</p>
-                <p>3 questions</p>
+            <div class="text-sm text-gray-700 space-y-0.5 whitespace-nowrap">
+                <p>{{ $user->posts_count ?? 0}} posts</p>
+                <p>{{ $user->questions_count ?? 0}} questions</p>
             </div>
         </div>
 
