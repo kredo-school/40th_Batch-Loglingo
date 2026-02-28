@@ -10,7 +10,7 @@
           <div class="mb-6">
             <div class="flex items-start space-x-4 w-full">
               @if($post->user->avatar)
-                <img src="{{ $post->user->avatar }}"  alt="user" class="text-[96px] rounded-full object-cover">
+                <img src="{{ $post->user->avatar }}"  alt="user" class="w-16 h-16 rounded-full object-cover">
               @else
                   <i class="fa-solid fa-circle-user text-gray-400 text-[96px] leading-none"></i>
               @endif

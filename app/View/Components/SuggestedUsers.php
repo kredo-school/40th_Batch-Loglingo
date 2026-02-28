@@ -9,7 +9,7 @@ use Illuminate\View\Component;
 class SuggestedUsers extends Component
 {
     public $users;
-    public $isAll;
+    public $isAll = false;
 
     public function __construct()
     {
@@ -17,7 +17,6 @@ class SuggestedUsers extends Component
 
         if (!$authUser) {
             $this->users = collect();
-            $this->isAll = false;
             return;
         }
 
