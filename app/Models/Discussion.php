@@ -7,9 +7,12 @@ use App\Models\User;
 use App\Models\Reply;
 use App\Models\Question;
 use App\Models\Language;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Discussion extends Model
 {
+    use HasFactory;
+    
     protected $fillable = [
         'user_id',
         'question_id',
@@ -47,5 +50,18 @@ class Discussion extends Model
     public function reports()
     {
         return $this->morphMany(Report::class, 'reportable');
+    }
+
+    public function getTotalReportsCountAttribute(): int
+    {
+        // number of reports to discussion
+        $discussionReports = $this->reports()->count();
+
+        // total report number
+        $repliesReports = $this->replies->sum(function ($reply) {
+            return $reply->reports()->count();
+        });
+
+        return $discussionReports + $repliesReports;
     }
 }

@@ -21,7 +21,11 @@
                     {{-- username--}}
                     <td class="px-6 py-4">
                         <div class="flex items-center space-x-3 justify-center">
-                            <img src="{{ $user->avatar ?? asset('images/baby-octopus.png')}}" alt="user" class="w-10 h-10 rounded-full  border shadow-sm">
+                            @if($user->avatar)
+                            <img src="{{ $user->avatar }}" alt="user" class="w-10 h-10 rounded-full object-cover">
+                            @else
+                            <i class="fa-solid fa-circle-user text-gray-400 text-[35px] leading-none"></i>
+                            @endif
                             <span class="font-medium text-gray-800">{{ $user->name }}</span>
                         </div>
                     </td>
@@ -103,13 +107,13 @@
                                     </button>
 
                                     <form action="{{ route('admin.users.toggle' , $user->id) }}" method="POST">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit"
-                                        :class="active ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
-                                        class="px-4 py-2 text-sm font-medium text-white rounded-md transition-colors">
-                                        <span x-text="active ? 'Deactivate' : 'Activate'"></span>
-                                    </button>
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit"
+                                            :class="active ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
+                                            class="px-4 py-2 text-sm font-medium text-white rounded-md transition-colors">
+                                            <span x-text="active ? 'Deactivate' : 'Activate'"></span>
+                                        </button>
                                     </form>
 
                                 </div>

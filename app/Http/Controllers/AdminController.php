@@ -51,7 +51,7 @@ class AdminController extends Controller
 
     public function indexDiscussions()
     {
-        $discussions = Discussion::with(['user', 'question.user', 'question.tags', 'replies.user'])
+        $discussions = Discussion::with(['user','tags', 'question.user', 'question.tags', 'replies.user', 'replies.reports'])
             ->latest()
             ->paginate(20);
 
