@@ -15,8 +15,14 @@ class QuestionController extends Controller
     {
         $languages = Language::where('status', true)->get();
 
+        // get s_lang of login user
+        $authUser = auth()->user();
+
         $query = Question::with(['user','tags'])
-        ->where('status',true);
+        ->where('status',true)
+        ->whereHas('user', function ($q) use ($authUser) {
+            $q->where('s_lang', $authUser->s_lang);
+        });
 
         if($request->has('languages')){
             $query->whereIn('written_lang',$request->input('languages'));
@@ -31,8 +37,15 @@ class QuestionController extends Controller
     {
         $languages = Language::where('status', true)->get();
 
+        // get s_lang of login user
+        $authUser = auth()->user();
+
         $query = Question::with(['user', 'tags'])
-        ->where('status', true);
+        ->where('status', true)
+        ->whereHas('user', function ($q) use ($authUser) {
+            $q->where('s_lang', $authUser->s_lang);
+        });
+
 
         if ($request->has('languages')){
             $query->whereIn('written_lang',$request->input('languages'));
@@ -72,7 +85,9 @@ class QuestionController extends Controller
             'written_lang' => $validated['written_lang'],
         ]);
 
-        $question->tags()->attach($validated['tag']);
+        if ($validated['tag']) {
+            $question->tags()->attach($validated['tag']);
+        }
 
         return redirect() ->route('questions.index')->with('status', 'Question posted successfully!');
 
