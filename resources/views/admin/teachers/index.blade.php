@@ -21,7 +21,11 @@
                     {{-- teachername--}}
                     <td class="px-6 py-4">
                         <div class="flex items-center space-x-3 justify-center">
-                            <img src="{{ $teacher->avatar ?? asset('images/baby-octopus.png')}}" alt="teacher" class="w-10 h-10 rounded-full border shadow-sm">
+                            @if($teacher->avatar)
+                            <img src="{{ $teacher->avatar }}" alt="user" class="w-10 h-10 rounded-full object-cover">
+                            @else
+                            <i class="fa-solid fa-circle-user text-gray-400 text-[35px] leading-none"></i>
+                            @endif
                             <span class="font-medium text-gray-800">{{ $teacher->name }}</span>
                         </div>
                     </td>

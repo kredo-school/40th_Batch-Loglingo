@@ -175,7 +175,12 @@
                                         </div>
 
                                         <div class="flex items-start space-x-4 w-full mb-4">
-                                            <img src="{{ $post->user->avatar ?? asset('images/baby-octopus.png') }}" class="w-16 h-16 rounded-full object-cover shadow-sm">
+                                            @if($post->user->avatar)
+                                            <img src="{{ $post->user->avatar }}" alt="user" class="w-16 h-16 rounded-full object-cover">
+                                            @else
+                                            <i class="fa-solid fa-circle-user text-gray-400 text-[35px] leading-none"></i>
+                                            @endif
+
                                             <div class="flex-1">
                                                 <div class="flex justify-between items-center mb-1">
                                                     <h3 class="font-bold text-lg text-gray-800">{{ $post->user->name }}</h3>
@@ -213,7 +218,13 @@
                                                 <span class="text-[11px] font-bold">{{ $comment->reports_count ?? $comment->reports->count() }}</span>
                                             </div>
 
-                                            <img src="{{ $comment->user->avatar ?? asset('images/baby-octopus.png') }}" class="w-12 h-12 rounded-full object-cover">
+                                            <!-- comment avatar -->
+                                            @if($comment->user->avatar)
+                                            <img src="{{ $comment->user->avatar }}" alt="user" class="w-12 h-12 rounded-full object-cover">
+                                            @else
+                                            <i class="fa-solid fa-circle-user text-gray-400 text-[30px] leading-none"></i>
+                                            @endif
+
                                             <div class="flex-1">
                                                 <div class="flex justify-between items-center mb-2 pr-16">
                                                     <div class="flex items-center space-x-2">
