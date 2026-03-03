@@ -15,8 +15,10 @@ class PostController extends Controller
     public function index(Request $request)
     {
         // get following users
-       $followingIds = auth()->user()->followings()->pluck('users.id');
-
+        $followingIds = auth()->user()->followings()->pluck('users.id');
+        // add my own ID
+        $followingIds->push(auth()->id());
+        
         $posts = Post::with(['user','tags'])
         ->whereIn('user_id', $followingIds)
         ->where('status', true)
@@ -31,6 +33,7 @@ class PostController extends Controller
     public function all()
     {
         $followingIds = auth()->user()->followings()->pluck('users.id');
+        $followingIds->push(auth()->id());
 
         $posts = Post::with(['user', 'tags'])
         ->whereIn('user_id', $followingIds)
