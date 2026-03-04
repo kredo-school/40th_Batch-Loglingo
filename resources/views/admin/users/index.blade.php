@@ -1,5 +1,54 @@
 <x-admin-layout>
-    <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100">
+    <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-6">
+
+        {{-- --- Filter --- --}}
+        <div class="mb-6">
+            <form action="{{ route('admin.users.index') }}" method="GET" class="flex flex-wrap gap-3 items-end">
+
+                {{-- search bar --}}
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-wider">Search User</label>
+                    <input type="text" name="search" value="{{ request('search') }}"
+                        placeholder="Name or Email..."
+                        class="form-control w-64 border-gray-300 rounded-md shadow-sm text-sm focus:ring-blue-500">
+                </div>
+
+                {{-- status filter --}}
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-wider">Status</label>
+                    <select name="status" class="form-control border-gray-300 rounded-md shadow-sm text-sm" onchange="this.form.submit()">
+                        <option value="">All Status</option>
+                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active Only</option>
+                        <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive Only</option>
+                    </select>
+                </div>
+
+                {{-- button --}}
+                <div class="flex gap-2">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-bold transition-colors">
+                        Search
+                    </button>
+                    @if(request()->anyFilled(['search', 'status']))
+                    <a href="{{ route('admin.users.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-bold transition-colors">
+                        Reset
+                    </a>
+                    @endif
+                </div>
+            </form>
+
+            <div class="mb-2 text-sm text-gray-500 font-medium">
+                @if($users->total() > 1)
+                Showing {{ $users->firstItem() }} - {{ $users->lastItem() }} of {{ $users->total() }} users
+                @elseif($users->total() === 1)
+                Showing 1 user
+                @else
+                No users found
+                @endif
+            </div>
+        </div>
+
+
+        {{-- Table --}}
         <table class="w-full text-left border-collapse">
             <thead>
                 <tr class="border-b border-gray-200">
