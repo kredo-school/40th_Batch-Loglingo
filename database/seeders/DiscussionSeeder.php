@@ -6,24 +6,32 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Discussion;
 use App\Models\Reply;
+use App\Models\Language;
+use App\Models\User;
 
 class DiscussionSeeder extends Seeder
 {
 
     public function run(): void
     {
-        $users = \App\Models\User::all();
+        $users = User::all();
+        $languages = Language::all();
 
-        // 1. 普通のデータを10件作成（たまに通報が混じる）
-        Discussion::factory(10)
+        // 1. generate 10 normal data
+        Discussion::factory(25)
             ->create()
-            ->each(function ($discussion) use ($users) {
-                // 各DiscussionにReplyを2〜3個作成
+            ->each(function ($discussion) use ($users,$languages) {
+                //add languag
+                $discussion->tags()->attach(
+                    $languages->random(1)->pluck('id')->toArray()
+                );
+
+                // generate reply data to each discussion
                 $replies = Reply::factory(rand(2, 3))->create([
                     'discussion_id' => $discussion->id,
                 ]);
 
-                // 20%の確率で、Discussion本体に1件通報を入れる
+                // 20% add report
                 if (rand(1, 10) > 8) {
                     $discussion->reports()->create([
                         'user_id' => $users->random()->id,
@@ -31,27 +39,30 @@ class DiscussionSeeder extends Seeder
                 }
             });
 
-        // 2. 【テスト用】通報が大量にある「危険な議論」を3件作成
-        // これにより、Admin画面で背景が赤くなる（Reports >= 10）のを確認できます
-        Discussion::factory(3)
+        // 2. generate 3 discussions with many reports 
+        Discussion::factory(10)
             ->create(['d_title' => '⚠️ HIGH REPORT TEST'])
-            ->each(function ($discussion) use ($users) {
+            ->each(function ($discussion) use ($users, $languages) {
+                // --- add language ---
+                $discussion->tags()->attach(
+                    $languages->random(1)->pluck('id')->toArray()
+                );
 
-                // 本体に5件通報
+                // 5 reports to discussion
                 $shuffledUsers = $users->shuffle();
 
                 for ($i = 0; $i < 5; $i++) {
                     $discussion->reports()->create([
-                        'user_id' => $shuffledUsers[$i]->id, // $i 番目のユーザーを使う
+                        'user_id' => $shuffledUsers[$i]->id, // $i use user number
                     ]);
                 }
 
-                // 返信にも通報を散らす（合計が10を超えるように）
+                // reports to its reply
                 Reply::factory(3)->create([
                     'discussion_id' => $discussion->id,
                 ])->each(function ($reply) use ($users) {
-                    // 各返信に2件ずつ通報
-                    $replyUsers = $users->shuffle(); // 再度シャッフル
+                    // 2 reports each
+                    $replyUsers = $users->shuffle();
 
                     for ($j = 0; $j < 2; $j++) {
                         $reply->reports()->create([
