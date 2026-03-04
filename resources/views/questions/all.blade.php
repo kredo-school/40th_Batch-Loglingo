@@ -14,7 +14,7 @@
                             All Q&As
                             @endif
                         </h2>
-                        <a href="{{ route('questions.index') }}" class="text-sm text-black hover:underline">see latest</a>
+                        <a href="{{ route('questions.index', request()->query()) }}" class="text-sm text-black hover:underline">see latest</a>
                     </div>
                 </div>
 

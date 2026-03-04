@@ -14,15 +14,32 @@ class DiscussionController extends Controller
         $query = Discussion::with(['user', 'replies', 'question.tags', 'tags'])
             ->where('status', true);
 
-        if ($request->filled('languages')) {
-            $selectedLangs = $request->languages;
-
-            $query->whereHas('tags', function ($q) use ($selectedLangs) {
-                $q->whereIn('languages.id', $selectedLangs);
+        // 1. language filter
+        $query->when($request->filled('languages'), function ($q) use ($request) {
+            $q->whereHas('tags', function ($sq) use ($request) {
+                $sq->whereIn('languages.id', $request->languages);
             });
-        }
+        });
 
-        $discussions = $query->latest()->paginate(5);
+        // 2. search by word
+        $query->when($request->filled('languages'), function ($q) use ($request) {
+            $q->whereHas('tags', function ($sq) use ($request) {
+                $sq->whereIn('languages.id', $request->languages);
+            });
+        });
+        $query->when($request->search, function ($q, $search) {
+            $q->where(function ($sq) use ($search) {
+                $sq->where('d_title', 'like', "%{$search}%")
+                    ->orWhere('d_content', 'like', "%{$search}%");
+            });
+        });
+
+        // 3. Sort by Resolved or not
+        $query->when($request->filled('resolved'), function ($q) use ($request) {
+            $q->where('is_resolved', $request->resolved === 'true');
+        });
+
+        $discussions = $query->latest()->paginate(5)->withQueryString();
         $languages = Language::where('status', true)->get();
 
         return view('discussions.index', compact('discussions', 'languages'));
@@ -33,6 +50,7 @@ class DiscussionController extends Controller
         $query = Discussion::with(['user', 'replies', 'question.tags', 'tags'])
             ->where('status', true);
 
+        // 1.language filter
         if ($request->filled('languages')) {
             $selectedLangs = $request->languages;
 
@@ -41,7 +59,21 @@ class DiscussionController extends Controller
             });
         }
 
-        $discussions = $query->latest()->paginate(20);
+        // 2. search by word
+        $query->when($request->search, function ($q, $search) {
+            $q->where(function ($sq) use ($search) {
+                $sq->where('d_title', 'like', "%{$search}%")
+                    ->orWhere('d_content', 'like', "%{$search}%");
+            });
+        });
+
+        // 3. sort by Resolved or not
+        $query->when($request->filled('resolved'), function ($q) use ($request) {
+            $status = $request->resolved === 'true';
+            $q->where('is_resolved', $status);
+        });
+
+        $discussions = $query->latest()->paginate(20)->withQueryString();
         $languages = Language::where('status', true)->get();
 
         return view('discussions.all', compact('discussions', 'languages'));
