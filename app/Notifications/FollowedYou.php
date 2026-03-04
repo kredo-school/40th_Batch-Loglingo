@@ -26,7 +26,7 @@ class FollowedYou extends Notification
             'type' => 'followed_you',
             'follower_id' => $this->followerId,
             'follower_name' => $this->followerName,
-            'url' => route('profile.show', $this->followerId),
+            'url' => route('profile.followers', $notifiable->id) 
         ];
     }
 
