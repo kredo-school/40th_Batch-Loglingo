@@ -11,6 +11,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\DiscussionController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\NotificationController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/{user}/questions', [ProfileController::class, 'questions'])->name('profile.questions');
     Route::get('/profile/{user}/following', [ProfileController::class, 'following'])->name('profile.following');
     Route::get('/profile/{user}/followers', [ProfileController::class, 'followers'])->name('profile.followers');
+    Route::get('/profile/{user}/notifications', [ProfileController::class, 'notifications'])->name('profile.notifications');
 
     // See more
     Route::get('/posts/all', [PostController::class, 'all'])->name('posts.all');
@@ -63,6 +65,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/discussions/{discussion}/replies', [ReplyController::class, 'store'])->name('replies.store');
     Route::delete('/replies/{reply}', [ReplyController::class, 'destroy'])->name('replies.destroy');
     
+    // notification
+    Route::get('/notifications/{id}', [NotificationController::class, 'read'])->name('notifications.read');
 });
 
 

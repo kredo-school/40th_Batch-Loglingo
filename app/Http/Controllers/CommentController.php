@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Notifications\CommentedOnYourPost;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -35,11 +36,27 @@ class CommentController extends Controller
             'post_id' => 'required|exists:posts,id',
         ]);
 
-        Comment::create([
+        $post = Post::findOrFail($validated['post_id']);
+
+        $comment = Comment::create([
         'c_content' => $validated['c_content'],
         'post_id' => $validated['post_id'],
         'user_id' => auth()->id(),
-    ]);
+        ]);
+
+        $post = $comment->post;
+        $postOwner = $post->user;
+
+        if ($postOwner->id !== auth()->id()) {
+        $postOwner->notify(
+            new CommentedOnYourPost(
+                $post->id,
+                $post->p_title,
+                auth()->id(),
+                auth()->user()->name
+            )
+        );
+    }
 
     return back();
     }

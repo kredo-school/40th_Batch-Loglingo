@@ -1,4 +1,4 @@
-{{-- TODO: set route for bookmark and notification --}}
+{{-- TODO: set route for bookmark --}}
 
 @props(['user'])
 
@@ -70,14 +70,26 @@
         @endif
     </a>
 
-    <a href="#"
-    {{-- {{ route('profile.notifications', $user) }} --}}
-    class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
-    {{ request()->routeIs('profile.notifications') 
-            ? 'text-gray-900 font-semibold' 
-            : 'text-gray-500 hover:text-gray-900 transition-all duration-200' }}">
+{{-- notification --}}
+    @php
+        $unreadCount = auth()->check() && auth()->id() === $user->id
+            ? auth()->user()->unreadNotifications()->count()
+            : 0;
+    @endphp
 
+    <a href="{{ route('profile.notifications', $user) }}"
+    class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
+    {{ request()->routeIs('profile.notifications')
+            ? 'text-gray-900 font-semibold'
+            : 'text-gray-500 hover:text-gray-900' }}">
         notifications
+        @if($unreadCount > 0)
+               <span
+        class="ml-0
+               relative -top-0.5 inline-flex items-center justify-center w-5 h-5 text-[12px] bg-red-500 text-white rounded-full">
+                {{ $unreadCount }}
+            </span>
+        @endif
 
         @if(request()->routeIs('profile.notifications'))
             <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"></div>

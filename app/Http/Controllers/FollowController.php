@@ -6,6 +6,7 @@ use App\Models\Follow;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\FollowedYou;
 
 class FollowController extends Controller
 {
@@ -35,7 +36,17 @@ class FollowController extends Controller
                 abort(403);
             }
 
-            Auth::user()->followings()->syncWithoutDetaching([$user->id]);
+            $me = Auth::user();
+            $me->followings()->syncWithoutDetaching([$user->id]);
+
+            if ($user->id !== $me->id) {
+            $user->notify(
+            new FollowedYou(
+                $me->id,
+                $me->name
+            )
+            );
+            }
 
             return back();
         }

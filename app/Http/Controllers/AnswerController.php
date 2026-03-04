@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Answer;
+use App\Notifications\AnsweredYourQuestion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,11 +17,25 @@ class AnswerController extends Controller
             'a_content' => 'required|string|max:2000',
         ]);
 
-        Answer::create([
+        $answer = Answer::create([
             'user_id' => Auth::id(),
             'question_id' => $request->question_id,
             'a_content' => $request->a_content,
         ]);
+
+        $question = $answer->question;
+        $questionOwner = $question->user;
+
+        if ($questionOwner->id !== auth()->id()) {
+        $questionOwner->notify(
+            new AnsweredYourQuestion(
+                $question->id,
+                $question->q_title,
+                auth()->id(),
+                auth()->user()->name
+            )
+        );
+    }
 
         return back()->with('success','Answer posted successfully!');
 
@@ -36,4 +51,6 @@ class AnswerController extends Controller
         return back()->with('success','Answer deleted.');
 
     }
+
+    
 }

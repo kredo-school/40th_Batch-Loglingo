@@ -26,6 +26,8 @@
                     <x-profile-show-following :followings="$followings" :count="$user->followings_count"/>
                 @elseif(request()->routeIs('profile.followers'))
                     <x-profile-show-followers :user="$user" :followers="$followers" :count="$user->followers_count"/>
+                @elseif(request()->routeIs('profile.notifications'))
+                    <x-profile-show-notifications :notifications="$notifications" />
                 @endif
                 </div>
 

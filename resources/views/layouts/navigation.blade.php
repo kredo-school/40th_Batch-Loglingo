@@ -36,7 +36,21 @@
 
         <div class="flex items-center space-x-5 text-[30px]">
             <a href="{{ route('posts.index')}}" class="text-white hover:text-gray-800"><i class="fa-solid fa-house"></i></a>
-            <a href="{{ route('posts.index')}}" class="text-white hover:text-gray-800"><i class="fa-regular fa-bell"></i></a> {{--★need to adjust the route --}}
+            
+            {{-- notification --}}
+            @php
+              $unreadCount = auth()->user()->unreadNotifications()->count();
+            @endphp
+
+            <a href="{{ route('profile.notifications', auth()->id()) }}" class="relative text-white hover:text-gray-800">
+                <i class="fa-regular fa-bell"></i>
+                @if($unreadCount > 0)
+                     <span
+                    class="absolute -bottom-0.5 -right-3 w-5 h-5 bg-red-500 text-white text-[12px] font-bold rounded-full flex items-center justify-center">
+                        {{ $unreadCount }}
+                    </span>
+                @endif
+            </a>
 
             <x-dropdown align="right" width="48">
                 <x-slot name="trigger">
