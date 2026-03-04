@@ -115,4 +115,23 @@ class ProfileController extends Controller
         }
     
 
+        public function notifications(User $user)
+        {
+            // do not show others' notification
+            if (Auth::id() !== $user->id) {
+                abort(403);
+            }
+
+            $notifications = $user->notifications()
+                ->orderByRaw('read_at IS NOT NULL')
+                ->latest()
+                ->get();
+
+            return view('profile.profile', [
+                'user' => $user,
+                'notifications' => $notifications,
+                'activeTab' => 'notifications',
+            ]);
+        }
+
 }

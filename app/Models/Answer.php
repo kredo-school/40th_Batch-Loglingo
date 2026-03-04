@@ -26,6 +26,12 @@ class Answer extends Model
         // return $this->belongsTo(User::class)->withTrashed();
     }
 
+     public function question()
+    {
+        return $this->belongsTo(Question::class);
+    }
+
+
     public function reports(): MorphMany
     {
         return $this->morphMany(Report::class, 'reportable');
