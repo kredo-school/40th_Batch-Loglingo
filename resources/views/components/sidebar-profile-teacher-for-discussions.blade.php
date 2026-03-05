@@ -10,9 +10,7 @@
     <div>
       <h3 class="text-xl font-bold">{{ Auth::user()->name }}</h3>
       <p class="text-sm"><span class="font-bold">{{ Auth::user()->posts_count ?? 0 }}</span> posts</p> 
-      <p class="text-sm"><span class="font-bold">#</span> answers</p> 
-      {{-- {{ Auth::user()->answers_count ?? 0 }} --}}
-      {{-- need loadCount in Controller--}}
+      <p class="text-sm"><span class="font-bold">{{ Auth::user()->questions_count ?? 0 }}</span> answers</p> 
     </div>
   </div>
 
