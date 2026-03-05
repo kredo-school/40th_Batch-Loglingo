@@ -15,7 +15,9 @@
                     class="w-full pl-10 pr-4 py-2 border-gray-200 rounded-full text-sm focus:ring-[#56A5E1] focus:border-[#56A5E1]">
             </div>
 
-            {{-- Resolved Filter --}}
+            {{-- Resolved/Answered Filter --}}
+
+            @unless(request()->routeIs('search'))
             <div class="min-w-[150px]">
                 <select name="resolved" class="w-full border-gray-200 rounded-full text-sm py-2 px-4 focus:ring-[#56A5E1]" onchange="this.form.submit()">
 
@@ -24,8 +26,9 @@
                     <option value="">All Questions</option>
                     <option value="false" {{ request('resolved') === 'false' ? 'selected' : '' }}>Unanswered</option>
                     <option value="true" {{ request('resolved') === 'true' ? 'selected' : '' }}>Answered</option>
-                    @else
-                    {{-- other pages (Discussion pages) --}}
+
+                    @elseif(request()->routeIs('discussions.*'))
+                    {{-- Discussion pages --}}
                     <option value="">All Issues</option>
                     <option value="false" {{ request('resolved') === 'false' ? 'selected' : '' }}>Unresolved</option>
                     <option value="true" {{ request('resolved') === 'true' ? 'selected' : '' }}>Resolved</option>
@@ -33,6 +36,8 @@
 
                 </select>
             </div>
+            @endunless
+
         </div>
 
         <hr class="border-gray-50">
