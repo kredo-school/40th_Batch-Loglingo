@@ -84,6 +84,8 @@ class ProfileController extends Controller
 
         public function questions(User $user)
         {
+            $user->loadCount(['posts', 'questions']);
+            
             return view('profile.profile', [
                 'user' => $user,
                 'questions' => $user->questions()->latest()->get(),
@@ -93,7 +95,7 @@ class ProfileController extends Controller
 
         public function following(User $user)
         {
-            $user->loadCount(['followings']);
+            $user->loadCount(['posts', 'questions', 'followings']);
 
             return view('profile.profile', [
                 'user' => $user,
@@ -105,7 +107,7 @@ class ProfileController extends Controller
 
         public function followers(User $user)
         {
-            $user->loadCount(['followers']);
+            $user->loadCount(['posts', 'questions', 'followers']);
             
             return view('profile.profile', [
                 'user' => $user,
@@ -117,6 +119,8 @@ class ProfileController extends Controller
 
         public function notifications(User $user)
         {
+            $user->loadCount(['posts', 'questions']);
+            
             // do not show others' notification
             if (Auth::id() !== $user->id) {
                 abort(403);
