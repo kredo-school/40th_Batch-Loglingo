@@ -47,8 +47,20 @@
 
 
                 <div class="flex items-center space-x-3">
-                    {{-- ★create a bookmark function --}}
-                    <i class="fa-regular fa-bookmark text-gray-400 hover:text-green-500 cursor-pointer"></i>
+                    {{-- bookmark --}}
+                    <form action="{{ route('bookmarks.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="bookmarkable_id" value="{{ $question->id }}">
+                        <input type="hidden" name="bookmarkable_type" value="{{ get_class($question) }}">
+
+                        <button type="submit">
+                            @if($question->isBookmarkedBy(auth()->user()))
+                            <i class="fa-solid fa-bookmark text-green-500"></i> {{-- already bookmarked --}}
+                            @else
+                            <i class="fa-regular fa-bookmark text-gray-400"></i> {{-- not yet --}}
+                            @endif
+                        </button>
+                    </form>
 
                     {{-- language tag --}}
                     @forelse($question->tags as $tag)
@@ -56,9 +68,8 @@
                         <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->code }}
                     </span>
                     @empty
-                      <span class="text-[12px] text-gray-400">No Tags</span>
+                    <span class="text-[12px] text-gray-400">No Tags</span>
                     @endforelse
-
 
                     {{-- report system --}}
                     @php

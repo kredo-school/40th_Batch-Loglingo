@@ -62,6 +62,21 @@
             <i class="fa-regular fa-comment-dots mr-1"></i> {{ $discussion->replies->count() }}
           </span>
 
+          {{-- bookmark --}}
+          <form action="{{ route('bookmarks.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="bookmarkable_id" value="{{ $discussion->id }}">
+            <input type="hidden" name="bookmarkable_type" value="{{ get_class($discussion) }}">
+
+            <button type="submit">
+              @if($discussion->isBookmarkedBy(auth()->user()))
+              <i class="fa-solid fa-bookmark text-green-500"></i> {{-- already bookmarked --}}
+              @else
+              <i class="fa-regular fa-bookmark text-gray-400"></i> {{-- not yet --}}
+              @endif
+            </button>
+          </form>
+
           {{-- language tag --}}
           @foreach($discussion->tags as $tag)
           <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100 flex items-center">

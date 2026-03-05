@@ -12,6 +12,7 @@ use App\Http\Controllers\DiscussionController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\BookmarkController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -67,6 +68,9 @@ Route::middleware('auth')->group(function () {
     
     // notification
     Route::get('/notifications/{id}', [NotificationController::class, 'read'])->name('notifications.read');
+
+    // bookmark
+    Route::post('/bookmarks', [BookmarkController::class, 'store'])->name('bookmarks.store');
 });
 
 

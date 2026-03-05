@@ -9,11 +9,11 @@ use App\Models\User;
 use App\Models\Comment;
 use App\Models\Language;
 use App\Models\Report;
-
+use App\Models\Bookmark;
 
 class Post extends Model
 {
-     use HasFactory;
+    use HasFactory;
 
     protected $fillable = [
         'user_id',
@@ -23,8 +23,8 @@ class Post extends Model
         'status',
     ];
 
-     protected $casts = [
-        'event_date' => 'date', 
+    protected $casts = [
+        'event_date' => 'date',
     ];
 
 
@@ -34,7 +34,7 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-     // post has many comments
+    // post has many comments
     public function comments()
     {
         return $this->hasMany(Comment::class);
@@ -62,7 +62,20 @@ class Post extends Model
 
         return $postReports + $commentsReports;
     }
+
+
+    //bookmark feature
+    public function bookmarks()
+    {
+        return $this->morphMany(Bookmark::class, 'bookmarkable');
+    }
+
+    public function isBookmarkedBy($user): bool
+    {
+        if (!$user) return false;
+
+        return $this->bookmarks()
+            ->where('user_id', $user->id)
+            ->exists();
+    }
 }
-
-
-
