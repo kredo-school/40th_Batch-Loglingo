@@ -14,12 +14,11 @@
                             Discover New Connections
                             @endif
                         </h2>
-                        <!-- <a href="#" class="text-sm text-black hover:underline">see more</a> -->
                     </div>
                 </div>
 
                 <!-- Language filter -->
-                <x-language-filter :languages="$languages" :action="route('search')" label="(Post written in)" />
+                <x-language-filter :languages="$languages" :action="route('search')" label="(Post of learning language)" />
 
                 <!-- Post example-->
                 @forelse($posts as $post)
