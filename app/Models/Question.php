@@ -8,6 +8,7 @@ use App\Models\Language;
 use App\Models\User;
 use App\Models\Report;
 use App\Models\Answer;
+use App\Models\Bookmark;
 
 class Question extends Model
 {
@@ -56,5 +57,21 @@ class Question extends Model
         });
 
         return $questionReports + $answersReports;
+    }
+
+
+    //bookmark feature
+    public function bookmarks()
+    {
+        return $this->morphMany(Bookmark::class, 'bookmarkable');
+    }
+
+    public function isBookmarkedBy($user): bool
+    {
+        if (!$user) return false;
+
+        return $this->bookmarks()
+            ->where('user_id', $user->id)
+            ->exists();
     }
 }

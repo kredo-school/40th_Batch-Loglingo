@@ -8,11 +8,12 @@ use App\Models\Reply;
 use App\Models\Question;
 use App\Models\Language;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Bookmark;
 
 class Discussion extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'user_id',
         'question_id',
@@ -63,5 +64,21 @@ class Discussion extends Model
         });
 
         return $discussionReports + $repliesReports;
+    }
+
+
+    //bookmark feature
+    public function bookmarks()
+    {
+        return $this->morphMany(Bookmark::class, 'bookmarkable');
+    }
+
+    public function isBookmarkedBy($user): bool
+    {
+        if (!$user) return false;
+
+        return $this->bookmarks()
+            ->where('user_id', $user->id)
+            ->exists();
     }
 }

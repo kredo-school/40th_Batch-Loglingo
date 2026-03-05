@@ -28,9 +28,9 @@
           <div class="pb-6 mb-6 border-b">
             <div class="flex items-start space-x-4 mb-4">
               @if($discussion->user->avatar)
-                <img src="{{ $discussion->user->avatar }}"  alt="user" class="w-16 h-16 rounded-full object-cover">
+              <img src="{{ $discussion->user->avatar }}" alt="user" class="w-16 h-16 rounded-full object-cover">
               @else
-                  <i class="fa-solid fa-circle-user text-gray-400 text-[96px] leading-none"></i>
+              <i class="fa-solid fa-circle-user text-gray-400 text-[96px] leading-none"></i>
               @endif
 
               <div class="flex-1">
@@ -77,9 +77,24 @@
                     <form action="{{ route('discussions.resolve', $discussion->id) }}" method="POST">
                       @csrf
                       @method('PATCH')
-                      <button type="submit" class="bg-green-500 text-white text-xs px-3 py-1 rounded-full font-bold hover:bg-green-600">Mark Resolved</button>
+                      <button type="submit" class="bg-blue-500 text-white text-xs px-3 py-1 rounded-full font-bold hover:bg-blue-600">Mark Resolved</button>
                     </form>
                     @endif
+
+                    {{-- bookmark --}}
+                    <form action="{{ route('bookmarks.store') }}" method="POST">
+                      @csrf
+                      <input type="hidden" name="bookmarkable_id" value="{{ $discussion->id }}">
+                      <input type="hidden" name="bookmarkable_type" value="{{ get_class($discussion) }}">
+
+                      <button type="submit">
+                        @if($discussion->isBookmarkedBy(auth()->user()))
+                        <i class="fa-solid fa-bookmark text-green-500"></i> {{-- already bookmarked --}}
+                        @else
+                        <i class="fa-regular fa-bookmark text-gray-400"></i> {{-- not yet --}}
+                        @endif
+                      </button>
+                    </form>
 
                     {{-- language tag --}}
                     @foreach($discussion->tags as $tag)
@@ -125,13 +140,13 @@
               @csrf
               <div class="flex items-start space-x-4">
                 {{-- avatar --}}
-                
-                  @if( auth()->user()->avatar)
-                  <img src="{{ auth()->user()->avatar }}" alt="user" class="w-12 h-12 object-cover">
-                  @else
-                  <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
-                  @endif
-                
+
+                @if( auth()->user()->avatar)
+                <img src="{{ auth()->user()->avatar }}" alt="user" class="w-12 h-12 object-cover">
+                @else
+                <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
+                @endif
+
 
                 <div class="flex-1">
                   <h4 class="font-bold text-gray-700 mb-2">{{ Auth::user()->name }}</h4>
@@ -150,11 +165,11 @@
             @foreach($discussion->replies as $reply)
             <div class="flex items-start space-x-4 border-b last:border-0 py-4">
               {{-- avatar --}}
-                @if( $reply->user->avatar)
-                <img src="{{ $reply->user->avatar }}" alt="user" class="w-12 h-12 rounded-full object-cover">
-                @else
-                <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
-                @endif
+              @if( $reply->user->avatar)
+              <img src="{{ $reply->user->avatar }}" alt="user" class="w-12 h-12 rounded-full object-cover">
+              @else
+              <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
+              @endif
 
               <div class="flex-1">
                 <div class="flex justify-between items-center mb-2">
