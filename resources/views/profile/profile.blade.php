@@ -22,10 +22,14 @@
                     <x-profile-show-posts :posts="$posts" />
                 @elseif(request()->routeIs('profile.questions'))
                     <x-profile-show-questions :questions="$questions" />
+                @elseif(request()->routeIs('profile.discussions'))
+                    <x-profile-show-discussions :discussions="$discussions" />
                 @elseif(request()->routeIs('profile.following'))
                     <x-profile-show-following :followings="$followings" :count="$user->followings_count"/>
                 @elseif(request()->routeIs('profile.followers'))
                     <x-profile-show-followers :user="$user" :followers="$followers" :count="$user->followers_count"/>
+                @elseif(request()->routeIs('profile.bookmarks'))
+                    <x-profile-show-bookmarks :bookmarks="$bookmarks" />
                 @elseif(request()->routeIs('profile.notifications'))
                     <x-profile-show-notifications :notifications="$notifications" />
                 @endif

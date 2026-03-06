@@ -7,7 +7,9 @@ use App\Models\User;
 use App\Models\Language;
 use App\Models\Post;
 use App\Models\Question;
+use App\Models\Discussion;
 use App\Models\Follow;
+use App\Models\Bookmark;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -79,6 +81,11 @@ class User extends Authenticatable
         return $this->hasMany(Question::class);
     }
 
+    public function discussions()
+    {
+        return $this->hasMany(Discussion::class);
+    }
+
     public function followings()
     {
         return $this->belongsToMany(
@@ -91,9 +98,9 @@ class User extends Authenticatable
 
     public function isFollowing(User $user): bool
     {
-    return $this->followings()
-        ->where('following_id', $user->id)
-        ->exists();
+        return $this->followings()
+            ->where('following_id', $user->id)
+            ->exists();
     }
 
     public function followers()
@@ -122,6 +129,10 @@ class User extends Authenticatable
             ->exists();
     }
 
+    public function bookmarks()
+    {
+        return $this->hasMany(Bookmark::class);
+    }
 }
 
 
@@ -130,4 +141,3 @@ class User extends Authenticatable
     // public function followsYou(){
     //     return $this->follow()->where('following_id', Auth::user()->id)->exists();
     // }
-
