@@ -1,11 +1,10 @@
-{{-- TODO: set route for bookmark --}}
-
 @props(['user'])
 
-<div class="mt-4 flex w-full gap-x-2 overflow-x-auto lg:overflow-x-visible no-scrollbar">  
+<div class="mt-4 flex w-full gap-x-2 overflow-x-auto no-scrollbar">
 
+    {{-- Posts --}}
     <a href="{{ route('profile.show', $user) }}"
-    class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
+        class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
     {{ request()->routeIs('profile.show') 
             ? 'text-gray-900 font-semibold' 
             : 'text-gray-500 hover:text-gray-900 transition-all duration-200' }}">
@@ -13,12 +12,14 @@
         posts
 
         @if(request()->routeIs('profile.show'))
-            <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"></div>
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"></div>
         @endif
     </a>
 
+
+    {{-- Questions --}}
     <a href="{{ route('profile.questions', $user) }}"
-    class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
+        class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
     {{ request()->routeIs('profile.questions') 
             ? 'text-gray-900 font-semibold' 
             : 'text-gray-500 hover:text-gray-900 transition-all duration-200' }}">
@@ -26,12 +27,27 @@
         questions
 
         @if(request()->routeIs('profile.questions'))
-            <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"></div>
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"></div>
         @endif
     </a>
 
+    {{-- Discussions --}}
+    @if(auth()->check() && auth()->user()->role_id === 3)
+    <a href="{{ route('profile.discussions', $user) }}"
+        class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
+    {{ request()->routeIs('profile.discussions') ? 'text-gray-900 font-semibold' : 'text-gray-500 hover:text-gray-900' }}">
+        discussions
+        @if(request()->routeIs('profile.discussions'))
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"></div>
+        @endif
+    </a>
+    @endif
+
+
+
+    {{-- Following --}}
     <a href="{{ route('profile.following', $user) }}"
-    class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
+        class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
     {{ request()->routeIs('profile.following') 
             ? 'text-gray-900 font-semibold' 
             : 'text-gray-500 hover:text-gray-900 transition-all duration-200' }}">
@@ -39,12 +55,14 @@
         following
 
         @if(request()->routeIs('profile.following'))
-            <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"></div>
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"></div>
         @endif
     </a>
 
+
+    {{-- Followers --}}
     <a href="{{ route('profile.followers', $user) }}"
-    class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
+        class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
     {{ request()->routeIs('profile.followers') 
             ? 'text-gray-900 font-semibold' 
             : 'text-gray-500 hover:text-gray-900 transition-all duration-200' }}">
@@ -52,13 +70,15 @@
         followers
 
         @if(request()->routeIs('profile.followers'))
-            <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"></div>
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"></div>
         @endif
     </a>
 
-    <a href="#"
-    {{-- {{ route('profile.bookmarks', $user) }} --}}
-    class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
+
+    {{-- Bookmarks --}}
+    <a href="{{ route('profile.bookmarks', $user) }}"
+        {{-- {{ route('profile.bookmarks', $user) }} --}}
+        class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
     {{ request()->routeIs('profile.bookmarks') 
             ? 'text-gray-900 font-semibold' 
             : 'text-gray-500 hover:text-gray-900 transition-all duration-200' }}">
@@ -66,37 +86,37 @@
         bookmarks
 
         @if(request()->routeIs('profile.bookmarks'))
-            <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"></div>
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"></div>
         @endif
     </a>
 
-{{-- notification --}}
+
+    {{-- notification --}}
     @php
-        $unreadCount = auth()->check() && auth()->id() === $user->id
-            ? auth()->user()->unreadNotifications()->count()
-            : 0;
+    $unreadCount = auth()->check() && auth()->id() === $user->id
+    ? auth()->user()->unreadNotifications()->count()
+    : 0;
     @endphp
 
     <a href="{{ route('profile.notifications', $user) }}"
-    class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
+        class="flex-1 text-center pb-4 px-2 min-w-fit text-lg md:text-xl relative
     {{ request()->routeIs('profile.notifications')
             ? 'text-gray-900 font-semibold'
             : 'text-gray-500 hover:text-gray-900' }}">
         notifications
         @if($unreadCount > 0)
-               <span
-        class="ml-0
+        <span
+            class="ml-0
                relative -top-0.5 inline-flex items-center justify-center w-5 h-5 text-[12px] bg-red-500 text-white rounded-full">
-                {{ $unreadCount }}
-            </span>
+            {{ $unreadCount }}
+        </span>
         @endif
 
         @if(request()->routeIs('profile.notifications'))
-            <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"></div>
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"></div>
         @endif
     </a>
 
-    
+
 
 </div>
-

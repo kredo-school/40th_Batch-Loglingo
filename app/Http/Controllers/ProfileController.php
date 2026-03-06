@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
 use App\Models\Language;
+use App\Models\Discussion;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class ProfileController extends Controller
     /**
      * Display the user's profile edit form.
      */
-     public function edit(Request $request): View
+    public function edit(Request $request): View
     {
         return view('profile.edit', [
             'user' => $request->user(),
@@ -67,75 +68,107 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
-   
+
     // tab controllers
-        public function show(User $user)
-        {
-            $user->loadCount(['posts', 'questions']);
+    public function show(User $user)
+    {
+        $user->loadCount(['posts', 'questions']);
 
-            return view('profile.profile', [
-                'user' => $user,
-                'posts' => $user->posts()->latest()->with('user')->get(),
-                'questions' => $user->questions()->latest()->with('user')->get(),
-            ]);
+        return view('profile.profile', [
+            'user' => $user,
+            'posts' => $user->posts()->latest()->with('user')->get(),
+            'questions' => $user->questions()->latest()->with('user')->get(),
+        ]);
+    }
 
-            
+    public function questions(User $user)
+    {
+        $user->loadCount(['posts', 'questions']);
+
+        return view('profile.profile', [
+            'user' => $user,
+            'questions' => $user->questions()->latest()->get(),
+        ]);
+    }
+
+    public function discussions(User $user)
+    {
+        if (auth()->user()->role_id !== 3) {
+            abort(403, 'Unauthorized action.');
         }
 
-        public function questions(User $user)
-        {
-            $user->loadCount(['posts', 'questions']);
-            
-            return view('profile.profile', [
-                'user' => $user,
-                'questions' => $user->questions()->latest()->get(),
-            ]);
+        $user->loadCount(['posts', 'questions']);
+
+        $discussions = $user->discussions()
+            ->latest()
+            ->paginate(10);
+
+        return view('profile.profile', [
+            'user' => $user,
+            'discussions' => $discussions,
+        ]);
+    }
+
+
+    public function following(User $user)
+    {
+        $user->loadCount(['posts', 'questions', 'followings']);
+
+        return view('profile.profile', [
+            'user' => $user,
+            // 'tab' => 'following',
+            'followings' => $user->followings()->get(),
+        ]);
+    }
+
+
+    public function followers(User $user)
+    {
+        $user->loadCount(['posts', 'questions', 'followers']);
+
+        return view('profile.profile', [
+            'user' => $user,
+            // 'tab' => 'followers',
+            'followers' => $user->followers()->get(),
+        ]);
+    }
+
+    public function bookmarks(User $user)
+    {
+        if (auth()->id() !== $user->id) {
+            abort(403);
         }
 
+        $bookmarks = $user->bookmarks()
+            ->with('bookmarkable.user', 'bookmarkable.tags')
+            ->latest()
+            ->paginate(10);
 
-        public function following(User $user)
-        {
-            $user->loadCount(['posts', 'questions', 'followings']);
+        return view('profile.profile', [
+            'user' => $user,
+            'bookmarks' => $bookmarks,
+        ]);
+    }
 
-            return view('profile.profile', [
-                'user' => $user,
-                // 'tab' => 'following',
-                'followings' => $user->followings()->get(),
-            ]);
-        }
-        
 
-        public function followers(User $user)
-        {
-            $user->loadCount(['posts', 'questions', 'followers']);
-            
-            return view('profile.profile', [
-                'user' => $user,
-                // 'tab' => 'followers',
-                'followers' => $user->followers()->get(),
-            ]);
-        }
-    
+    public function notifications(User $user)
+    {
+        $user->loadCount(['posts', 'questions']);
 
-        public function notifications(User $user)
-        {
-            $user->loadCount(['posts', 'questions']);
-            
-            // do not show others' notification
-            if (Auth::id() !== $user->id) {
-                abort(403);
-            }
-
-            $notifications = $user->notifications()
-                ->orderByRaw('read_at IS NOT NULL')
-                ->latest()
-                ->get();
-
-            return view('profile.profile', [
-                'user' => $user,
-                'notifications' => $notifications,
-                'activeTab' => 'notifications',
-            ]);
+        // do not show others' notification
+        if (Auth::id() !== $user->id) {
+            abort(403);
         }
 
+        $notifications = $user->notifications()
+            ->orderByRaw('read_at IS NOT NULL')
+            ->latest()
+            ->get();
+
+        return view('profile.profile', [
+            'user' => $user,
+            'notifications' => $notifications,
+            'activeTab' => 'notifications',
+        ]);
+    }
 }

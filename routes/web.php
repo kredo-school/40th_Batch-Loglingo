@@ -36,8 +36,10 @@ Route::middleware('auth')->group(function () {
     // Profile tabs
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show'); //default. (dashboard = post tab)
     Route::get('/profile/{user}/questions', [ProfileController::class, 'questions'])->name('profile.questions');
+    Route::get('/profile/{user}/discussions', [ProfileController::class, 'discussions'])->name('profile.discussions');
     Route::get('/profile/{user}/following', [ProfileController::class, 'following'])->name('profile.following');
     Route::get('/profile/{user}/followers', [ProfileController::class, 'followers'])->name('profile.followers');
+    Route::get('/profile/{user}/bookmarks', [ProfileController::class, 'bookmarks'])->name('profile.bookmarks');
     Route::get('/profile/{user}/notifications', [ProfileController::class, 'notifications'])->name('profile.notifications');
 
     // See more
