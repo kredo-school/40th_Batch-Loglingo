@@ -48,7 +48,7 @@
 
                 {{-- discussion title --}}
                 <div class="flex justify-between items-center mb-2">
-                  <h2 class="text-[20px] font-extrabold text-gray-900 leading-tight mb-2">
+                  <h2 class="text-[20px] font-extrabold text-gray-900 leading-tight mb-2 break-words">
                     {{ $discussion->d_title }}
                   </h2>
 
@@ -188,7 +188,7 @@
 
 
                 </div>
-                <div class="text-sm text-gray-700 leading-relaxed break-all whitespace-pre-wrap">{{ $reply->r_content }}</div>
+                <div class="text-sm text-gray-700 leading-relaxed break-words whitespace-pre-wrap">{{ $reply->r_content }}</div>
               </div>
             </div>
             @endforeach

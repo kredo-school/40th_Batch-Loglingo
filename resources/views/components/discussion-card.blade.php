@@ -44,9 +44,9 @@
       {{-- title&body  --}}
       <a href="{{ route('discussions.show', $discussion->id) }}" class="group block mt-1">
         {{-- title --}}
-        <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400 break-all whitespace-pre-wrap">{{ $discussion->d_title }}</h4>
+        <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400 break-words whitespace-pre-wrap">{{ $discussion->d_title }}</h4>
         {{-- body --}}
-        <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed break-all whitespace-pre-wrap">{{ $discussion->d_content }}</p>
+        <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed break-words whitespace-pre-wrap">{{ $discussion->d_content }}</p>
       </a>
 
       {{-- footer --}}

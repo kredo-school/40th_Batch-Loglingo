@@ -22,7 +22,7 @@
     <div class="flex-1 min-w-0">
       <div class="flex justify-between items-start mb-2">
         <a href="{{ route('profile.show',$post->user->id) }}" class="group">
-          <h3 class="font-bold text-gray-700 group-hover:text-[#B178CC] transition-colors truncate max-w-[150px] sm:max-w-[200px]"> {{ $post->user->name }} </h3>
+          <h3 class="font-bold text-gray-700 group-hover:text-[#B178CC] transition-colors truncate max-w-full"> {{ $post->user->name }} </h3>
         </a>
         <span class="text-gray-400 text-[13px] underline">{{ $post->event_date->format('m/d/Y') }}</span>
       </div>
@@ -30,11 +30,11 @@
       {{-- tytle&body  --}}
       <a href="{{ route('posts.show', $post->id) }}" class="group block mt-1 truncate">
         {{-- title --}}
-        <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400">
+        <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400 break-words">
           {{ $post->p_title }}
         </h4>
         {{-- body --}}
-        <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed break-all whitespace-pre-wrap">{{ $post->p_content }}</p>
+        <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed break-words whitespace-pre-wrap">{{ $post->p_content }}</p>
       </a>
 
 

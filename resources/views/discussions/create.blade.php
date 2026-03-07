@@ -20,7 +20,7 @@
                         @if($question)
                             <input type="hidden" name="question_id" value="{{ $question->id }}">
                             <div class="bg-purple-50 border border-purple-100 rounded-2xl p-5 mx-4">
-                                <div class="flex justify-between items-start mb-2">
+                                <div class="flex justify-between items-start mb-2 min-w-0">
                                     <p class="text-[10px] font-extrabold text-purple-600 uppercase tracking-widest leading-none">Quoting Question</p>
                                     <div class="flex gap-1">
                                         @foreach($question->tags as $lang)
@@ -28,7 +28,7 @@
                                         @endforeach
                                     </div>
                                 </div>
-                                <h4 class="font-bold text-gray-800">{{ $question->q_title }}</h4>
+                                <h4 class="font-bold text-gray-800 break-words">{{ $question->q_title }}</h4>
                                 <p class="text-sm text-gray-500 line-clamp-1 mt-1">{{ $question->q_content }}</p>
                             </div>
                         @endif

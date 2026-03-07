@@ -29,7 +29,7 @@
             </div>
 
             <!--  tytle & body  -->
-            <a href="{{ route('posts.show',  $post->id) }}" class="group block mt-1">
+            <a href="{{ route('posts.show',  $post->id) }}" class="group block mt-1 min-w-0">
                 <!--  title -->
                 <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400 truncate w-full">
                     {{ $post->p_title }}

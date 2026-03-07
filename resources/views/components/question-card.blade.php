@@ -21,7 +21,7 @@
         <div class="flex-1 min-w-0">
             <div class="flex justify-between items-start mb-2">
                 <a href="{{ route('profile.show',$question->user->id) }} " class="group">
-                    <h3 class="font-bold text-gray-700 group-hover:text-[#B178CC] transition-colors">{{ $question->user->name }}</h3>
+                    <h3 class="font-bold text-gray-700 group-hover:text-[#B178CC] transition-colors truncate max-w-full break-words">{{ $question->user->name }}</h3>
                 </a>
             </div>
 
@@ -32,11 +32,11 @@
             {{-- tytle&body  --}}
             <a href="{{ route('questions.show', $question->id) }}" class="group block mt-1">
                 {{-- title --}}
-                <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400">
+                <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400 break-words">
                     {{ $question->q_title }}
                 </h4>
                 {{-- body --}}
-                <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed break-all whitespace-pre-wrap">{{ $question->q_content }}</p>
+                <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed break-words whitespace-pre-wrap">{{ $question->q_content }}</p>
             </a>
 
             {{-- bookmark&tag&report --}}

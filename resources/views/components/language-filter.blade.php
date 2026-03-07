@@ -59,11 +59,11 @@
             </div>
 
             {{-- Apply button --}}
-            <div class="ml-auto flex gap-2">
+            <div class="ml-auto flex gap-2 mt-2">
                 @if(request()->anyFilled(['search', 'resolved', 'languages']))
                 <a href="{{ $action }}" class="text-sm text-gray-400 hover:text-gray-600 self-center mr-2">Reset</a>
                 @endif
-                <button type="submit" class="bg-[#56A5E1] hover:bg-blue-600 text-white font-bold py-1 px-6 rounded-full shadow-md transition-transform hover:scale-[1.02] active:scale-95">
+                <button type="submit" class="bg-[#56A5E1] hover:bg-blue-600 text-white font-bold py-1 px-6 rounded-full transition-transform hover:scale-[1.02] active:scale-95">
                     Apply
                 </button>
             </div>
