@@ -52,8 +52,10 @@
                         <i class="fa-regular fa-comment-dots mr-1"></i> {{ $question->answers->count() }}
                     </span>
 
+
                     {{-- bookmark --}}
                     <x-bookmark-button :model="$question" />
+
 
                     {{-- language tag --}}
                     @forelse($question->tags as $tag)
@@ -64,6 +66,7 @@
                     <span class="text-[12px] text-gray-400">No Tags</span>
                     @endforelse
 
+
                     {{-- report system --}}
                     @php
                     $reportedByMe = auth()->check()
@@ -73,19 +76,8 @@
                     : false;
                     @endphp
 
-                    @if (!$reportedByMe)
-                    <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this?');">
-                        @csrf
-                        <input type="hidden" name="reportable_id" value="{{ $question->id }}">
-                        <input type="hidden" name="reportable_type" value="{{ \App\Models\Question::class }}">
+                    <x-report-button :model="$question" :reported="$reportedByMe" />
 
-                        <button type="submit" title="Report this question">
-                            <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
-                        </button>
-                    </form>
-                    @else
-                    <i class="fa-solid fa-flag text-red-500"></i>
-                    @endif
 
                 </div>
             </div>

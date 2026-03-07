@@ -86,19 +86,7 @@
           : false;
           @endphp
 
-          @if (!$reportedByMe)
-          <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this?');">
-            @csrf
-            <input type="hidden" name="reportable_id" value="{{ $discussion->id }}">
-            <input type="hidden" name="reportable_type" value="{{ \App\Models\Discussion::class }}">
-
-            <button type="submit" title="Report this question">
-              <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
-            </button>
-          </form>
-          @else
-          <i class="fa-solid fa-flag text-red-500"></i>
-          @endif
+          <x-report-button :model="$discussion" :reported="$reportedByMe" />
 
 
         </div>

@@ -1,100 +1,97 @@
 <!-- show  -->
-{{-- TO DO: bookmark --}}
-
 <div class="space-y-4">
 
     @forelse ($questions as $question)
-        <div class="relative bg-white rounded-[1rem] shadow-sm border border-gray-100 p-5 flex space-x-4 transition-all hover:border-gray-
+    <div class="relative bg-white rounded-[1rem] shadow-sm border border-gray-100 p-5 flex space-x-4 transition-all hover:border-gray-
         200">
 
-            <!-- ★ Answered Badge  -->
-            @if($question->is_answered)
-                <x-answered-badge class="absolute top-4 right-4" />
-            @endif
+        <!-- ★ Answered Badge  -->
+        @if($question->is_answered)
+        <x-answered-badge class="absolute top-4 right-4" />
+        @endif
 
-            <!-- user icon  -->
-            <div class="flex-shrink-0">
-                @if($question->user->avatar)
-                    <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-sm">
-                        <img src="{{ $question->user->avatar }}" class="w-full h-full object-cover">
-                    </div>
-                @else
-                    <i class="fa-solid fa-circle-user text-gray-400 text-[64px] leading-none"></i>
-                @endif
+        <!-- user icon  -->
+        <div class="flex-shrink-0">
+            @if($question->user->avatar)
+            <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-sm">
+                <img src="{{ $question->user->avatar }}" class="w-full h-full object-cover">
             </div>
-            
+            @else
+            <i class="fa-solid fa-circle-user text-gray-400 text-[64px] leading-none"></i>
+            @endif
+        </div>
 
-             <!--  content -->
-            <div class="flex-1 flex flex-col min-w-0">
+
+        <!--  content -->
+        <div class="flex-1 flex flex-col min-w-0">
             <div class="flex justify-between items-start mb-2">
                 <a href="#" class="group">
-                <h3 class="font-bold text-gray-700 group-hover:text-[#B178CC] transition-colors">
-                {{ $question->user->name }}
-                </h3> 
+                    <h3 class="font-bold text-gray-700 group-hover:text-[#B178CC] transition-colors">
+                        {{ $question->user->name }}
+                    </h3>
                 </a>
             </div>
 
-             <!--  tytle & body  -->
+            <!--  tytle & body  -->
             <a href="{{ route('questions.show', $question->id) }}" class="group block mt-1">
                 <!--  title -->
-                <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400 pr-24 truncate w-full">             
-                 {{ $question->q_title }}
+                <h4 class="text-xl font-extrabold text-gray-900 leading-tight mb-1 group-hover:underline decoration-gray-400 pr-24 truncate w-full">
+                    {{ $question->q_title }}
                 </h4>
-               <!-- body -->
+                <!-- body -->
                 <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed">
-                 {{ $question->q_content }}
+                    {{ $question->q_content }}
                 </p>
             </a>
 
             <!-- bookmark & tag & report -->
             <div class="flex justify-between items-center mt-4 pt-3 border-t border-gray-50">
                 <p class="text-[12px] text-gray-400">
-                {{ $question->created_at->diffForHumans() }}
-                </p> 
+                    {{ $question->created_at->diffForHumans() }}
+                </p>
 
                 <div class="flex items-center space-x-3">
+                    {{-- replies --}}
+                    <span class="text-[12px] text-gray-400 mr-2">
+                        <i class="fa-regular fa-comment-dots mr-1"></i> {{ $question->answers->count() }}
+                    </span>
+
+                    {{-- bookmark --}}
+                    <x-bookmark-button :model="$question" />
+
+                    {{-- tag --}}
                     @forelse($question->tags as $tag)
-                    <i class="fa-regular fa-bookmark text-gray-400 hover:text-green-500 cursor-pointer"></i>
                     <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100">
                         <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->code }}
                     </span>
-                 @empty
+                    @empty
                     <span class="text-[12px] text-gray-400">No Tags</span>
-                @endforelse
-                    
-                {{-- report system --}}
-                @php
-                    $reportedByMe = auth()->check()
-                        ? $question->reports()
-                            ->where('user_id', auth()->id())
-                            ->exists()
-                        : false;
-                @endphp
-                
-                @if (!$reportedByMe)
-                <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this?');">
-                    @csrf
-                    <input type="hidden" name="reportable_id" value="{{ $question->id }}">
-                    <input type="hidden" name="reportable_type" value="{{ \App\Models\Post::class }}">
+                    @endforelse
 
-                    <button type="submit">
-                        <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
-                    </button>
-                </form>
-                @else
-                <i class="fa-solid fa-flag text-red-500"></i>
-                @endif    
+
+                    {{-- report system --}}
+                    @php
+                    $reportedByMe = auth()->check()
+                    ? $question->reports()
+                    ->where('user_id', auth()->id())
+                    ->exists()
+                    : false;
+                    @endphp
+
+                    <x-report-button :model="$question" :reported="$reportedByMe" />
+
+
 
                 </div>
             </div>
-            </div>
         </div>
+    </div>
 
     @empty
-        <p class="text-gray-400 text-center py-10">
-            No questions yet.
-        </p>
-        
+    <p class="text-gray-400 text-center py-10">
+        No questions yet.
+    </p>
+
     @endforelse
 
 </div>
