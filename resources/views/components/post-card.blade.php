@@ -34,18 +34,23 @@
           {{ $post->p_title }}
         </h4>
         {{-- body --}}
-        <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed break-all whitespace-pre-wrap">
-          {{ $post->p_content }}
-        </p>
+        <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed break-all whitespace-pre-wrap">{{ $post->p_content }}</p>
       </a>
 
 
 
-      {{-- tag --}}
+      {{-- footer --}}
       <div class="flex justify-between items-center mt-4 pt-3 border-t border-gray-50">
+
+        {{-- created at --}}
         <p class="text-[12px] text-gray-400">{{ $post->created_at->diffForHumans() }}</p>
 
+
         <div class="flex items-center space-x-3">
+          {{-- replies --}}
+          <span class="text-[12px] text-gray-400 mr-2">
+            <i class="fa-regular fa-comment-dots mr-1"></i> {{ $post->comments->count() }}
+          </span>
 
           {{-- bookmark --}}
           <form action="{{ route('bookmarks.store') }}" method="POST">
@@ -61,7 +66,7 @@
               @endif
             </button>
           </form>
-          
+
           @forelse($post->tags as $tag)
           <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100">
             <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->code }}

@@ -47,6 +47,11 @@
 
 
                 <div class="flex items-center space-x-3">
+                    {{-- replies --}}
+                    <span class="text-[12px] text-gray-400 mr-2">
+                        <i class="fa-regular fa-comment-dots mr-1"></i> {{ $question->answers->count() }}
+                    </span>
+
                     {{-- bookmark --}}
                     <form action="{{ route('bookmarks.store') }}" method="POST">
                         @csrf
