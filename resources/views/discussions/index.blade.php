@@ -41,7 +41,7 @@
                 <x-sidebar-profile-teacher-for-discussions />
 
                 <!-- suggested users using blade -->
-                <x-suggested-users />
+                <x-suggested-teachers />
 
             </div>
 
