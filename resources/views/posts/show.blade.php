@@ -51,19 +51,8 @@
                   <div class="flex items-center space-x-3">
 
                     {{-- bookmark --}}
-                    <form action="{{ route('bookmarks.store') }}" method="POST">
-                      @csrf
-                      <input type="hidden" name="bookmarkable_id" value="{{ $post->id }}">
-                      <input type="hidden" name="bookmarkable_type" value="{{ get_class($post) }}">
+                    <x-bookmark-button :model="$post" />
 
-                      <button type="submit">
-                        @if($post->isBookmarkedBy(auth()->user()))
-                        <i class="fa-solid fa-bookmark text-green-500"></i> {{-- already bookmarked --}}
-                        @else
-                        <i class="fa-regular fa-bookmark text-gray-400"></i> {{-- not yet --}}
-                        @endif
-                      </button>
-                    </form>
 
                     {{-- tag --}}
                     @foreach($post->tags as $tag)
@@ -72,7 +61,7 @@
                     </span>
                     @endforeach
 
-                    {{-- report function--}}
+                    {{-- report system --}}
                     @php
                     $reportedByMe = auth()->check()
                     ? $post->reports()
@@ -81,19 +70,8 @@
                     : false;
                     @endphp
 
-                    @if (!$reportedByMe)
-                    <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this?');">
-                      @csrf
-                      <input type="hidden" name="reportable_id" value="{{ $post->id }}">
-                      <input type="hidden" name="reportable_type" value="{{ \App\Models\Post::class }}">
+                    <x-report-button :model="$post" :reported="$reportedByMe" />
 
-                      <button type="submit">
-                        <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
-                      </button>
-                    </form>
-                    @else
-                    <i class="fa-solid fa-flag text-red-500"></i>
-                    @endif
 
                   </div>
                 </div>
@@ -159,6 +137,7 @@
                     </form>
                     @endif
 
+
                     {{-- report --}}
                     @php
                     $reportedByMe = auth()->check()
@@ -168,21 +147,12 @@
                     : false;
                     @endphp
 
-                    @if (!$reportedByMe)
-                    <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this?');">
-                      @csrf
-                      <input type="hidden" name="reportable_id" value="{{ $post->id }}">
-                      <input type="hidden" name="reportable_type" value="{{ \App\Models\Post::class }}">
+                    <x-report-button :model="$post" :reported="$reportedByMe" />
 
-                      <button type="submit">
-                        <i class="fa-regular fa-flag text-[18px] text-gray-400 hover:text-red-500 cursor-pointer"></i>
-                      </button>
-                    </form>
-                    @else
-                    <i class="fa-solid fa-flag text-[18px] text-red-500"></i>
-                    @endif
+                    
                   </div>
                 </div>
+
 
                 {{-- display comment --}}
                 <div>

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-     /**
+    /**
      * 通報する
      */
     public function store(Request $request)
@@ -18,12 +18,12 @@ class ReportController extends Controller
         ]);
 
         Report::firstOrCreate([
-        'user_id'         => auth()->id(),
-        'reportable_id'   => $request->reportable_id,
-        'reportable_type' => $request->reportable_type,
-    ]);
+            'user_id'         => auth()->id(),
+            'reportable_id'   => $request->reportable_id,
+            'reportable_type' => $request->reportable_type,
+        ]);
 
-    return back();
+        return back();
 
         // すでに通報済みかチェック
         $alreadyReported = Report::where('user_id', auth()->id())
@@ -41,8 +41,10 @@ class ReportController extends Controller
             'reportable_type' => $request->reportable_type,
         ]);
 
-        return back()->with('success', 'reported');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Report received'
+        ]);
+        
     }
-
-
 }

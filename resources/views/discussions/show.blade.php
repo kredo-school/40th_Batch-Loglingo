@@ -82,19 +82,7 @@
                     @endif
 
                     {{-- bookmark --}}
-                    <form action="{{ route('bookmarks.store') }}" method="POST">
-                      @csrf
-                      <input type="hidden" name="bookmarkable_id" value="{{ $discussion->id }}">
-                      <input type="hidden" name="bookmarkable_type" value="{{ get_class($discussion) }}">
-
-                      <button type="submit">
-                        @if($discussion->isBookmarkedBy(auth()->user()))
-                        <i class="fa-solid fa-bookmark text-green-500"></i> {{-- already bookmarked --}}
-                        @else
-                        <i class="fa-regular fa-bookmark text-gray-400"></i> {{-- not yet --}}
-                        @endif
-                      </button>
-                    </form>
+                    <x-bookmark-button :model="$discussion" />
 
                     {{-- language tag --}}
                     @foreach($discussion->tags as $tag)
@@ -102,6 +90,7 @@
                       <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->code }}
                     </span>
                     @endforeach
+
 
                     {{-- report discussion --}}
                     @php
@@ -112,19 +101,8 @@
                     : false;
                     @endphp
 
-                    @if (!$reportedByMe)
-                    <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this?');">
-                      @csrf
-                      <input type="hidden" name="reportable_id" value="{{ $discussion->id }}">
-                      <input type="hidden" name="reportable_type" value="{{ \App\Models\Discussion::class }}">
+                    <x-report-button :model="$discussion" :reported="$reportedByMe" />
 
-                      <button type="submit" title="Report this question">
-                        <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
-                      </button>
-                    </form>
-                    @else
-                    <i class="fa-solid fa-flag text-red-500"></i>
-                    @endif
 
                   </div>
                 </div>
@@ -202,19 +180,8 @@
                     : false;
                     @endphp
 
-                    @if (!$reportedByMe)
-                    <form action="{{ route('report.store') }}" method="POST" onsubmit="return confirm('Are you sure you want to report this?');">
-                      @csrf
-                      <input type="hidden" name="reportable_id" value="{{ $reply->id }}">
-                      <input type="hidden" name="reportable_type" value="{{ \App\Models\Reply::class }}">
+                    <x-report-button :model="$discussion" :reported="$reportedByMe" />
 
-                      <button type="submit" title="Report this question">
-                        <i class="fa-regular fa-flag text-gray-400 hover:text-red-500 cursor-pointer"></i>
-                      </button>
-                    </form>
-                    @else
-                    <i class="fa-solid fa-flag text-red-500"></i>
-                    @endif
 
 
                   </div>
