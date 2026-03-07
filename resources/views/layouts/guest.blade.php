@@ -7,23 +7,35 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
-        <!-- Scripts -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
+    <body>
+        <div class="min-h-screen flex items-center justify-center p-4 md:p-8 lg:p-12">
+            <div class="container mx-auto max-w-6xl">
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
+                <div class="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
+
+                    <div class="w-full md:w-1/2 flex justify-center">
+                        <div class="relative w-full max-w-md rounded-[2rem] flex flex-col items-center text-center">
+                            <div class="w-full mb-6 flex items-center justify-center">
+                                <img src="{{ asset('/images/logo.png') }}" alt="LogLingo Logo">
+                            </div>
+                            <div class="space-y-4">
+                                <p>This app is for language learners. You can log your day in the language you are studying, and interact with your friends and teachers! <br> Let's enjoy and practice together!!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-1/2 max-w-md justify-center">
+                        {{ $slot }}
+                    </div>
+
+                </div>
             </div>
         </div>
     </body>
