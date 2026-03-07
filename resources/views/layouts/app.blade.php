@@ -39,6 +39,16 @@
         <main>
             {{ $slot }}
         </main>
+
+
+        <footer class="mt-auto py-4 bg-[#B178CC] text-white shadow-inner">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <p class="text-sm font-medium tracking-wide">
+                    Copyright &copy; {{ date('Y') }} Kredo Internship 40th Batch. All Rights Reserved.
+                </p>
+            </div>
+        </footer>
+
     </div>
 
     <div x-data="{ 
@@ -72,6 +82,35 @@
             <span x-text="message" class="text-sm font-medium"></span>
         </div>
     </div>
+
+
+    {{-- PHPからセッションメッセージがある場合、JavaScriptのイベントを発火させる --}}
+    @if (session('error'))
+    <script>
+        // 100ミリ秒だけ待ってからイベントを発火させる
+        setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('toast', {
+                detail: {
+                    message: "{{ session('error') }}",
+                    type: 'error'
+                }
+            }));
+        }, 100);
+    </script>
+    @endif
+
+    @if (session('success'))
+    <script>
+        setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('toast', {
+                detail: {
+                    message: "{{ session('success') }}",
+                    type: 'success'
+                }
+            }));
+        }, 100);
+    </script>
+    @endif
 
 </body>
 
