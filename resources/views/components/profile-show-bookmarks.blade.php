@@ -10,6 +10,8 @@
             <x-post-card :post="$item" />
         @elseif($item instanceof \App\Models\Question)
             <x-question-card :question="$item" />
+        @elseif($item instanceof \App\Models\Discussion)
+            <x-discussion-card :discussion="$item" />
         @endif
 
     @empty
