@@ -69,7 +69,7 @@
                 <x-slot name="content">
 
                     <!-- Admin -->
-                    @if(Auth::user()->role_id == 1)
+                    @if(Auth::user()->isAdmin())
                     <x-dropdown-link :href="route('admin.users.index')">
                         {{ __('Admin') }}
                     </x-dropdown-link>

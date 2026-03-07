@@ -14,6 +14,9 @@ use App\Http\Controllers\FollowController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\BookmarkController;
 
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\TeacherMiddleware;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -36,7 +39,6 @@ Route::middleware('auth')->group(function () {
     // Profile tabs
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show'); //default. (dashboard = post tab)
     Route::get('/profile/{user}/questions', [ProfileController::class, 'questions'])->name('profile.questions');
-    Route::get('/profile/{user}/discussions', [ProfileController::class, 'discussions'])->name('profile.discussions');
     Route::get('/profile/{user}/following', [ProfileController::class, 'following'])->name('profile.following');
     Route::get('/profile/{user}/followers', [ProfileController::class, 'followers'])->name('profile.followers');
     Route::get('/profile/{user}/bookmarks', [ProfileController::class, 'bookmarks'])->name('profile.bookmarks');
@@ -45,15 +47,14 @@ Route::middleware('auth')->group(function () {
     // See more
     Route::get('/posts/all', [PostController::class, 'all'])->name('posts.all');
     Route::get('/questions/all', [QuestionController::class, 'all'])->name('questions.all');
-    Route::get('/discussions/all', [DiscussionController::class, 'all'])->name('discussions.all');
+
 
     // Resource
     Route::resource('posts', PostController::class);
     Route::resource('questions', QuestionController::class);
     Route::resource('comments', CommentController::class);
-    Route::resource('answers', AnswerController::class);
-    Route::resource('discussions', DiscussionController::class);
 
+    // Search
     Route::get('/search', [SearchController::class, 'index'])->name('search');
 
     // report
@@ -61,13 +62,6 @@ Route::middleware('auth')->group(function () {
         // ->middleware('auth')
         ->name('report.store');
 
-    // resolve
-    Route::patch('/discussions/{discussion}/resolve', [DiscussionController::class, 'resolve'])->name('discussions.resolve');
-
-    // reply
-    Route::post('/discussions/{discussion}/replies', [ReplyController::class, 'store'])->name('replies.store');
-    Route::delete('/replies/{reply}', [ReplyController::class, 'destroy'])->name('replies.destroy');
-    
     // notification
     Route::get('/notifications/{id}', [NotificationController::class, 'read'])->name('notifications.read');
 
@@ -77,29 +71,44 @@ Route::middleware('auth')->group(function () {
 
 
 
+//teacher + admin only
+Route::middleware(['auth', TeacherMiddleware::class])->group(function () {
+    Route::get('/profile/{user}/discussions', [ProfileController::class, 'discussions'])->name('profile.discussions');
+    Route::get('/discussions/all', [DiscussionController::class, 'all'])->name('discussions.all');
+    Route::resource('discussions', DiscussionController::class);
 
+    // Answer question
+    Route::resource('answers', AnswerController::class);
 
+    // resolve button
+    Route::patch('/discussions/{discussion}/resolve', [DiscussionController::class, 'resolve'])->name('discussions.resolve');
 
-
-//admin 
-Route::prefix('admin')->name('admin.')->group(function () {
-
-    Route::get('/', [AdminController::class, 'indexUsers'])->name('dashboard');
-    Route::get('/users', [AdminController::class, 'indexUsers'])->name('users.index');
-    Route::get('/teachers', [AdminController::class, 'indexTeachers'])->name('teachers.index');
-    Route::get('/posts', [AdminController::class, 'indexPosts'])->name('posts.index');
-    Route::get('/qna', [AdminController::class, 'indexQna'])->name('qna.index');
-    Route::get('/tags', [AdminController::class, 'indexTags'])->name('tags.index');
-    Route::post('/tags', [AdminController::class, 'storeTag'])->name('tags.store');
-    Route::get('/discussions', [AdminController::class, 'indexDiscussions'])->name('discussions.index');
-
-    // status
-    Route::patch('/users/{user}/toggle', [AdminController::class, 'toggleUserStatus'])->name('users.toggle');
-    Route::patch('/posts/{post}/toggle', [AdminController::class, 'togglePostStatus'])->name('posts.toggle');
-    Route::patch('/questions/{question}/toggle', [AdminController::class, 'toggleQuestionStatus'])->name('questions.toggle');
-    Route::patch('/languages/{language}/toggle', [AdminController::class, 'toggleLanguageStatus'])->name('languages.toggle');
-    Route::patch('/discussions/{discussion}/toggle', [AdminController::class, 'toggleDiscussionStatus'])->name('discussions.toggle');
-    
+    // reply to discussion
+    Route::post('/discussions/{discussion}/replies', [ReplyController::class, 'store'])->name('replies.store');
+    Route::delete('/replies/{reply}', [ReplyController::class, 'destroy'])->name('replies.destroy');
 });
+
+//Admin only 
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', AdminMiddleware::class])
+    ->group(function () {
+
+        Route::get('/', [AdminController::class, 'indexUsers'])->name('dashboard');
+        Route::get('/users', [AdminController::class, 'indexUsers'])->name('users.index');
+        Route::get('/teachers', [AdminController::class, 'indexTeachers'])->name('teachers.index');
+        Route::get('/posts', [AdminController::class, 'indexPosts'])->name('posts.index');
+        Route::get('/qna', [AdminController::class, 'indexQna'])->name('qna.index');
+        Route::get('/tags', [AdminController::class, 'indexTags'])->name('tags.index');
+        Route::post('/tags', [AdminController::class, 'storeTag'])->name('tags.store');
+        Route::get('/discussions', [AdminController::class, 'indexDiscussions'])->name('discussions.index');
+
+        // status
+        Route::patch('/users/{user}/toggle', [AdminController::class, 'toggleUserStatus'])->name('users.toggle');
+        Route::patch('/posts/{post}/toggle', [AdminController::class, 'togglePostStatus'])->name('posts.toggle');
+        Route::patch('/questions/{question}/toggle', [AdminController::class, 'toggleQuestionStatus'])->name('questions.toggle');
+        Route::patch('/languages/{language}/toggle', [AdminController::class, 'toggleLanguageStatus'])->name('languages.toggle');
+        Route::patch('/discussions/{discussion}/toggle', [AdminController::class, 'toggleDiscussionStatus'])->name('discussions.toggle');
+    });
 
 require __DIR__ . '/auth.php';

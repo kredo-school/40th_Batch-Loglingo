@@ -133,6 +133,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(Bookmark::class);
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->role_id === 1;
+    }
+
+    public function isTeacher(): bool
+    {
+        return $this->role_id === 3;
+    }
 }
 
 
