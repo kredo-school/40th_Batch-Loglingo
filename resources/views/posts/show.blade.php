@@ -37,7 +37,7 @@
                 <p class="text-[15px] text-gray-600 block mb-1">{{ $post->event_date->format('m/d/Y') }}</p>
 
                 {{-- post title --}}
-                <h2 class="text-[20px] font-extrabold text-gray-900 mb-2">
+                <h2 class="text-[20px] font-extrabold text-gray-900 mb-2 break-words">
                   {{ $post->p_title }}
                 </h2>
 
@@ -156,7 +156,7 @@
 
                 {{-- display comment --}}
                 <div>
-                  <span class="text-s text-gray-700 leading-relaxed">{{ $comment->c_content}} </span>
+                  <span class="text-s text-gray-700 leading-relaxed break-words">{{ $comment->c_content}} </span>
                 </div>
               </div>
             </div>

@@ -34,7 +34,7 @@
 
                 {{-- post title --}}
                 <div class="flex justify-between items-center mb-2">
-                  <h2 class="text-[20px] font-extrabold text-gray-900 mb-2 break-all whitespace-pre-wrap flex-1">{{ $question->q_title }}</h2>
+                  <h2 class="text-[20px] font-extrabold text-gray-900 mb-2 break-words whitespace-pre-wrap flex-1">{{ $question->q_title }}</h2>
 
                   {{-- delete button --}}
                   @if(Auth::id() === $question->user_id)
@@ -94,7 +94,7 @@
 
           {{-- question body --}}
           <div class="pb-2 mb-5 border-b">
-            <p class="text-gray-700 leading-relaxed  break-all whitespace-pre-wrap">{{ $question->q_content }}</p>
+            <p class="text-gray-700 leading-relaxed  break-words whitespace-pre-wrap">{{ $question->q_content }}</p>
 
             {{-- Start Discussion button --}}
             @if(auth()->check() && auth()->user()->role_id == 3)
@@ -175,7 +175,7 @@
                   </div>
                 </div>
 
-                <div class="text-s text-gray-700 leading-relaxed break-all  whitespace-pre-wrap">{{ $answer->a_content }}</div>
+                <div class="text-s text-gray-700 leading-relaxed break-words  whitespace-pre-wrap">{{ $answer->a_content }}</div>
               </div>
             </div>
           </div>

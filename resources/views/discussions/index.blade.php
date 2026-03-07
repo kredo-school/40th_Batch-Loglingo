@@ -3,7 +3,7 @@
         <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-8">
 
             <!-- Left side -->
-            <div class="w-full md:w-2/3">
+            <div class="w-full md:w-2/3 min-w-0">
 
                 <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 mb-3">
                     <div class="flex justify-between items-end m-4">
