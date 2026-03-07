@@ -53,20 +53,8 @@
           </span>
 
           {{-- bookmark --}}
-          <form action="{{ route('bookmarks.store') }}" method="POST">
-            @csrf
-            <input type="hidden" name="bookmarkable_id" value="{{ $post->id }}">
-            <input type="hidden" name="bookmarkable_type" value="{{ get_class($post) }}">
-
-            <button type="submit">
-              @if($post->isBookmarkedBy(auth()->user()))
-              <i class="fa-solid fa-bookmark text-green-500"></i> {{-- already bookmarked --}}
-              @else
-              <i class="fa-regular fa-bookmark text-gray-400"></i> {{-- not yet --}}
-              @endif
-            </button>
-          </form>
-
+          <x-bookmark-button :model="$post" />
+          
           @forelse($post->tags as $tag)
           <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100">
             <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->code }}

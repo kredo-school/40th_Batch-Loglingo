@@ -32,7 +32,9 @@ class BookmarkController extends Controller
             $status = 'added';
         }
 
-        return back()->with('status', "Bookmark {$status}!");
+        return response()->json([
+            'status' => $status, // 'added' or 'removed'
+            'isBookmarked' => ($status === 'added')
+        ]);
     }
-
 }

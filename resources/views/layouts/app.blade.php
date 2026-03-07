@@ -29,17 +29,50 @@
         @include('layouts.navigation')
 
         @isset($header)
-            <header class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
+        <header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                {{ $header }}
+            </div>
+        </header>
         @endisset
 
         <main>
             {{ $slot }}
         </main>
     </div>
+
+    <div x-data="{ 
+                show: false, 
+                message: '',
+                type: 'success',
+                showToast(detail) {
+                    this.message = typeof detail === 'string' ? detail : detail.message;
+                    this.type = detail.type || 'success';
+                    this.show = true;
+                    setTimeout(() => { this.show = false }, 3000);
+                }
+            }"
+        @toast.window="showToast($event.detail)"
+        style="display: none;"
+        x-show="show"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:translate-x-4"
+        x-transition:enter-end="opacity-100 translate-y-0 sm:translate-x-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed bottom-5 right-5 z-[100] min-w-[200px]">
+        <div class="bg-[#B178CC] text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-gray-700">
+            <template x-if="type === 'success'">
+                <i class="fa-solid fa-circle-check text-white-400"></i>
+            </template>
+            <template x-if="type === 'error'">
+                <i class="fa-solid fa-circle-exclamation text-red-400"></i>
+            </template>
+            <span x-text="message" class="text-sm font-medium"></span>
+        </div>
+    </div>
+
 </body>
 
 </html>

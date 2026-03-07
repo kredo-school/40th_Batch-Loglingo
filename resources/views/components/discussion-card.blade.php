@@ -63,19 +63,7 @@
           </span>
 
           {{-- bookmark --}}
-          <form action="{{ route('bookmarks.store') }}" method="POST">
-            @csrf
-            <input type="hidden" name="bookmarkable_id" value="{{ $discussion->id }}">
-            <input type="hidden" name="bookmarkable_type" value="{{ get_class($discussion) }}">
-
-            <button type="submit">
-              @if($discussion->isBookmarkedBy(auth()->user()))
-              <i class="fa-solid fa-bookmark text-green-500"></i> {{-- already bookmarked --}}
-              @else
-              <i class="fa-regular fa-bookmark text-gray-400"></i> {{-- not yet --}}
-              @endif
-            </button>
-          </form>
+          <x-bookmark-button :model="$discussion" />
 
           {{-- language tag --}}
           @foreach($discussion->tags as $tag)
