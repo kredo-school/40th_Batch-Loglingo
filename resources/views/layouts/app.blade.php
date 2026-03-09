@@ -20,6 +20,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+    {{-- JavaScript(toast notifications) --}}
+    <script src="{{ asset('js/toast.js') }}" defer></script>
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -51,18 +54,7 @@
 
     </div>
 
-    <div x-data="{ 
-                show: false, 
-                message: '',
-                type: 'success',
-                showToast(detail) {
-                    this.message = typeof detail === 'string' ? detail : detail.message;
-                    this.type = detail.type || 'success';
-                    this.show = true;
-                    setTimeout(() => { this.show = false }, 3000);
-                }
-            }"
-        @toast.window="showToast($event.detail)"
+    <div x-data="toastNotification()"
         style="display: none;"
         x-show="show"
         x-transition:enter="transition ease-out duration-300"
@@ -72,6 +64,7 @@
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
         class="fixed bottom-5 right-5 z-[100] min-w-[200px]">
+
         <div class="bg-[#B178CC] text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-gray-700">
             <template x-if="type === 'success'">
                 <i class="fa-solid fa-circle-check text-white-400"></i>
@@ -84,31 +77,24 @@
     </div>
 
 
-    {{-- PHPからセッションメッセージがある場合、JavaScriptのイベントを発火させる --}}
+    {{-- Dispatch JS only when it gets php message --}}
     @if (session('error'))
     <script>
-        // 100ミリ秒だけ待ってからイベントを発火させる
-        setTimeout(() => {
-            window.dispatchEvent(new CustomEvent('toast', {
-                detail: {
-                    message: "{{ session('error') }}",
-                    type: 'error'
-                }
-            }));
-        }, 100);
+        window.addEventListener('load', () => {
+            if (typeof dispatchToast === 'function') {
+                dispatchToast("{{ session('error') }}", 'error');
+            }
+        });
     </script>
     @endif
 
     @if (session('success'))
     <script>
-        setTimeout(() => {
-            window.dispatchEvent(new CustomEvent('toast', {
-                detail: {
-                    message: "{{ session('success') }}",
-                    type: 'success'
-                }
-            }));
-        }, 100);
+        window.addEventListener('load', () => {
+            if (typeof dispatchToast === 'function') {
+                dispatchToast("{{ session('success') }}", 'success');
+            }
+        });
     </script>
     @endif
 
