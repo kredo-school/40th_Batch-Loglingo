@@ -22,34 +22,27 @@
             if (res.ok) {
                 this.isBookmarked = !this.isBookmarked;
 
-                // トースト通知を飛ばす
-                window.dispatchEvent(new CustomEvent('toast', { 
-                    detail: { 
-                        message: this.isBookmarked ? 'Saved to bookmarks!' : 'Removed from bookmarks',
-                        type: 'success'
-                    } 
-                }));
+                // 修正：共通関数を呼び出す
+                dispatchToast(
+                    this.isBookmarked ? 'Saved to bookmarks!' : 'Removed from bookmarks', 
+                    'success'
+                );
             } else {
-                // エラー時のトースト通知
-                window.dispatchEvent(new CustomEvent('toast', { 
-                    detail: { message: 'Something went wrong...', type: 'error' } 
-                }));
+                dispatchToast('Something went wrong...', 'error');
             }
         })
         .catch(() => {
-            window.dispatchEvent(new CustomEvent('toast', { 
-                detail: { message: 'Connection error', type: 'error' } 
-            }));
+            dispatchToast('Connection error', 'error');
         })
         .finally(() => this.loading = false);
     }
 }">
-  <button @click="toggle" :class="loading ? 'opacity-50 cursor-not-allowed' : ''" class="transition-transform active:scale-125">
-    <template x-if="isBookmarked">
-      <i class="fa-solid fa-bookmark text-green-500"></i> {{-- already bookmarked --}}
-    </template>
-    <template x-if="!isBookmarked">
-      <i class="fa-regular fa-bookmark text-gray-400 hover:text-green-400"></i> {{-- not yet --}}
-    </template>
-  </button>
+    <button @click="toggle" :class="loading ? 'opacity-50 cursor-not-allowed' : ''" class="transition-transform active:scale-125">
+        <template x-if="isBookmarked">
+            <i class="fa-solid fa-bookmark text-green-500"></i> {{-- already bookmarked --}}
+        </template>
+        <template x-if="!isBookmarked">
+            <i class="fa-regular fa-bookmark text-gray-400 hover:text-green-400"></i> {{-- not yet --}}
+        </template>
+    </button>
 </div>

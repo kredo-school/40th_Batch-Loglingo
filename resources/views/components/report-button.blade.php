@@ -25,33 +25,29 @@
             if (res.ok) {
                 this.reported = true;
                 
-                window.dispatchEvent(new CustomEvent('toast', { 
-                    detail: { message: 'Report submitted. Thank you.', type: 'success' } 
-                }));
+                dispatchToast('Report submitted. Thank you.', 'success');
             } else {
                 throw new Error();
             }
         })
         .catch(() => {
-            window.dispatchEvent(new CustomEvent('toast', { 
-                detail: { message: 'Failed to send report.', type: 'error' } 
-            }));
+            dispatchToast('Failed to send report.', 'error');
         })
         .finally(() => this.loading = false);
     }
 }">
-    <button @click.stop="sendReport" 
-            :disabled="reported || loading"
-            :class="{
+    <button @click.stop="sendReport"
+        :disabled="reported || loading"
+        :class="{
                 'text-red-500 opacity-100 cursor-default': reported,
                 'text-gray-400 hover:text-red-500': !reported,
                 'opacity-50': loading
             }"
-            class="transition-all p-2 flex items-center gap-1 group">
-        
-        <i :class="reported ? 'fa-solid fa-flag' : 'fa-regular fa-flag'" 
-           class="group-active:scale-125 transition-transform"></i>
-        
+        class="transition-all p-2 flex items-center gap-1 group">
+
+        <i :class="reported ? 'fa-solid fa-flag' : 'fa-regular fa-flag'"
+            class="group-active:scale-125 transition-transform"></i>
+
         <span x-show="reported" x-transition class="text-xs font-medium">Reported</span>
     </button>
 </div>

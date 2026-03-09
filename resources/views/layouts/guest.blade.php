@@ -13,6 +13,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    {{-- JavaScript(toast notifications) --}}
+    <script src="{{ asset('js/toast.js') }}" defer></script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -41,18 +44,7 @@
         </div>
     </div>
 
-    <div x-data="{ 
-                show: false, 
-                message: '',
-                type: 'success',
-                showToast(detail) {
-                    this.message = typeof detail === 'string' ? detail : detail.message;
-                    this.type = detail.type || 'success';
-                    this.show = true;
-                    setTimeout(() => { this.show = false }, 3000);
-                }
-            }"
-        @toast.window="showToast($event.detail)"
+    <div x-data="toastNotification()"
         style="display: none;"
         x-show="show"
         x-transition:enter="transition ease-out duration-300"
@@ -62,6 +54,7 @@
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
         class="fixed bottom-5 right-5 z-[100] min-w-[200px]">
+
         <div class="bg-[#B178CC] text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
             <template x-if="type === 'error'">
                 <i class="fa-solid fa-circle-exclamation text-red-200"></i>
@@ -72,17 +65,24 @@
 
     @if (session('error'))
     <script>
-        setTimeout(() => {
-            window.dispatchEvent(new CustomEvent('toast', {
-                detail: {
-                    message: "{{ session('error') }}",
-                    type: 'error'
-                }
-            }));
-        }, 200);
+        window.addEventListener('load', () => {
+            if (typeof dispatchToast === 'function') {
+                dispatchToast("{{ session('error') }}", 'error');
+            }
+        });
     </script>
     @endif
-    
+
+    @if (session('success'))
+    <script>
+        window.addEventListener('load', () => {
+            if (typeof dispatchToast === 'function') {
+                dispatchToast("{{ session('success') }}", 'success');
+            }
+        });
+    </script>
+    @endif
+
 </body>
 
 </html>
