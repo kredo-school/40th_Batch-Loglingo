@@ -13,8 +13,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    {{-- JavaScript(toast notifications) --}}
+    {{-- JavaScript --}}
     <script src="{{ asset('js/toast.js') }}" defer></script>
+    <script src="{{ asset('js/register.js') }}" defer></script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

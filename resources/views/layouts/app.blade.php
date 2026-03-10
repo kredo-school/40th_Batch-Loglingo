@@ -28,7 +28,7 @@
 </head>
 
 <body class="font-sans antialiased bg-[#EFEFEF]">
-    <div class="min-h-screen">
+    <div class="min-h-screen flex flex-col bg-gray-100">
         @include('layouts.navigation')
 
         @isset($header)
@@ -43,12 +43,42 @@
             {{ $slot }}
         </main>
 
-
-        <footer class="mt-auto py-4 bg-[#B178CC] text-white shadow-inner">
+        {{-- copyright --}}
+        <footer x-data="{ openTerms: false }" class="mt-auto py-3 bg-[#B178CC] text-white shadow-inner">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <p class="text-sm font-medium tracking-wide">
                     Copyright &copy; {{ date('Y') }} Kredo Internship 40th Batch. All Rights Reserved.
                 </p>
+
+                <div class="mt-1">
+                    <a href="#" @click.prevent="openTerms = true" class="text-xs text-purple-100 hover:text-white underline transition-colors">
+                        Terms of Service
+                    </a>
+                </div>
+
+                <div x-show="openTerms" x-cloak
+                    class="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black bg-opacity-60 text-gray-800"
+                    style="display: none;">
+
+                    <div @click.away="openTerms = false" class="bg-white rounded-2xl shadow-xl max-w-2xl w-full flex flex-col overflow-hidden">
+                        <div class="px-6 py-4 border-b flex justify-between items-center bg-gray-50">
+                            <h3 class="text-lg font-bold">Terms of Service</h3>
+                            <button @click="openTerms = false" class="text-gray-400 hover:text-gray-600">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+
+                        <div class="p-6 overflow-y-auto max-h-[70vh] text-left">
+                            <x-terms-content />
+                        </div>
+
+                        <div class="px-6 py-4 border-t bg-gray-50 text-right">
+                            <button @click="openTerms = false" class="bg-[#B178CC] text-white px-5 py-2 rounded-full text-sm font-bold">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </footer>
 
