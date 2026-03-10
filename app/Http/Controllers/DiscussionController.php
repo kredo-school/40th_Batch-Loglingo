@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Question;
 use App\Models\Discussion;
 use App\Models\Language;
+use App\Services\StreakService;
 
 class DiscussionController extends Controller
 {
@@ -117,6 +118,8 @@ class DiscussionController extends Controller
         } else {
             $discussion->tags()->sync($request->language_ids);
         }
+
+        StreakService::update(auth()->user());
 
         return redirect()->route('discussions.index')->with('success', 'Discussion started!');
     }
