@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Notifications\CommentedOnYourPost;
+use App\Services\StreakService;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -58,6 +59,8 @@ class CommentController extends Controller
         );
     }
 
+    StreakService::update(auth()->user());
+    
     return back();
     }
 

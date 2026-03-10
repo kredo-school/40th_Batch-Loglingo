@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Answer;
 use App\Notifications\AnsweredYourQuestion;
+use App\Services\StreakService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,9 +34,11 @@ class AnswerController extends Controller
                 $question->q_title,
                 auth()->id(),
                 auth()->user()->name
-            )
-        );
-    }
+                )
+            );
+        }
+
+        StreakService::update(auth()->user());
 
         return back()->with('success','Answer posted successfully!');
 

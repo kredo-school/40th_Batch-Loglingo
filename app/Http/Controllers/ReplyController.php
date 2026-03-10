@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Discussion;
 use App\Models\Reply;
 use Illuminate\Http\Request;
+use App\Services\StreakService;
 
 class ReplyController extends Controller
 {
@@ -19,6 +20,8 @@ class ReplyController extends Controller
             'user_id' => auth()->id(),
             'r_content' => $request->r_content,
         ]);
+
+        StreakService::update(auth()->user());
 
         return back()->with('success', 'Your reply has been posted!');
     }

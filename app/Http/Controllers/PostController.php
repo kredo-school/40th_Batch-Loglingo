@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Language;
 use App\Models\Comment;
+use App\Services\StreakService;
 
 class PostController extends Controller
 {
@@ -78,6 +79,8 @@ class PostController extends Controller
         if ($validated['tag']) {
             $post->tags()->attach($validated['tag']);
         }
+
+        StreakService::update(auth()->user());
 
         return redirect() ->route('posts.index')->with('status', 'Your log posted successfully!');
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Question;
 use App\Models\Language;
+use App\Services\StreakService;
 
 class QuestionController extends Controller
 {
@@ -117,6 +118,8 @@ class QuestionController extends Controller
         if ($validated['tag']) {
             $question->tags()->attach($validated['tag']);
         }
+
+        StreakService::update(auth()->user());
 
         return redirect()->route('questions.index')->with('status', 'Question posted successfully!');
     }
