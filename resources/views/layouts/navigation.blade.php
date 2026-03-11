@@ -26,7 +26,7 @@
             </a>
 
             {{-- Discussion --}}
-            @if(Auth::user()->role_id == 3)
+            @if(Auth::user()->role_id == 3 || Auth::user()->role_id == 1)
             <a href="{{ route('discussions.index') }}"
                 class="{{ request()->routeIs('discussions.*') ? 'text-gray-800' : 'hover:text-gray-800' }} text-[27px]">
                 Discussion

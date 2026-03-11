@@ -30,8 +30,10 @@ class SuggestedUsers extends Component
             ->unique();
 
         $this->users = User::query()
+            ->where('role_id', '!=', 1)
             ->where('s_lang', $authUser->s_lang)
             ->whereNotIn('id', $excludedIds)
+            ->inRandomOrder()
             ->limit($limit)
             ->get();
     }
