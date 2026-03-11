@@ -13,23 +13,53 @@ class PostSeeder extends Seeder
 
     public function run(): void
     {
-        $user = User::first() ?? User::factory()->create();
+        $students = User::where('role_id', 2)->get();
+        $allLanguages = Language::all();
 
-        $japanese = Language::where('name', 'Japanese')->firstOrFail();
-        $english = Language::where('name', 'English')->firstOrFail();
-
-        for ($i = 1; $i <= 25; $i++) {
-        $post = Post::create([
-            'user_id' => $user->id,
-            'p_title' => "Test Post Title No.{$i}",
-            'p_content' => "This is the dummy content for Post number {$i}. It helps to check the layout and pagination.",
-            'event_date' => "2026-02-09",
-            ]);
-
-            $post->tags()->attach($english->id); 
-
+        if ($students->isEmpty() || $allLanguages->isEmpty()) {
+            $this->command->error("Students or Languages are missing.");
+            return;
         }
 
-        
+        $contentSamples = [
+            'English' => [
+                'title' => 'My Daily Life',
+                'content' => 'Today I practiced coding in Laravel. It is challenging but fun!',
+            ],
+            'Japanese' => [
+                'title' => '今日の学習記録',
+                'content' => '今日は新しい単語を10個覚えました。継続は力なりですね。',
+            ],
+            'Spanish' => [
+                'title' => 'Mi comida favorita',
+                'content' => 'Me encanta comer pizza con mis amigos los fines de semana.',
+            ],
+            'Chinese' => [
+                'title' => '学习汉语',
+                'content' => '我觉得汉字很有意思，但是发音有点难。',
+            ],
+        ];
+
+        for ($i = 1; $i <= 200; $i++) {
+            $user = $students->random();
+            
+            // --- 9割の確率で学習言語(s_lang)、1割で母国語(f_lang)を選択 ---
+            $writingLangId = (rand(1, 10) <= 9) ? $user->s_lang : $user->f_lang;
+            
+            $writingLang = $allLanguages->find($writingLangId);
+            $sample = $contentSamples[$writingLang->name ?? 'English'] ?? $contentSamples['English'];
+
+            $post = Post::create([
+                'user_id' => $user->id,
+                'p_title' => $sample['title'] . " #{$i}",
+                'p_content' => $sample['content'],
+                'event_date' => now()->subDays(rand(0, 30))->format('Y-m-d'),
+            ]);
+
+            // 日記に紐付く言語タグも、書いた言語と一致させる
+            $post->tags()->attach($writingLangId);
+        }
+
+        $this->command->info("PostSeeder: 25 posts created (90% in study language).");
     }
 }

@@ -33,6 +33,7 @@ class SuggestedTeachers extends Component
             ->where('role_id', 3)
             ->where('s_lang', $authUser->s_lang)
             ->whereNotIn('id', $excludedIds)
+            ->inRandomOrder()
             ->limit($limit)
             ->get();
     }

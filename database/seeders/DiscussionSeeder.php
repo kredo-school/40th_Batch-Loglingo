@@ -17,21 +17,30 @@ class DiscussionSeeder extends Seeder
         $users = User::all();
         $languages = Language::all();
 
-        // 1. generate 10 normal data
-        Discussion::factory(25)
-            ->create()
-            ->each(function ($discussion) use ($users,$languages) {
-                //add languag
+        // 1. 通常のディスカッションを 90件 生成（合計100にするため）
+        Discussion::factory(90)
+            ->make()
+            ->each(function ($discussion) use ($users, $languages) {
+
+                // 3割の確率で引用(question_id)をなしにする
+                if (rand(1, 10) <= 3) {
+                    $discussion->question_id = null;
+                    // タイトルを少し変えて「一般トピック」感を出す
+                    $discussion->d_title = "Topic: " . $discussion->d_title;
+                }
+                $discussion->save();
+
+                // 言語タグの紐付け
                 $discussion->tags()->attach(
                     $languages->random(1)->pluck('id')->toArray()
                 );
 
-                // generate reply data to each discussion
-                $replies = Reply::factory(rand(2, 3))->create([
+                // 返信データの作成（1〜5件でバラけさせる）
+                Reply::factory(rand(1, 5))->create([
                     'discussion_id' => $discussion->id,
                 ]);
 
-                // 20% add report
+                // 20%の確率で通報
                 if (rand(1, 10) > 8) {
                     $discussion->reports()->create([
                         'user_id' => $users->random()->id,
@@ -39,37 +48,42 @@ class DiscussionSeeder extends Seeder
                 }
             });
 
-        // 2. generate 3 discussions with many reports 
+        // 2. 通報が多いテスト用データを 10件 生成
         Discussion::factory(10)
-            ->create(['d_title' => '⚠️ HIGH REPORT TEST'])
+            ->make(['d_title' => '⚠️ HIGH REPORT TEST'])
             ->each(function ($discussion) use ($users, $languages) {
-                // --- add language ---
+
+                // ここも3割の確率で引用なし
+                if (rand(1, 10) <= 3) {
+                    $discussion->question_id = null;
+                }
+                $discussion->save();
+
                 $discussion->tags()->attach(
                     $languages->random(1)->pluck('id')->toArray()
                 );
 
-                // 5 reports to discussion
+                // 5人から通報
                 $shuffledUsers = $users->shuffle();
-
-                for ($i = 0; $i < 5; $i++) {
+                for ($i = 0; $i < min(5, $shuffledUsers->count()); $i++) {
                     $discussion->reports()->create([
-                        'user_id' => $shuffledUsers[$i]->id, // $i use user number
+                        'user_id' => $shuffledUsers[$i]->id,
                     ]);
                 }
 
-                // reports to its reply
+                // 返信にも通報
                 Reply::factory(3)->create([
                     'discussion_id' => $discussion->id,
                 ])->each(function ($reply) use ($users) {
-                    // 2 reports each
                     $replyUsers = $users->shuffle();
-
-                    for ($j = 0; $j < 2; $j++) {
+                    for ($j = 0; $j < min(2, $replyUsers->count()); $j++) {
                         $reply->reports()->create([
                             'user_id' => $replyUsers[$j]->id,
                         ]);
                     }
                 });
             });
+
+        $this->command->info("DiscussionSeeder: 100 discussions created (with 30% no-quote topics).");
     }
 }

@@ -9,7 +9,7 @@
                     <div class="flex justify-between items-end m-4">
                         <h2 class="text-[24px] font-bold">
                             @if(request()->filled('languages'))
-                            All Posts in selected languages
+                            Posts from Selected Language Learners
                             @else
                             Discover New Connections
                             @endif
@@ -18,7 +18,7 @@
                 </div>
 
                 <!-- Language filter -->
-                <x-language-filter :languages="$languages" :action="route('search')" label="(Post of learning language)" />
+                <x-language-filter :languages="$languages" :action="route('search')" label="(Filter by learner's target language)" />
 
                 <!-- Post example-->
                 @forelse($posts as $post)
