@@ -11,9 +11,54 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ProfileController extends Controller
 {
+    private function getCalendarData()
+    {
+        $now = Carbon::now();
+
+        $year = $now->year;
+        $month = $now->month;
+
+        $daysInMonth = $now->daysInMonth;
+
+        $startOfMonth = Carbon::create($year, $month, 1);
+        $startDayOfWeek = $startOfMonth->dayOfWeek;
+
+        return [
+            'year' => $year,
+            'month' => $month,
+            'daysInMonth' => $daysInMonth,
+            'startDayOfWeek' => $startDayOfWeek
+        ];
+    }
+
+    private function getActivityData($userId)
+    {
+
+        $posts = DB::table('posts')
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->where('user_id', $userId)
+            ->groupBy('date');
+
+        $comments = DB::table('comments')
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->where('user_id', $userId)
+            ->groupBy('date');
+
+        return $posts
+            ->unionAll($comments)
+            ->get()
+            ->groupBy('date')
+            ->map(fn($items) => $items->sum('count'));
+
+    }
+
+
+
     /**
      * Display the user's profile edit form.
      */
@@ -73,22 +118,26 @@ class ProfileController extends Controller
     public function show(User $user)
     {
         $user->loadCount(['posts', 'questions']);
+        $activityData = $this->getActivityData($user->id);
 
-        return view('profile.profile', [
+        return view('profile.profile', array_merge([
             'user' => $user,
             'posts' => $user->posts()->latest()->with('user')->get(),
             'questions' => $user->questions()->latest()->with('user')->get(),
-        ]);
+            'activityData' => $activityData
+        ], $this->getCalendarData()));
     }
 
     public function questions(User $user)
     {
         $user->loadCount(['posts', 'questions']);
+        $activityData = $this->getActivityData($user->id);
 
-        return view('profile.profile', [
+        return view('profile.profile', array_merge([
             'user' => $user,
             'questions' => $user->questions()->latest()->get(),
-        ]);
+            'activityData' => $activityData
+        ], $this->getCalendarData()));
     }
 
     public function discussions(User $user)
@@ -103,10 +152,13 @@ class ProfileController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('profile.profile', [
+        $activityData = $this->getActivityData($user->id);
+
+        return view('profile.profile', array_merge( [
             'user' => $user,
             'discussions' => $discussions,
-        ]);
+            'activityData' => $activityData
+        ], $this->getCalendarData()));
     }
 
 
@@ -114,11 +166,14 @@ class ProfileController extends Controller
     {
         $user->loadCount(['posts', 'questions', 'followings']);
 
-        return view('profile.profile', [
+        $activityData = $this->getActivityData($user->id);
+
+        return view('profile.profile', array_merge( [
             'user' => $user,
             // 'tab' => 'following',
             'followings' => $user->followings()->get(),
-        ]);
+            'activityData' => $activityData
+        ], $this->getCalendarData()));
     }
 
 
@@ -126,11 +181,14 @@ class ProfileController extends Controller
     {
         $user->loadCount(['posts', 'questions', 'followers']);
 
-        return view('profile.profile', [
+        $activityData = $this->getActivityData($user->id);
+
+        return view('profile.profile', array_merge([
             'user' => $user,
             // 'tab' => 'followers',
             'followers' => $user->followers()->get(),
-        ]);
+            'activityData' => $activityData
+        ], $this->getCalendarData()));
     }
 
     public function bookmarks(User $user)
@@ -144,10 +202,13 @@ class ProfileController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('profile.profile', [
+        $activityData = $this->getActivityData($user->id);
+
+        return view('profile.profile', array_merge([
             'user' => $user,
             'bookmarks' => $bookmarks,
-        ]);
+            'activityData' => $activityData
+        ], $this->getCalendarData()));
     }
 
 
@@ -165,10 +226,13 @@ class ProfileController extends Controller
             ->latest()
             ->get();
 
-        return view('profile.profile', [
+        $activityData = $this->getActivityData($user->id);
+
+        return view('profile.profile',array_merge([
             'user' => $user,
             'notifications' => $notifications,
             'activeTab' => 'notifications',
-        ]);
+            'activityData' => $activityData
+        ], $this->getCalendarData()));
     }
 }
