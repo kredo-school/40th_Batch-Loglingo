@@ -23,6 +23,11 @@
     {{-- JavaScript(toast notifications) --}}
     <script src="{{ asset('js/toast.js') }}" defer></script>
 
+    {{-- Google Maps API --}}
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}"></script>
+    {{-- JavaScript(map) --}}
+    <script src="{{ asset('js/map.js') }}" defer></script>
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -44,18 +49,27 @@
         </main>
 
         {{-- copyright --}}
-        <footer x-data="{ openTerms: false }" class="mt-auto py-3 bg-[#B178CC] text-white shadow-inner">
+        <footer x-data="{ openTerms: false, openContact: false }" class="mt-auto py-3 bg-[#B178CC] text-white shadow-inner">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <p class="text-sm font-medium tracking-wide">
                     Copyright &copy; {{ date('Y') }} Kredo Internship 40th Batch. All Rights Reserved.
                 </p>
 
-                <div class="mt-1">
+                <div class="mt-1 flex items-center justify-center gap-3">
                     <a href="#" @click.prevent="openTerms = true" class="text-xs text-purple-100 hover:text-white underline transition-colors">
                         Terms of Service
                     </a>
+
+                    <span class="text-purple-200 text-xs text-opacity-50">|</span>
+
+                    {{-- call JS function--}}
+                    <a href="#" @click.prevent="openContact = true; $nextTick(() => initContactMap())" class="text-xs text-purple-100 hover:text-white underline transition-colors">
+                        Contact Us
+                    </a>
+
                 </div>
 
+                {{-- Terms Modal --}}
                 <div x-show="openTerms" x-cloak
                     class="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black bg-opacity-60 text-gray-800"
                     style="display: none;">
@@ -79,6 +93,47 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- Contact Modal --}}
+                <div x-show="openContact" x-cloak
+                    class="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black bg-opacity-60 text-gray-800"
+                    style="display: none;">
+
+                    <div @click.away="openContact = false" class="bg-white rounded-2xl shadow-xl max-w-2xl w-full flex flex-col overflow-hidden">
+                        <div class="px-6 py-4 border-b flex justify-between items-center bg-gray-50">
+                            <h3 class="text-lg font-bold text-[#B178CC]">Contact Us</h3>
+                            <button @click="openContact = false" class="text-gray-400 hover:text-gray-600">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+
+                        <div class="p-6 text-left">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                                <div class="space-y-4 text-sm">
+                                    <div>
+                                        <h4 class="font-bold text-gray-700">Location</h4>
+                                        <p class="text-gray-600">Roppongi Hills Mori Tower,<br>Tokyo, Japan</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-700">Email</h4>
+                                        <p class="text-gray-600">support@loglingo.test</p>
+                                    </div>
+                                </div>
+                                {{-- show map --}}
+                                <div id="modal-map" class="w-full h-48 bg-gray-100 rounded-xl border border-gray-200"></div>
+                            </div>
+                        </div>
+
+                        <div class="px-6 py-4 border-t bg-gray-50 text-right">
+                            <button @click="openContact = false" class="bg-[#B178CC] text-white px-5 py-2 rounded-full text-sm font-bold shadow-md hover:bg-[#a066b8]">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+
             </div>
         </footer>
 

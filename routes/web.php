@@ -24,6 +24,7 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+
 Route::redirect('/dashboard', '/posts');
 
 Route::middleware('auth')->group(function () {
@@ -68,7 +69,6 @@ Route::middleware('auth')->group(function () {
     // bookmark
     Route::post('/bookmarks', [BookmarkController::class, 'store'])->name('bookmarks.store');
 });
-
 
 
 //teacher + admin only
