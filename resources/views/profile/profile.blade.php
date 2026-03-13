@@ -7,9 +7,23 @@
                 <div class="bg-white mb-4 p-6 pb-1 border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
                                             
                     @if(Auth::check() && Auth::id() === $user->id)
-                        <x-profile-auth-info :user="$user" />
+                        <x-profile-auth-info 
+                            :user="$user"
+                            :year="$year"
+                            :month="$month"
+                            :daysInMonth="$daysInMonth"
+                            :startDayOfWeek="$startDayOfWeek"
+                            :activityData="$activityData"
+                        />
                     @else
-                        <x-profile-user-info :user="$user" />
+                        <x-profile-user-info 
+                            :user="$user"
+                            :year="$year"
+                            :month="$month"
+                            :daysInMonth="$daysInMonth"
+                            :startDayOfWeek="$startDayOfWeek"
+                            :activityData="$activityData"
+                        />
                     @endif
                                                 
                     <!-- Tab -->
