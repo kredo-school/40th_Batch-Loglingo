@@ -23,6 +23,9 @@
     {{-- JavaScript(toast notifications) --}}
     <script src="{{ asset('js/toast.js') }}" defer></script>
 
+    {{-- JavaScript(Modal quoted question on discussion page) --}}
+    <script src="{{ asset('js/discussion.js') }}" defer></script>
+
     {{-- Google Maps API --}}
     <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}"></script>
     {{-- JavaScript(map) --}}
