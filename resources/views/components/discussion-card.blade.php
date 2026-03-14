@@ -1,6 +1,6 @@
 @props(['discussion'])
 
-<div class="space-y-4">
+<div x-data="discussionCard" class="space-y-4">
 
   <div class="relative bg-white rounded-[1rem] shadow-sm border border-gray-100 p-5 flex items-start space-x-4 transition-all hover:border-gray-200" mb-4>
 
@@ -29,9 +29,58 @@
 
           {{-- quoted question --}}
           @if($discussion->question_id)
-          <a href="{{ route('questions.show', $discussion->question_id) }}" class="text-[10px] text-purple-400 hover:underline mt-0.5">
+          <button @click="toggleModal" class="text-[10px] text-purple-400 hover:underline mt-0.5 text-left focus:outline-none">
             <i class="fa-solid fa-quote-left mr-1"></i> Based on Question #{{ $discussion->question_id }}
-          </a>
+          </button>
+
+          {{-- start Question Modal --}}
+          <div x-show="openQuestion"
+            x-cloak
+            class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black bg-opacity-60 text-gray-800"
+            style="display: none;">
+
+            <div @click.away="openQuestion = false"
+              class="bg-white rounded-2xl shadow-xl max-w-lg w-full flex flex-col overflow-hidden transform transition-all">
+
+              {{-- Modal Header --}}
+              <div class="px-5 py-3 border-b flex justify-between items-center bg-gray-50">
+                <span class="text-xs font-bold text-purple-400">
+                  <i class="fa-solid fa-circle-question mr-1"></i> Original Question #{{ $discussion->question_id }}
+                </span>
+                <button @click="toggleModal" class="text-gray-400 hover:text-gray-600"> {{-- ★追加 --}}
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+
+              {{-- Modal Body --}}
+              <div class="p-6 text-left">
+                @if($discussion->question)
+                <h4 class="text-lg font-bold text-gray-900 mb-2">{{ $discussion->question->q_title }}</h4>
+                <div class="max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                  <p class="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap break-words">{{ $discussion->question->q_content }}</p>
+                </div>
+
+                <div class="mt-4">
+                  <a href="{{ route('questions.show', $discussion->question_id) }}" class="text-xs text-[#B178CC] font-bold hover:underline">
+                    View full question page <i class="fa-solid fa-arrow-right ml-1"></i>
+                  </a>
+                </div>
+                @else
+                <p class="text-sm text-gray-500 italic">Question data not found.</p>
+                @endif
+              </div>
+
+              {{-- Modal Footer --}}
+              <div class="px-5 py-3 border-t bg-gray-50 text-right">
+                <button @click="toggleModal" class="bg-[#B178CC] text-white px-5 py-2 rounded-full text-xs font-bold shadow-md hover:bg-[#a066b8]"> {{-- ★追加 --}}
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+          {{-- end Question Modal --}}
+
+
           @endif
         </div>
 

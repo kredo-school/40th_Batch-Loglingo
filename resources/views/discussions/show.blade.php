@@ -1,5 +1,5 @@
 <x-app-layout>
-  <div class="py-8 bg-[#F9FAFB] min-h-screen">
+  <div x-data="discussionCard" class="py-8 bg-[#F9FAFB] min-h-screen">
     <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-8">
 
       {{-- Left Side --}}
@@ -7,19 +7,78 @@
 
         {{-- Referenced Question --}}
         @if($discussion->question)
-        <div class="bg-white rounded-[1rem] shadow-sm border border-purple-100 p-6 relative overflow-hidden">
-          <p class="text-[11px] font-extrabold text-purple-400 uppercase tracking-widest mb-2 flex items-center">
-            <i class="fa-solid fa-link mr-2"></i> Referenced Question
-          </p>
-          <h3 class="text-md font-bold text-gray-700 mb-1">{{ $discussion->question->q_title }}</h3>
-          <div class="flex items-center justify-between mt-3">
-            <span class="text-xs text-gray-400">Asked by {{ $discussion->question->user->name }}</span>
-            <a href="{{ route('questions.show', $discussion->question_id) }}" class="text-xs font-bold text-purple-500 hover:underline">
-              View original <i class="fa-solid fa-arrow-right ml-1"></i>
-            </a>
+        <div class="bg-white rounded-[1rem] shadow-sm border border-purple-100 p-6 relative overflow-hidden group">
+          {{-- quote icon --}}
+          <i class="fa-solid fa-quote-right absolute right-4 bottom-[-10px] text-purple-50 text-6xl opacity-40"></i>
+
+          <div class="relative z-10">
+            <p class="text-[11px] font-extrabold text-purple-400 uppercase tracking-widest mb-2 flex items-center">
+              <i class="fa-solid fa-link mr-2"></i> Referenced Question
+            </p>
+            <h3 class="text-md font-bold text-gray-700 mb-1 leading-snug">{{ $discussion->question->q_title }}</h3>
+
+            {{-- check if q_content is overfloating --}}
+            <p x-ref="content"
+              x-init="checkTruncation($refs.content)"
+              class="text-xs text-gray-500 italic mb-3 line-clamp-5 leading-relaxed whitespace-pre-wrap">"{{ $discussion->question->q_content }}"</p>
+
+            <div class="flex items-center justify-between mt-3">
+              <span class="text-xs text-gray-400">Asked by {{ $discussion->question->user->name }}</span>
+
+              <div class="flex items-center space-x-4">
+                {{-- show button when isTruncated is true --}}
+                <button x-show="isTruncated"
+                  @click="toggleModal"
+                  class="text-xs font-bold text-purple-500 hover:text-purple-700 transition-colors flex items-center"
+                  style="display: none;">
+                  <i class="fa-solid fa-expand-alt mr-1.5"></i> Read Full Text
+                </button>
+
+                <a href="{{ route('questions.show', $discussion->question_id) }}" class="text-xs font-bold text-gray-400 hover:text-purple-500 transition-colors">
+                  View full question page <i class="fa-solid fa-arrow-right ml-1"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {{-- Question Modal --}}
+          <div x-show="openQuestion"
+            x-cloak
+            class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black bg-opacity-60 text-gray-800"
+            style="display: none;">
+
+            <div @click.away="openQuestion = false"
+              class="bg-white rounded-2xl shadow-xl max-w-lg w-full flex flex-col overflow-hidden transform transition-all">
+
+              <div class="px-5 py-3 border-b flex justify-between items-center bg-gray-50">
+                <span class="text-xs font-bold text-purple-400">
+                  <i class="fa-solid fa-circle-question mr-1"></i> Original Question #{{ $discussion->question_id }}
+                </span>
+                <button @click="toggleModal" class="text-gray-400 hover:text-gray-600">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+
+              <div class="p-6 text-left">
+                <h4 class="text-lg font-bold text-gray-900 mb-3">{{ $discussion->question->q_title }}</h4>
+                <div class="max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                  <p class="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap break-words">{{ $discussion->question->q_content }}</p>
+                </div>
+              </div>
+
+              <div class="px-5 py-3 border-t bg-gray-50 text-right">
+                <button @click="toggleModal" class="bg-[#B178CC] text-white px-5 py-2 rounded-full text-xs font-bold shadow-md hover:bg-[#a066b8]">
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         @endif
+        {{-- End Referenced Question --}}
+
+
+
 
         {{-- Main Discussion Card --}}
         <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-8">
