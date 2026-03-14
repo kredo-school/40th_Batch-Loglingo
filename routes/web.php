@@ -16,6 +16,7 @@ use App\Http\Controllers\BookmarkController;
 
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\TeacherMiddleware;
+use App\Http\Middleware\UpdateStreak;
 
 
 use Illuminate\Support\Facades\Route;

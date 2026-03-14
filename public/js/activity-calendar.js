@@ -48,7 +48,7 @@ function renderCalendar(year, month) {
 
         }
 
-        cell.title = `${date} : ${count} activities`;
+        cell.title = `${count} ${count === 1 ? 'activity' : 'activities'} on ${date}`;
 
         if (count === 0) {
 

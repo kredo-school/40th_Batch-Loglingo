@@ -59,7 +59,8 @@ class CommentController extends Controller
         );
     }
 
-    StreakService::update(auth()->user());
+    StreakService::update(auth()->user()->fresh());
+
     
     return back();
     }

@@ -80,7 +80,8 @@ class PostController extends Controller
             $post->tags()->attach($validated['tag']);
         }
 
-        StreakService::update(auth()->user());
+        StreakService::update(auth()->user()->fresh());
+
 
         return redirect() ->route('posts.index')->with('status', 'Your log posted successfully!');
     }
