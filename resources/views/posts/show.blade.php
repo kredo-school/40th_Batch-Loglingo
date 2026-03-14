@@ -85,8 +85,8 @@
           </p>
 
           {{-- comment form --}}
-          <div class="pb-4 border-b">
-            <form action="{{ route('comments.store') }}" method="POST">
+          <div class="pb-4 border-b" x-data="commentForm">
+            <form action="{{ route('comments.store') }}" method="POST" @submit="submit()">
               @csrf
               <div class="flex items-start space-x-4">
 
@@ -98,11 +98,30 @@
 
                 <div class="flex-1">
                   <h4 class="font-bold text-s text-gray-700 mb-1">{{ Auth::user()->name }}</h4>
-                  <textarea name="c_content" placeholder="write a comment here.." class="w-full border-gray-200 rounded-lg focus:ring-[#B178CC] focus:border-[#B178CC] text-s" rows="2" required></textarea>
+
+                  <textarea
+                    name="c_content"
+                    x-model="content"
+                    @input="resize($el)"
+                    placeholder="write a comment here.."
+                    class="w-full border-gray-200 rounded-lg focus:ring-[#B178CC] focus:border-[#B178CC] text-s resize-none overflow-hidden transition-all" rows="2"
+                    required></textarea>
+
                   <input type="hidden" name="post_id" value="{{ $post->id }}">
+
                   <div class="flex justify-end mt-2">
-                    <button type="submit" class="bg-[#56A5E1] text-white px-6 py-1 rounded-full text-sm font-bold shadow-sm hover:bg-blue-500 transition-colors">Post</button>
+                    <button
+                      type="submit"
+                      :disabled="!content.trim() || isSubmitting"
+                      class="bg-[#56A5E1] text-white px-6 py-1 rounded-full text-sm font-bold shadow-sm hover:bg-blue-500 transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed">
+
+                      <template x-if="isSubmitting">
+                        <i class="fa-solid fa-circle-notch animate-spin mr-2"></i>
+                      </template>
+                      <span x-text="isSubmitting ? 'Posting...' : 'Post'"></span>
+                    </button>
                   </div>
+
                 </div>
               </div>
             </form>
@@ -149,7 +168,7 @@
 
                     <x-report-button :model="$post" :reported="$reportedByMe" />
 
-                    
+
                   </div>
                 </div>
 
