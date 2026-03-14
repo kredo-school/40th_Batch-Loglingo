@@ -119,7 +119,8 @@ class DiscussionController extends Controller
             $discussion->tags()->sync($request->language_ids);
         }
 
-        StreakService::update(auth()->user());
+        StreakService::update(auth()->user()->fresh());
+
 
         return redirect()->route('discussions.index')->with('success', 'Discussion started!');
     }

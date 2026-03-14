@@ -38,7 +38,7 @@ class AnswerController extends Controller
             );
         }
 
-        StreakService::update(auth()->user());
+        StreakService::update(auth()->user()->fresh());
 
         return back()->with('success','Answer posted successfully!');
 

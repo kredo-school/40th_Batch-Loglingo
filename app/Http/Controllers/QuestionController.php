@@ -119,7 +119,8 @@ class QuestionController extends Controller
             $question->tags()->attach($validated['tag']);
         }
 
-        StreakService::update(auth()->user());
+        StreakService::update(auth()->user()->fresh());
+
 
         return redirect()->route('questions.index')->with('status', 'Question posted successfully!');
     }

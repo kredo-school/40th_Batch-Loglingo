@@ -38,24 +38,32 @@ class ProfileController extends Controller
 
     private function getActivityData($userId)
     {
+        $tables = [
+            'posts',
+            'comments',
+            'questions',
+            'answers',
+            'discussions',
+            'replies'
+        ];
 
-        $posts = DB::table('posts')
-            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
-            ->where('user_id', $userId)
-            ->groupBy('date');
+        $query = null;
 
-        $comments = DB::table('comments')
-            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
-            ->where('user_id', $userId)
-            ->groupBy('date');
+        foreach ($tables as $table) {
 
-        return $posts
-            ->unionAll($comments)
-            ->get()
+            $q = DB::table($table)
+                ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+                ->where('user_id', $userId)
+                ->groupBy('date');
+
+            $query = $query ? $query->unionAll($q) : $q;
+        }
+
+        return $query->get()
             ->groupBy('date')
             ->map(fn($items) => $items->sum('count'));
-
     }
+
 
 
 
@@ -117,6 +125,10 @@ class ProfileController extends Controller
     // tab controllers
     public function show(User $user)
     {
+        $user->refresh();
+
+        // dd('auth user', auth()->id(), 'route user', $user->id);
+        // dd('controller streak', $user->current_streak, 'db streak', \App\Models\User::find($user->id)->current_streak);
         $user->loadCount(['posts', 'questions']);
         $activityData = $this->getActivityData($user->id);
 

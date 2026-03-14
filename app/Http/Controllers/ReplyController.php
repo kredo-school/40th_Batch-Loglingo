@@ -21,7 +21,7 @@ class ReplyController extends Controller
             'r_content' => $request->r_content,
         ]);
 
-        StreakService::update(auth()->user());
+        StreakService::update(auth()->user()->fresh());
 
         return back()->with('success', 'Your reply has been posted!');
     }
