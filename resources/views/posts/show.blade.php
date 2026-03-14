@@ -12,7 +12,7 @@
               @if($post->user->avatar)
               <img src="{{ $post->user->avatar }}" alt="user" class="w-16 h-16 rounded-full object-cover">
               @else
-              <i class="fa-solid fa-circle-user text-gray-400 text-[96px] leading-none"></i>
+              <i class="fa-solid fa-circle-user text-gray-400 text-[60px] leading-none"></i>
               @endif
 
               <div class="flex-1">

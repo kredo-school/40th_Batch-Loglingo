@@ -1,7 +1,24 @@
-@props(['user'])
+@props(['user', 'type' => 'default'])
 
 @php
 $isFollowing = auth()->user()->isFollowing($user);
+
+// define the design
+$baseClass = "font-bold transition-all duration-300 active:translate-y-1 disabled:opacity-50";
+
+// choose class by type
+$styles = [
+'default' => [
+'following' => 'bg-gray-200 text-gray-700 px-3 py-1 rounded-full',
+'not_following' => 'bg-[#B178CC] text-white px-3 py-1 rounded-full'
+],
+'orange' => [ // for profile page
+'following' => 'bg-[#fda211] border border-[#fda211] text-white px-6 py-1 rounded-xl hover:bg-[#fdb211]',
+'not_following' => 'bg-white border-2 border-[#fda211] text-[#fda211] px-10 py-1 rounded-xl hover:border-[#fdbe11] hover:text-[#fdbe11]'
+]
+];
+
+$currentStyle = $styles[$type] ?? $styles['default'];
 @endphp
 
 <div x-data="{ 
@@ -48,10 +65,11 @@ $isFollowing = auth()->user()->isFollowing($user);
 }">
   <button
     @click="toggleFollow()"
-    :class="following ? 'bg-gray-200 text-gray-700' : 'bg-[#B178CC] text-white'"
-    class="text-[13px] font-bold px-3 py-1 rounded-full hover:bg-[#a068ba] transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+    :class="following ? '{{ $currentStyle['following'] }}' : '{{ $currentStyle['not_following'] }}'"
+    class="{{ $baseClass }} min-w-[160px] inline-flex justify-center items-center"
     :disabled="loading">
-    <span x-show="!loading" x-text="following ? 'Following' : 'Follow'"></span>
+
+    <span x-show="!loading" x-text="following ? '{{ $type === 'orange' ? 'Unfollow' : 'Following' }}' : 'Follow'"></span>
     <i x-show="loading" class="fa-solid fa-circle-notch animate-spin"></i>
   </button>
 </div>
