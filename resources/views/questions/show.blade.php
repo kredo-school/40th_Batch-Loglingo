@@ -15,7 +15,7 @@
                   @if($question->user->avatar)
                   <img src="{{ $question->user->avatar }}" alt="user" class="w-16 h-16 rounded-full object-cover">
                   @else
-                  <i class="fa-solid fa-circle-user text-gray-400 text-4xl leading-none"></i>
+                  <i class="fa-solid fa-circle-user text-gray-400 text-[60px] leading-none"></i>
                   @endif
                 </div>
               </div>
@@ -117,7 +117,7 @@
               <input type="hidden" name="question_id" value="{{ $question->id }}">
 
               <div class="flex items-start space-x-4">
-                @if($question->user->avatar)
+                @if(auth()->user()->avatar)
                 <img src="{{ auth()->user()->avatar }}" alt="user" class="w-12 h-12 rounded-full object-cover">
                 @else
                 <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>

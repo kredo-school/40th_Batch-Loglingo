@@ -2,118 +2,142 @@
 
 
 <div class="space-y-4">
-{{-- show the number of following --}}
+  {{-- show the number of following --}}
   <div class="px-2 py-1">
-      <h3 class="text-lg font-semibold text-gray-700">
-          {{ $count ?? 0 }} 
-          <span class="text-lg font-normal text-gray-500">
-              Following
-          </span>
-      </h3>
+    <h3 class="text-lg font-semibold text-gray-700">
+      {{ $count ?? 0 }}
+      <span class="text-lg font-normal text-gray-500">
+        Following
+      </span>
+    </h3>
   </div>
 
   @forelse ($followings as $following)
-    
-    <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-3">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-          <div class="w-14 h-14 rounded-full shadow-sm overflow-hidden">
-            @if($following->avatar)
-              <img src="{{ $following->avatar }}" alt="avatar" class="w-full h-full object-cover">
-            @else
-              <i class="fa-solid fa-circle-user text-gray-400 text-[3.5rem] leading-none"></i>
-            @endif
-          </div>
-          <div>
-           <p class="text-[16px] font-bold">
+
+  <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-14 h-14 rounded-full shadow-sm overflow-hidden">
+          @if($following->avatar)
+          <img src="{{ $following->avatar }}" alt="avatar" class="w-full h-full object-cover">
+          @else
+          <i class="fa-solid fa-circle-user text-gray-400 text-[3.5rem] leading-none"></i>
+          @endif
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <p class="text-[16px] font-bold">
               <a
                 href="{{ route('profile.show', $following) }}"
                 class="hover:text-[#B178CC] transition-colors">
                 {{ $following->name }}
               </a>
             </p>
-            <p class="text-[15px]"><i class="fa-solid fa-message text-gray-600"></i> 
-            <span>{{ $following->firstLanguage->name ?? $following->f_lang }}</span>
-            </p>
-            <p class="text-[15px]"><i class="fa-solid fa-pen text-gray-600"></i> 
-            <span>{{ $following->studyLanguage->name ?? $following->s_lang }}</span>
-            </p>
+
+            @if($following->isFollowingMe())
+            <span class="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">
+              Following you
+            </span>
+            @endif
           </div>
+
+          <p class="text-[15px]"><i class="fa-solid fa-message text-gray-600"></i>
+            <span>{{ $following->firstLanguage->name ?? $following->f_lang }}</span>
+          </p>
+          <p class="text-[15px]"><i class="fa-solid fa-pen text-gray-600"></i>
+            <span>{{ $following->studyLanguage->name ?? $following->s_lang }}</span>
+          </p>
         </div>
+      </div>
 
 
-        {{-- follow button  --}}
-         {{-- version 1 : my(auth) profile is not shown on the follwing list, even if this user follows me --}}
+      {{-- follow button --}}
+
+      {{-- version3 : use component--}}
+      @auth
+      @if(Auth::id() !== $following->id)
+      <div class="pt-4">
+        <x-follow-button :user="$following" type="orange" />
+      </div>
+      @else
+      <span class="px-10 py-1 text-gray-400 font-bold italic">Me</span>
+      @endif
+      @endauth
+
+      {{-- version 1 : my(auth) profile is not shown on the follwing list, even if this user follows me --}}
+      {{--
         @auth
           @if(Auth::id() !== $following->id)
               <div class="pt-4">
                   @if(Auth::user()->isFollowing($following))
                       <!-- unfollow -->
                       <form method="POST" action="{{ route('follow.destroy', $following) }}">
-                          @csrf
-                          @method('DELETE')
-                          <button
-                              class="px-10 py-1 bg-[#fda211] border border-[#fda211] text-white font-bold rounded-xl hover:bg-[#fdb211] border-[#fdb211] transition-all duration-300 active:translate-y-1">
-                              Unfollow
-                          </button>
-                      </form>
-                  @else
-                      <!-- follow -->
-                      <form method="POST" action="{{ route('follow.store', $following) }}">
-                          @csrf
-                          <button
-                              class="px-10 py-1 bg-white border-2 border-[#fda211] text-[#fda211] font-bold rounded-xl hover:border-[#fdbe11] hover:text-[#fdbe11] transition-all duration-300 active:translate-y-1">
-                              Follow
-                          </button>
-                      </form>
-                  @endif
-              </div>
-          @endif
-        @endauth
+      @csrf
+      @method('DELETE')
+      <button
+        class="px-10 py-1 bg-[#fda211] border border-[#fda211] text-white font-bold rounded-xl hover:bg-[#fdb211] border-[#fdb211] transition-all duration-300 active:translate-y-1">
+        Unfollow
+      </button>
+      </form>
+      @else
+      <!-- follow -->
+      <form method="POST" action="{{ route('follow.store', $following) }}">
+        @csrf
+        <button
+          class="px-10 py-1 bg-white border-2 border-[#fda211] text-[#fda211] font-bold rounded-xl hover:border-[#fdbe11] hover:text-[#fdbe11] transition-all duration-300 active:translate-y-1">
+          Follow
+        </button>
+      </form>
+      @endif
+    </div>
+    @endif
+    @endauth
+    --}}
 
 
-        {{-- version 2 : my(auth) profile is shown but follow button is disable to click, if this user follows me --}}
-        {{-- @auth
+
+    {{-- version 2 : my(auth) profile is shown but follow button is disable to click, if this user follows me --}}
+    {{-- @auth
           <div class="pt-4">
             @if(Auth::user()->isFollowing($following))
               <!-- unfollow -->
               <form method="POST" action="{{ route('follow.destroy', $following) }}">
-                @csrf
-                @method('DELETE')
-                <button
-                  @if(Auth::id() === $following->id) disabled @endif
-                  class="px-10 py-1 font-bold rounded-xl rounded-xl
-                    {{ Auth::id() === $following->id
+    @csrf
+    @method('DELETE')
+    <button
+      @if(Auth::id()===$following->id) disabled @endif
+      class="px-10 py-1 font-bold rounded-xl rounded-xl
+      {{ Auth::id() === $following->id
                       ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                       : 'bg-[#fda211] text-white hover:bg-[#fdb211]'
                     }}">
-                  Unfollow
-                </button>
-              </form>
-            @else
-              <!-- follow -->
-              <form method="POST" action="{{ route('follow.store', $following) }}">
-                @csrf
-                <button
-                  @if(Auth::id() === $following->id) disabled @endif
-                  class="px-10 py-1 font-bold rounded-xl
-                    {{ Auth::id() === $following->id
+      Unfollow
+    </button>
+    </form>
+    @else
+    <!-- follow -->
+    <form method="POST" action="{{ route('follow.store', $following) }}">
+      @csrf
+      <button
+        @if(Auth::id()===$following->id) disabled @endif
+        class="px-10 py-1 font-bold rounded-xl
+        {{ Auth::id() === $following->id
                       ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                       : 'bg-white border-2 border-[#fda211] text-[#fda211] hover:border-[#fdbe11]'
                     }}">
-                  Follow
-                </button>
-              </form>
-            @endif
-          </div>
-        @endauth --}}
+        Follow
+      </button>
+    </form>
+    @endif
+  </div>
+  @endauth --}}
 
 
-      </div>
-    </div>
-  @empty
-        <p class="text-gray-400 text-center py-10">
-            Not following anyone yet.
-        </p>
-    @endforelse
+</div>
+</div>
+@empty
+<p class="text-gray-400 text-center py-10">
+  Not following anyone yet.
+</p>
+@endforelse
 </div>

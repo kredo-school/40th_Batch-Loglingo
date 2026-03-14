@@ -143,6 +143,22 @@ class User extends Authenticatable
     {
         return $this->role_id === 3;
     }
+
+    /**
+     * このユーザーが自分（ログインユーザー）をフォローしているか判定
+     * 「フォローされています」バッジ用
+     */
+    public function isFollowingMe(): bool
+    {
+        if (!Auth::check()) {
+            return false;
+        }
+
+        // このユーザーの「フォロー中リスト」の中に、自分がいるかを確認
+        return $this->followings()
+            ->where('following_id', Auth::id())
+            ->exists();
+    }
 }
 
 

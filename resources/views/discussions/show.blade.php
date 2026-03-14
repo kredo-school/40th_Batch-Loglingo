@@ -89,7 +89,7 @@
               @if($discussion->user->avatar)
               <img src="{{ $discussion->user->avatar }}" alt="user" class="w-16 h-16 rounded-full object-cover">
               @else
-              <i class="fa-solid fa-circle-user text-gray-400 text-[96px] leading-none"></i>
+              <i class="fa-solid fa-circle-user text-gray-400 text-[60px] leading-none"></i>
               @endif
 
               <div class="flex-1">
@@ -179,7 +179,7 @@
                 {{-- avatar --}}
 
                 @if( auth()->user()->avatar)
-                <img src="{{ auth()->user()->avatar }}" alt="user" class="w-12 h-12 object-cover">
+                <img src="{{ auth()->user()->avatar }}" alt="user" class="w-12 h-12 rounded-full object-cover">
                 @else
                 <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
                 @endif
