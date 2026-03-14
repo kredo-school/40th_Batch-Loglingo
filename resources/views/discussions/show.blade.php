@@ -172,8 +172,8 @@
 
           {{-- Reply Form --}}
           @if(auth()->check() && auth()->user()->role_id == 3)
-          <div class="pb-6 mb-1 border-b">
-            <form action="{{ route('replies.store', $discussion->id) }}" method="POST">
+          <div class="pb-6 mb-1 border-b" x-data="commentForm">
+            <form action="{{ route('replies.store', $discussion->id) }}" method="POST" @submit="submit()">
               @csrf
               <div class="flex items-start space-x-4">
                 {{-- avatar --}}
@@ -187,11 +187,30 @@
 
                 <div class="flex-1">
                   <h4 class="font-bold text-gray-700 mb-2">{{ Auth::user()->name }}</h4>
-                  <textarea name="r_content" placeholder="write an insight here.." class="w-full border-gray-200 rounded-lg focus:ring-purple-400 focus:border-purple-400 text-sm" rows="4" required></textarea>
+
+                  <textarea
+                    name="r_content"
+                    x-model="content"
+                    @input="resize($el)"
+                    placeholder="write an insight here.."
+                    class="w-full border-gray-200 rounded-lg focus:ring-purple-400 focus:border-purple-400 text-sm resize-none overflow-hidden transition-all"
+                    rows="2" required></textarea>
+
                   <div class="flex justify-end mt-2">
-                    <button type="submit" class="bg-purple-500 text-white px-6 py-1 rounded-full text-sm font-bold hover:bg-purple-600 transition-colors">Post</button>
+                    <button
+                      type="submit"
+                      :disabled="!content.trim() || isSubmitting"
+                      class="bg-purple-500 text-white px-6 py-1 rounded-full text-sm font-bold hover:bg-purple-600 transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed">
+
+                      <template x-if="isSubmitting">
+                        <i class="fa-solid fa-circle-notch animate-spin mr-2"></i>
+                      </template>
+                      <span x-text="isSubmitting ? 'Posting...' : 'Post'"></span>
+                    </button>
                   </div>
+
                 </div>
+
               </div>
             </form>
           </div>

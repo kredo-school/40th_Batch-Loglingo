@@ -10,79 +10,52 @@ use App\Notifications\FollowedYou;
 
 class FollowController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(User $user)
-        {
-            // avoid to follow myself
-            if (Auth::id() === $user->id) {
-                abort(403);
+    {
+        // avoid to follow myself
+        if (Auth::id() === $user->id) {
+            if (request()->ajax()) {
+                return response()->json(['message' => 'Cannot follow yourself'], 403);
             }
+            abort(403);
+        }
 
-            $me = Auth::user();
-            $me->followings()->syncWithoutDetaching([$user->id]);
+        $me = Auth::user();
+        $me->followings()->syncWithoutDetaching([$user->id]);
 
-            if ($user->id !== $me->id) {
+        if ($user->id !== $me->id) {
             $user->notify(
-            new FollowedYou(
-                $me->id,
-                $me->name
-            )
+                new FollowedYou(
+                    $me->id,
+                    $me->name
+                )
             );
-            }
-
-            return back();
         }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Follow $follow)
-    {
-        //
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Followed ' . $user->name,
+                'following' => true
+            ]);
+        }
+
+        return back();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Follow $follow)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Follow $follow)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(User $user)
-        {
-            Auth::user()->followings()->detach($user->id);
+    {
+        Auth::user()->followings()->detach($user->id);
 
-            return back();
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Unfollowed ' . $user->name,
+                'following' => false
+            ]);
         }
 
+        return back();
+    }
 }

@@ -54,7 +54,7 @@
                   {{-- created at --}}
                   <p class="text-[13px] text-gray-400">{{ $question->created_at->diffForHumans() }}</p>
 
-                 
+
                   <div class="flex items-center space-x-4">
                     {{-- bookmark --}}
                     <x-bookmark-button :model="$question" />
@@ -111,24 +111,46 @@
 
           {{-- answer form--}}
           @if(auth()->check() && auth()->user()->role_id == 3)
-          <div class="pb-4 border-b">
-            <form action="{{ route('answers.store') }}" method="POST">
+          <div class="pb-4 border-b" x-data="commentForm">
+            <form action="{{ route('answers.store') }}" method="POST" @submit="submit()">
               @csrf
               <input type="hidden" name="question_id" value="{{ $question->id }}">
 
               <div class="flex items-start space-x-4">
                 @if($question->user->avatar)
-                <img src="{{ $question->user->avatar }}" alt="user" class="w-12 h-12 rounded-full object-cover">
+                <img src="{{ auth()->user()->avatar }}" alt="user" class="w-12 h-12 rounded-full object-cover">
                 @else
                 <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
                 @endif
+
                 <div class="flex-1">
                   <h4 class="font-bold text-s text-gray-700 mb-1">{{ Auth::user()->name }}</h4>
-                  <textarea name="a_content" placeholder="write an answer here.." class="w-full border-gray-200 rounded-lg focus:ring-[#B178CC] focus:border-[#B178CC] text-s" rows="5" required></textarea>
+
+                  <textarea
+                    name="a_content"
+                    x-model="content"
+                    @input="resize($el)"
+                    placeholder="write an answer here.."
+                    class="w-full border-gray-200 rounded-lg focus:ring-[#B178CC] focus:border-[#B178CC] text-s resize-none overflow-hidden transition-all"
+                    rows="2"
+                    required></textarea>
+
                   <div class="flex justify-end mt-2">
-                    <button type="submit" class="bg-[#56A5E1] text-white px-6 py-1 rounded-full text-sm font-bold shadow-sm hover:bg-blue-500 transition-colors">Post</button>
+                    <button
+                      type="submit"
+                      :disabled="!content.trim() || isSubmitting"
+                      class="bg-[#56A5E1] text-white px-6 py-1 rounded-full text-sm font-bold shadow-sm hover:bg-blue-500 transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed">
+
+                      <template x-if="isSubmitting">
+                        <i class="fa-solid fa-circle-notch animate-spin mr-2"></i>
+                      </template>
+                      <span x-text="isSubmitting ? 'Posting...' : 'Post'"></span>
+
+                    </button>
                   </div>
+
                 </div>
+
               </div>
             </form>
           </div>
@@ -146,7 +168,7 @@
               <div class="flex-1">
                 <div class="flex justify-between items-center mb-4">
                   <div class="flex items-center space-x-4">
-                    <a href="{{ route('profile.show',$question->user->id )}}">
+                    <a href="{{ route('profile.show',$answer->user->id )}}">
                       <h4 class="font-bold text-[16px]">{{ $answer->user->name }}</h4>
                     </a>
                     <span class="text-[13px] text-gray-400">{{ $answer->created_at->diffForHumans() }}</span>
@@ -170,7 +192,7 @@
                     @endphp
 
                     <x-report-button :model="$question" :reported="$reportedByMe" />
-                    
+
 
                   </div>
                 </div>

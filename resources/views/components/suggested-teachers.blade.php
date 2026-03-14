@@ -54,13 +54,16 @@
           </div>
         </div>
 
-        <form method="POST" action="{{ route('follow.store', $user) }}">
+        <x-follow-button :user="$user" />
+
+        {{-- <form method="POST" action="{{ route('follow.store', $user) }}">
           @csrf
           <button
             class="bg-[#B178CC] text-white text-[13px] font-bold px-3 py-1 rounded-full hover:bg-[#a068ba] transition-all hover:scale-105 active:scale-95">
             Follow
           </button>
-        </form>
+        </form> --}}
+        
       </div>
     </div>
   @empty

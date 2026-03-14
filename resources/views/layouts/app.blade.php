@@ -26,6 +26,9 @@
     {{-- JavaScript(Modal quoted question on discussion page) --}}
     <script src="{{ asset('js/discussion.js') }}" defer></script>
 
+    {{-- JavaScript(comment) --}}
+    <script src="{{ asset('js/comment.js') }}" defer></script>
+
     {{-- Google Maps API --}}
     <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}"></script>
     {{-- JavaScript(map) --}}
@@ -146,21 +149,36 @@
         style="display: none;"
         x-show="show"
         x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:translate-x-4"
-        x-transition:enter-end="opacity-100 translate-y-0 sm:translate-x-0"
+        x-transition:enter-start="opacity-0 transform translate-x-8"
+        x-transition:enter-end="opacity-100 transform translate-x-0"
         x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        class="fixed bottom-5 right-5 z-[100] min-w-[200px]">
+        x-transition:leave-start="opacity-100 transform translate-x-0"
+        x-transition:leave-end="opacity-0 transform translate-x-8"
+        class="fixed top-8 right-8 z-[9999] w-full max-w-[320px] pointer-events-none">
 
-        <div class="bg-[#B178CC] text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-gray-700">
-            <template x-if="type === 'success'">
-                <i class="fa-solid fa-circle-check text-white-400"></i>
-            </template>
-            <template x-if="type === 'error'">
-                <i class="fa-solid fa-circle-exclamation text-red-400"></i>
-            </template>
-            <span x-text="message" class="text-sm font-medium"></span>
+        <div class="bg-white border-l-4 p-4 shadow-[0_15px_40px_rgba(0,0,0,0.2)] pointer-events-auto flex items-center gap-4"
+            :class="{
+                'border-[#B178CC]': type === 'success',
+                'border-red-500': type === 'error'
+             }">
+
+            <div class="flex-shrink-0 text-lg">
+                <template x-if="type === 'success'">
+                    <i class="fa-solid fa-circle-check text-[#B178CC]"></i>
+                </template>
+                <template x-if="type === 'error'">
+                    <i class="fa-solid fa-circle-exclamation text-red-400"></i>
+                </template>
+            </div>
+
+            <div class="flex-1">
+                <span x-text="message" class="text-sm font-bold text-gray-700"></span>
+            </div>
+
+            <button @click="show = false" class="text-gray-300 hover:text-gray-500 transition-colors">
+                <i class="fa-solid fa-xmark text-xs"></i>
+            </button>
+
         </div>
     </div>
 
@@ -185,6 +203,18 @@
         });
     </script>
     @endif
+
+    
+    {{-- receive custom event from JavaScript(AJAX) --}}
+    <script>
+        window.addEventListener('notify', (event) => {
+            if (typeof dispatchToast === 'function') {
+                const message = typeof event.detail === 'string' ? event.detail : event.detail.message;
+                const type = event.detail.type || 'success';
+                dispatchToast(message, type);
+            }
+        });
+    </script>
 
 </body>
 
