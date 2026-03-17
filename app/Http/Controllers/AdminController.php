@@ -171,7 +171,33 @@ class AdminController extends Controller
             ->orderBy('id', 'asc')
             ->paginate(10);
 
-        return view('admin.tags.index', compact('languages'));
+        $allColors = [
+            'red',
+            'blue',
+            'green',
+            'yellow',
+            'indigo',
+            'purple',
+            'pink',
+            'orange',
+            'teal',
+            'cyan',
+            'lime',
+            'emerald',
+            'sky',
+            'amber',
+            'rose',
+            'gray'
+        ];
+
+        $usedColors = Language::pluck('color')->toArray();
+
+        $availableColors = array_diff($allColors, $usedColors);
+        if (!in_array('gray', $availableColors)) {
+            $availableColors[] = 'gray';
+        }
+
+        return view('admin.tags.index', compact('languages', 'availableColors'));
     }
 
     // store tags
@@ -180,11 +206,13 @@ class AdminController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:50|unique:languages,name',
             'code' => 'required|max:10|unique:languages,code',
+            'color' => 'required|in:red,blue,green,yellow,indigo,purple,pink,orange,teal,cyan,lime,emerald,sky,amber,rose,gray',
         ]);
 
         Language::create([
             'name' => $validated['name'],
             'code' => $validated['code'],
+            'color' => $validated['color'],
         ]);
 
         return back()->with('status', 'New tag added successfully!');

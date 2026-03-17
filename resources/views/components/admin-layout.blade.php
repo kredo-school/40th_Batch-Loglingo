@@ -83,6 +83,8 @@
             {{ $slot }}
         </main>
     </div>
+
+    <script src="{{ asset('js/admin-tag-preview.js') }}"></script>
 </body>
 
 </html>

@@ -1,56 +1,88 @@
 <x-admin-layout>
 
+
     @if (session('status'))
     <div class="mb-4 ms-6 text-green-600 font-bold">
         {{ session('status') }}
     </div>
     @endif
 
+    <div x-data="tagPreview('{{ old('color', '') }}', '{{ old('code', '') }}')" x-cloak class="mb-6 p-6 bg-white rounded-[1rem] border border-gray-200 shadow-sm">
+        <form action="{{ route('admin.tags.store') }}" method="POST">
+            @csrf
 
-    <form action="{{ route('admin.tags.store') }}" method="POST" class="mb-6 p-6 bg-teal-50 rounded-[1rem] border border-teal-100">
-        @csrf
-        <h1 class="font-bold mb-4 text-[18px] text-gray-700">Add a new tag</h1>
+            <h1 class="font-bold mb-4 text-[18px] text-gray-700">
+                Add a new tag
+            </h1>
 
-        <div class="flex flex-wrap items-start gap-4">
+            <div class="flex flex-wrap items-end gap-4">
 
+                <!--Tag name  -->
+                <div class="flex-1 max-w-xs">
+                    <input type="text"
+                        name="name"
+                        required
+                        placeholder="Tag (e.g. English)"
+                        value="{{ old('name') }}"
+                        class="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-[1rem] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400">
+                    @error('name')
+                    <p class="text-red-500 text-xs mt-1 ml-2">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <!--Tag name  -->
-            <div class="fex-1 max-w-xs">
-                <input type="text"
-                    name="name"
-                    required
-                    placeholder="Tag (e.g. English)"
-                    value="{{ old('name') }}"
-                    class="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-[1rem] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400">
-                @error('name')
-                <p class="text-red-500 text-xs mt-1 ml-2">{{ $message }}</p>
-                @enderror
+                <!-- code name -->
+                <div class="w-35">
+                    <input type="text"
+                        name="code"
+                        x-model="code"
+                        required
+                        placeholder="Code (e.g. EN)"
+                        class=" uppercase w-full px-4 py-2.5 bg-white border border-gray-300 rounded-[1rem] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400">
+                    @error('code')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="relative w-40 pt-8">
+                    <div class="absolute top-0 left-0 h-6 flex items-center gap-2 text-sm">
+                        <span class="text-gray-400 text-[10px] uppercase font-bold">Preview:</span>
+                        <span
+                            x-show="color || code"
+                            x-cloak
+                            :class="badgeClasses"
+                            x-text="code || 'EN'">
+                        </span>
+                    </div>
+
+                    <select name="color"
+                        x-model="color"
+                        required
+                        class="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-[1rem] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-700">
+                        <option value="" disabled hidden>Badge Color</option>
+
+                        @foreach($availableColors as $color)
+                        <option value="{{ $color }}">{{ ucfirst($color) }}</option>
+                        @endforeach
+
+                        @if(count($availableColors) === 0)
+                        <option value="" disabled>No colors available</option>
+                        @endif
+                    </select>
+
+                    @error('color')
+                    <p class="text-red-500 text-xs mt-1 ml-2">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Add button -->
+                <button class="bg-[#3b82f6] hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-[1rem] flex items-center transition-colors">
+                    <span class="mr-2 text-[20px]">+</span>
+                    Add
+                </button>
+
             </div>
-
-            <!-- code name -->
-            <div class="w-35">
-                <input type="text"
-                    name="code"
-                    required
-                    placeholder="Code (e.g. EN)"
-                    value="{{ old('name') }}"
-                    class="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-[1rem] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400">
-                @error('code')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <!-- Add button -->
-            <button class="bg-[#3b82f6] hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-[1rem] flex items-center transition-colors">
-                <span class="mr-2 text-[20px]">+</span>
-                Add
-            </button>
-
-        </div>
-
-
-
-    </form>
+        </form>
+    </div>
 
 
     <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100">
@@ -77,13 +109,13 @@
                     <td class="px-6 py-4 text-gray-600 text-center text-sm">{{ $language->id }}</td>
 
                     {{-- tag name--}}
-                    <td class="px-6 py-4 text-gray-600 text-center text-sm">{{ $language->name}}</td>
+                    <td class="px-6 py-4 text-gray-600 text-center text-sm font-medium">
+                        {{ $language->name }}
+                    </td>
 
                     {{-- tag code--}}
-                    <td class="px-6 py-4 text-gray-600 text-center text-sm">
-                        <span class="px-2 py-0.5 bg-blue-50 text-gray-600 text-[12px] font-bold rounded border border-blue-100">
-                            {{ $language->code }}
-                        </span>
+                    <td class="px-6 py-4 text-center">
+                        <x-language-badge :language="$language" />
                     </td>
 
                     {{-- count --}}
