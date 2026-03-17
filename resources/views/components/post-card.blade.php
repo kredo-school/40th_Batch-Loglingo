@@ -52,16 +52,14 @@
             <i class="fa-regular fa-comment-dots mr-1"></i> {{ $post->comments->count() }}
           </span>
 
-          
+
           {{-- bookmark --}}
           <x-bookmark-button :model="$post" />
-          
+
 
           {{-- tag --}}
           @forelse($post->tags as $tag)
-          <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100">
-            <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->code }}
-          </span>
+          <x-language-badge :language="$tag" :icon="true" />
           @empty
           <span class="text-[12px] text-gray-400">No Tags</span>
           @endforelse
@@ -78,7 +76,7 @@
 
           <x-report-button :model="$post" :reported="$reportedByMe" />
 
-    
+
 
         </div>
       </div>
