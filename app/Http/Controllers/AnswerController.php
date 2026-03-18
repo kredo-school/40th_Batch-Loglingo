@@ -15,8 +15,14 @@ class AnswerController extends Controller
     {
         $request->validate([
             'question_id' => 'required|exists:questions,id',
-            'a_content' => 'required|string|max:2000',
-        ]);
+            'a_content' => 'required|string|max:5000',
+        ],
+        [
+                'a_content.max' => 'Answer must be within 5000 characters',
+                'a_content.required' => 'Please enter an answer',
+            ]
+
+        );
 
         $answer = Answer::create([
             'user_id' => Auth::id(),

@@ -18,7 +18,7 @@
                     </div>
                 </div>
 
-                <!-- Post example-->
+                <!-- show posts-->
                  @forelse($posts as $post)
                     <x-post-card :post="$post"/>
                     <div class="mb-4"></div> 

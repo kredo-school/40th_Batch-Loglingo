@@ -101,12 +101,18 @@ class QuestionController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'q_title' => 'required|max:255',
-            'q_content' => 'required|string',
-            'tag' => 'required|integer|exists:languages,id',
-            'written_lang' => 'required|integer|exists:languages,id',
-        ]);
+        $validated = $request->validate(
+            [
+                'q_title' => 'required|max:255',
+                'q_content' => 'required|string|max:5000',
+                'tag' => 'required|integer|exists:languages,id',
+                'written_lang' => 'required|integer|exists:languages,id',
+            ],
+            [
+                'q_content.required' => 'Please enter content',
+                'q_content.max' => 'Content must be within 5000 characters',
+            ]
+        );
 
         $question = Question::create([
             'user_id' => auth()->id(),

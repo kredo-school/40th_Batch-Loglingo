@@ -7,7 +7,7 @@
         <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-8">
 
 
-          {{-- post header --}}
+          {{-- question header --}}
           <div class="mb-3">
             <div class="flex items-start space-x-4 w-full">
               <div class="flex-shrink-0">
@@ -32,13 +32,13 @@
 
                 </div>
 
-                {{-- post title --}}
-                <div class="flex justify-between items-center mb-2">
-                  <h2 class="text-[20px] font-extrabold text-gray-900 mb-2 break-words whitespace-pre-wrap flex-1">{{ $question->q_title }}</h2>
+                {{-- question title --}}
+                <div class="flex justify-between items-start gap-3 mb-2">
+                  <h2 class="flex-1 min-w-0 text-[20px] font-extrabold text-gray-900 mb-2 break-all whitespace-pre-wrap">{{ $question->q_title }}</h2>
 
                   {{-- delete button --}}
                   @if(Auth::id() === $question->user_id)
-                  <form action="{{ route('questions.destroy', $question->id) }}" method="POST" onsubmit="return confirm('Really delete this question?');">
+                  <form action="{{ route('questions.destroy', $question->id) }}" method="POST" onsubmit="return confirm('Really delete this question?');" class="shrink-0">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="bg-red-500 text-white text-sm px-3 py-1 rounded-full font-bold shadow-sm hover:bg-red-600 transition-colors">delete</button>
@@ -110,7 +110,7 @@
 
 
           {{-- answer form--}}
-          @if(auth()->check() && auth()->user()->role_id == 3)
+          @if(auth()->check() && auth()->user()->role_id == 3 || auth()->user()->role_id == 1)
           <div class="pb-4 border-b" x-data="commentForm">
             <form action="{{ route('answers.store') }}" method="POST" @submit="submit()">
               @csrf
@@ -123,17 +123,22 @@
                 <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
                 @endif
 
-                <div class="flex-1">
+                <div class="flex-1 min-w-0">
                   <h4 class="font-bold text-s text-gray-700 mb-1">{{ Auth::user()->name }}</h4>
 
                   <textarea
                     name="a_content"
+                    maxlength="5000"
                     x-model="content"
                     @input="resize($el)"
                     placeholder="write an answer here.."
                     class="w-full border-gray-200 rounded-lg focus:ring-[#B178CC] focus:border-[#B178CC] text-s resize-none overflow-hidden transition-all"
                     rows="2"
                     required></textarea>
+
+                    @error('a_content')
+                  <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                  @enderror                    
 
                   <div class="flex justify-end mt-2">
                     <button
@@ -165,7 +170,7 @@
               @else
               <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
               @endif
-              <div class="flex-1">
+              <div class="flex-1 min-w-0">
                 <div class="flex justify-between items-center mb-4">
                   <div class="flex items-center space-x-4">
                     <a href="{{ route('profile.show',$answer->user->id )}}">

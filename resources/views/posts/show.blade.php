@@ -15,7 +15,7 @@
               <i class="fa-solid fa-circle-user text-gray-400 text-[60px] leading-none"></i>
               @endif
 
-              <div class="flex-1">
+              <div class="flex-1 min-w-0">
                 <div class="flex justify-between items-center mb-1">
                   <a href="{{ route('profile.show',$post->user->id) }}">
                     <h3 class="font-bold text-lg text-gray-800">{{ $post->user->name }}</h3>
@@ -80,8 +80,7 @@
           </div>
 
           {{-- post body --}}
-          <p class="text-gray-700 leading-relaxed pb-2 mb-5 border-b">
-            {{ $post->p_content}}
+          <p class="text-gray-700 leading-relaxed pb-2 mb-5 border-b break-words whitespace-pre-wrap">{{ $post->p_content}}
           </p>
 
           {{-- comment form --}}
@@ -101,11 +100,16 @@
 
                   <textarea
                     name="c_content"
+                    maxlength="1000"
                     x-model="content"
                     @input="resize($el)"
                     placeholder="write a comment here.."
                     class="w-full border-gray-200 rounded-lg focus:ring-[#B178CC] focus:border-[#B178CC] text-s resize-none overflow-hidden transition-all" rows="2"
                     required></textarea>
+
+                  @error('c_content')
+                  <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                  @enderror
 
                   <input type="hidden" name="post_id" value="{{ $post->id }}">
 
@@ -137,7 +141,7 @@
               <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
               @endif
               {{-- comment owner & date --}}
-              <div class="flex-1">
+              <div class="flex-1 min-w-0">
                 <div class="flex justify-between items-center mb-1">
                   <div class="flex items-center space-x-4">
                     <a href="{{ route('profile.show', $comment->user->id) }}">
@@ -168,24 +172,18 @@
 
                     <x-report-button :model="$post" :reported="$reportedByMe" />
 
-
                   </div>
                 </div>
 
 
                 {{-- display comment --}}
                 <div>
-                  <span class="text-s text-gray-700 leading-relaxed break-words">{{ $comment->c_content}} </span>
+                  <span class="text-s text-gray-700 leading-relaxed break-words whitespace-pre-wrap">{{ $comment->c_content}} </span>
                 </div>
               </div>
             </div>
             @endforeach
           </div>
-
-
-
-
-
 
         </div>
       </div>
