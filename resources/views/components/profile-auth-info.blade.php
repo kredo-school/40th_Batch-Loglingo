@@ -61,7 +61,9 @@
         <!-- count streak & octopus -->
         <div class="flex items-end justify-center md:justify-end gap-0 -mt-7">
             @php
-                $todayDone = $user->last_activity_date === now()->toDateString();
+                $todayDone = \App\Models\UserActivity::where('user_id', $user->id)
+                    ->whereDate('activity_date', now())
+                    ->exists();
             @endphp
 
             {{-- speach bubble --}}
@@ -97,7 +99,7 @@
                     </p>
 
                     @if($todayDone)
-                        <p class="text-green-600 text-xs animate-pulse">
+                        <p class="text-green-600 text-[11px] animate-pulse">
                             <i class="fa-solid fa-thumbs-up"></i> Your streak saved today!
                         </p>
                         @else

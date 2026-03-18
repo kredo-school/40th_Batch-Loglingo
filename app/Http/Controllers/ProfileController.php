@@ -127,8 +127,6 @@ class ProfileController extends Controller
     {
         $user->refresh();
 
-        // dd('auth user', auth()->id(), 'route user', $user->id);
-        // dd('controller streak', $user->current_streak, 'db streak', \App\Models\User::find($user->id)->current_streak);
         $user->loadCount(['posts', 'questions']);
         $activityData = $this->getActivityData($user->id);
 
@@ -182,7 +180,6 @@ class ProfileController extends Controller
 
         return view('profile.profile', array_merge( [
             'user' => $user,
-            // 'tab' => 'following',
             'followings' => $user->followings()->get(),
             'activityData' => $activityData
         ], $this->getCalendarData()));
@@ -197,7 +194,6 @@ class ProfileController extends Controller
 
         return view('profile.profile', array_merge([
             'user' => $user,
-            // 'tab' => 'followers',
             'followers' => $user->followers()->get(),
             'activityData' => $activityData
         ], $this->getCalendarData()));

@@ -32,13 +32,15 @@ function renderCalendar(year, month) {
 
     }
 
+    // Main loop (date)
     for (let day = 1; day <= daysInMonth; day++) {
 
         const cell = document.createElement("div");
 
         const date = `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
 
-        const count = activityData[date] ?? 0;
+        const raw = activityData[date];
+        const count = raw ? Number(raw) : 0;
 
         cell.className = "w-4 h-2 rounded-sm";
 
@@ -47,8 +49,6 @@ function renderCalendar(year, month) {
             cell.classList.add("ring-1","ring-blue-400");
 
         }
-
-        cell.title = `${count} ${count === 1 ? 'activity' : 'activities'} on ${date}`;
 
         if (count === 0) {
 
@@ -67,6 +67,53 @@ function renderCalendar(year, month) {
             cell.classList.add("bg-green-600");
 
         }
+
+// --- tooltip (hover design) ---
+        cell.classList.add("relative");
+
+        const tooltip = document.createElement("div");
+
+       const formattedDate = new Date(date).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+
+        tooltip.innerText = `${formattedDate}\n${count} ${count === 1 ? 'activity' : 'activities'}`;
+
+
+        tooltip.className = `
+          absolute
+          top-full
+          left-1/2
+          -translate-x-1/2
+          mb-1
+          mt-4
+          px-1 py-1
+          text-xs
+          text-white
+          text-semibold
+          bg-[#B178CC]/80
+          rounded
+          opacity-0
+          pointer-events-none
+          transition-opacity
+          duration-200
+          z-50  
+          min-w-[120px]
+          text-center
+        `;
+        
+
+        cell.addEventListener("mouseenter", () => {
+            tooltip.classList.remove("opacity-0");
+        });
+
+        cell.addEventListener("mouseleave", () => {
+            tooltip.classList.add("opacity-0");
+        });
+
+        cell.appendChild(tooltip);
 
         calendar.appendChild(cell);
 

@@ -12,11 +12,10 @@ class StreakService
     {
 
         $user = User::find($user->id);
-        // $last = optional($user->last_activity_date)->toDateString();
         $streak = 0;
         $currentDate = Carbon::today();
 
-        // activity保存
+        // save activity
         UserActivity::firstOrCreate([
             'user_id' => $user->id,
             'activity_date' => $currentDate
@@ -61,30 +60,6 @@ class StreakService
             'current_streak' => $user->current_streak,
             'last_activity_date' => $user->last_activity_date,
         ]);
-        // $last = $user->last_activity_date;
-        // dd($last, $today, Carbon::parse($last)->diffInDays($today));
-        // if (!$last) {
-
-        //     $user->current_streak = 1;
-        //     Log::info('Message');
-        // } else {
-
-        //     $diff = Carbon::parse($last)->diffInDays($today);
-
-        //     if ($diff === 0) {
-        //         return;
-        //     }
-
-        //     if ($diff === 1) {
-        //         $user->current_streak += 1;
-        //     } else {
-        //         $user->current_streak = 1;
-        //     }
-
-        // }
-
-        // if ($user->current_streak > $user->longest_streak) {
-        //     $user->longest_streak = $user->current_streak;
-        // }
+        
     }
 }
