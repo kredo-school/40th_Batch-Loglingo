@@ -8,6 +8,17 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         "./app/Models/**/*.php",
+        "./resources/js/**/*.js", 
+    ],
+
+     safelist: [ 
+        'bg-gray-200',
+        'bg-green-200',
+        'bg-green-400',
+        'bg-green-600',
+        'bg-[#B178CC]/80',
+        'min-w-[120px]',
+
     ],
 
     theme: {
