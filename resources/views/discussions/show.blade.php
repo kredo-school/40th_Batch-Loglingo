@@ -144,11 +144,12 @@
                     <x-bookmark-button :model="$discussion" />
 
                     {{-- language tag --}}
-                    @foreach($discussion->tags as $tag)
-                    <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100 flex items-center">
-                      <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->code }}
-                    </span>
-                    @endforeach
+                    @forelse($discussion->tags as $tag)
+                    <x-language-badge :language="$tag" :icon="true" />
+                    @empty
+                    <span class="text-[12px] text-gray-400">No Tags</span>
+                    @endforelse
+
 
 
                     {{-- report discussion --}}
@@ -171,7 +172,7 @@
           </div>
 
           {{-- Reply Form --}}
-          @if(auth()->check() && auth()->user()->role_id == 3)
+          @if(auth()->check() && auth()->user()->role_id == 3 || auth()->user()->role_id == 1)
           <div class="pb-6 mb-1 border-b" x-data="commentForm">
             <form action="{{ route('replies.store', $discussion->id) }}" method="POST" @submit="submit()">
               @csrf
@@ -227,7 +228,7 @@
               <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
               @endif
 
-              <div class="flex-1">
+              <div class="flex-1 min-w-0">
                 <div class="flex justify-between items-center mb-2">
                   <div class="flex items-center space-x-2">
                     <a href="{{ route('profile.show',$discussion->user->id)}}">
