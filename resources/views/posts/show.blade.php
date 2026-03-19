@@ -55,11 +55,11 @@
 
 
                     {{-- tag --}}
-                    @foreach($post->tags as $tag)
-                    <span class="text-[12px] px-2 py-1 bg-gray-50 rounded-md text-gray-600 font-bold border border-gray-100">
-                      <i class="fa-solid fa-tag mr-1 text-gray-400"></i> {{ $tag->code }}
-                    </span>
-                    @endforeach
+                    @forelse($post->tags as $tag)
+                    <x-language-badge :language="$tag" :icon="true" />
+                    @empty
+                    <span class="text-[12px] text-gray-400">No Tags</span>
+                    @endforelse
 
                     {{-- report system --}}
                     @php
