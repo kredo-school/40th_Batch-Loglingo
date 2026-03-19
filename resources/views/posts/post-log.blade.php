@@ -28,7 +28,7 @@
                    {{-- title --}}
                     <div class="px-4"> 
                         <label for="p_title" class="block text-xl mb-2">Title</label> 
-                        <input type="text" name="p_title" id="p_title" value="{{ old('p_title') }}" required placeholder="Name your day!" class="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition outline-none">
+                        <input type="text" name="p_title" maxlength="255" id="p_title" value="{{ old('p_title') }}" required placeholder="Name your day!" class="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition outline-none">
                         
                         @error('p_title')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
@@ -38,7 +38,7 @@
                     {{-- content --}}
                     <div class="px-4"> 
                         <label for="p_content" class="block text-xl mb-2">Content</label> 
-                        <textarea name="p_content" id="p_content" rows="15" 
+                        <textarea name="p_content" maxlength="5000" id="p_content" rows="15" 
                             placeholder="What happened?"
                             class="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition outline-none resize-none">{{ old('p_content')}}</textarea>
                         
@@ -57,7 +57,8 @@
                                     
                                 <option value="" hidden>In which language did you write? </option>
                                 @foreach($languages as $language)
-                                    <option value="{{ $language->id }}">
+                                    <option value="{{ $language->id }}"
+                                        {{ old('tag') == $language->id ? 'selected' : '' }}>
                                         {{ $language->name }}
                                     </option>
                                 @endforeach
