@@ -23,6 +23,10 @@
             @elseif ($data['type'] === 'followed_you')
                 <i class="fa-regular fa-user text-purple-500"></i>
                 <span>New follower</span>
+
+            @elseif ($data['type'] === 'discussion_replied')
+                <i class="fa-regular fa-lightbulb text-yellow-500"></i>
+                <span>New reply on your discussion</span>
             @endif
         </h4>
 
@@ -33,6 +37,8 @@
                 {{ $data['comment_user_name'] }} commented on: {{ $data['post_title'] }}
             @elseif ($data['type'] === 'followed_you')
                 {{ $data['follower_name'] }} started following you
+            @elseif ($data['type'] === 'discussion_replied')
+                {{ $data['reply_user_name'] }} replied: {{ $data['discussion_title'] }}
             @endif
         </p>
 
