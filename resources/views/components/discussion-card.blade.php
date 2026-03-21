@@ -47,7 +47,7 @@
                 <span class="text-xs font-bold text-purple-400">
                   <i class="fa-solid fa-circle-question mr-1"></i> Original Question #{{ $discussion->question_id }}
                 </span>
-                <button @click="toggleModal" class="text-gray-400 hover:text-gray-600"> {{-- ★追加 --}}
+                <button @click="toggleModal" class="text-gray-400 hover:text-gray-600">
                   <i class="fa-solid fa-xmark"></i>
                 </button>
               </div>
@@ -72,7 +72,7 @@
 
               {{-- Modal Footer --}}
               <div class="px-5 py-3 border-t bg-gray-50 text-right">
-                <button @click="toggleModal" class="bg-[#B178CC] text-white px-5 py-2 rounded-full text-xs font-bold shadow-md hover:bg-[#a066b8]"> {{-- ★追加 --}}
+                <button @click="toggleModal" class="bg-[#B178CC] text-white px-5 py-2 rounded-full text-xs font-bold shadow-md hover:bg-[#a066b8]">
                   Close
                 </button>
               </div>

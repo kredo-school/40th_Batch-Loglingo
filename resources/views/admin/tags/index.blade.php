@@ -86,136 +86,139 @@
 
 
     <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="border-b border-gray-200">
-                    <th class="px-6 py-4 font-bold text-gray-700 text-center">#</th>
-                    <th class="px-6 py-4 font-bold text-gray-700 text-center">name</th>
-                    <th class="px-6 py-4 font-bold text-gray-700 text-center">code</th>
-                    <th class="px-6 py-4 font-bold text-gray-700 text-center">count</th>
-                    <th class="px-6 py-4 font-bold text-gray-700 text-center">last updated</th>
-                    <th class="px-6 py-4 font-bold text-gray-700 text-center">status</th>
-                    <th class="px-6 py-4 text-gray-400"></th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[900px] text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-gray-200">
+                        <th class="px-6 py-4 font-bold text-gray-700 text-center">#</th>
+                        <th class="px-6 py-4 font-bold text-gray-700 text-center">name</th>
+                        <th class="px-6 py-4 font-bold text-gray-700 text-center">code</th>
+                        <th class="px-6 py-4 font-bold text-gray-700 text-center">count</th>
+                        <th class="px-6 py-4 font-bold text-gray-700 text-center">last updated</th>
+                        <th class="px-6 py-4 font-bold text-gray-700 text-center">status</th>
+                        <th class="px-6 py-4 text-gray-400"></th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
 
-                @foreach($languages as $language)
+                    @foreach($languages as $language)
 
-                {{-- display tag--}}
-                <tr x-data="{ active: {{ $language->status ? 'true' : 'false'}}, open: false, showModal: false}" class="hover:bg-gray-50 transition-colors">
+                    {{-- display tag--}}
+                    <tr x-data="{ active: {{ $language->status ? 'true' : 'false'}}, open: false, showModal: false}" class="hover:bg-gray-50 transition-colors">
 
-                    {{-- number--}}
-                    <td class="px-6 py-4 text-gray-600 text-center text-sm">{{ $language->id }}</td>
+                        {{-- number--}}
+                        <td class="px-6 py-4 text-gray-600 text-center text-sm">{{ $language->id }}</td>
 
-                    {{-- tag name--}}
-                    <td class="px-6 py-4 text-gray-600 text-center text-sm font-medium">
-                        {{ $language->name }}
-                    </td>
+                        {{-- tag name--}}
+                        <td class="px-6 py-4 text-gray-600 text-center text-sm font-medium">
+                            {{ $language->name }}
+                        </td>
 
-                    {{-- tag code--}}
-                    <td class="px-6 py-4 text-center">
-                        <x-language-badge :language="$language" />
-                    </td>
+                        {{-- tag code--}}
+                        <td class="px-6 py-4 text-center">
+                            <x-language-badge :language="$language" />
+                        </td>
 
-                    {{-- count --}}
-                    <td class="px-6 py-4 text-gray-500 text-center text-sm">{{ $language->questions_count }}</td>
+                        {{-- count --}}
+                        <td class="px-6 py-4 text-gray-500 text-center text-sm">{{ $language->questions_count }}</td>
 
-                    {{-- last updated --}}
-                    <td class="px-6 py-4 text-gray-500 text-center text-sm">{{ $language->updated_at ? $language->updated_at->format('Y-m-d H:i') : 'no update' }}</td>
-
-
-                    {{-- status--}}
-                    <td class="px-6 py-4 text-center">
-                        <div class="flex items-center justify-center space-x-2">
-                            <span :class="active ? 'text-green-600' : 'text-gray-400'">●</span>
-                            <span class="text-gray-800" x-text="active ? 'Active' : 'Inactive'"></span>
-                        </div>
-                    </td>
-
-                    <td class="px-6 py-4 text-right">
-                        <div class="relative inline-block text-left">
-
-                            {{-- menu button --}}
-                            <button @click="open = !open" class="text-gray-400 hover:text-gray-600 transition-colors p-2">
-                                <i class="fa-solid fa-ellipsis"></i>
-                            </button>
-
-                            {{-- dorp down menu --}}
-                            <div x-show="open" @click.away="open = false"
-                                class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg z-50 py-1">
+                        {{-- last updated --}}
+                        <td class="px-6 py-4 text-gray-500 text-center text-sm">{{ $language->updated_at ? $language->updated_at->format('Y-m-d H:i') : 'no update' }}</td>
 
 
-                                {{-- Change status--}}
-                                <button @click="showModal = true"
-                                    class="group w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center transition-colors focus:outline-none">
-                                    <div class="mr-3 w-5 flex justify-center items-center">
-                                        <span :class="active ? 'bg-red-500' : 'bg-green-500'"
-                                            class="inline-block w-3 h-3 rounded-full"></span>
-                                    </div>
-                                    <span x-text="active ? 'Deactivate tag' : 'Activate tag'"></span>
+                        {{-- status--}}
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex items-center justify-center space-x-2">
+                                <span :class="active ? 'text-green-600' : 'text-gray-400'">●</span>
+                                <span class="text-gray-800" x-text="active ? 'Active' : 'Inactive'"></span>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4 text-right">
+                            <div class="relative inline-block text-left">
+
+                                {{-- menu button --}}
+                                <button @click="open = !open" class="text-gray-400 hover:text-gray-600 transition-colors p-2">
+                                    <i class="fa-solid fa-ellipsis"></i>
                                 </button>
 
-                            </div>
-                        </div>
-                    </td>
+                                {{-- dorp down menu --}}
+                                <div x-show="open" @click.away="open = false"
+                                    class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg z-50 py-1">
 
 
-
-                    {{-- --- Confirmation Modal --- --}}
-                    <template x-teleport="body">
-                        <div x-show="showModal"
-                            class="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black bg-opacity-50"
-                            x-cloak>
-
-                            {{-- Modal Content --}}
-                            <div @click.away="showModal = false"
-                                class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden transform transition-all border border-gray-200">
-
-                                {{-- Modal Header --}}
-                                <div :class="active ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'"
-                                    class="px-4 py-3 border-b flex items-center font-bold">
-                                    <i :class="active ? 'fa-solid fa-ban' : 'fa-solid fa-circle-check'" class="mr-2"></i>
-                                    <span x-text="active ? 'Deactivate Tag' : 'Activate Tag'"></span>
-                                </div>
-
-                                {{-- Modal Body --}}
-                                <div class="p-6 text-left">
-                                    <p class="text-gray-700">Are you sure you want to <span x-text="active ? 'deactivate' : 'activate'" class="font-bold"></span> <span class="font-bold text-black">tag</span>?</p>
-                                </div>
-
-                                {{-- Modal Footer --}}
-                                <div class="px-4 py-3 bg-gray-50 flex justify-end space-x-3">
-
-                                    <button @click="showModal = false" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                                        Cancel
+                                    {{-- Change status--}}
+                                    <button @click="showModal = true"
+                                        class="group w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center transition-colors focus:outline-none">
+                                        <div class="mr-3 w-5 flex justify-center items-center">
+                                            <span :class="active ? 'bg-red-500' : 'bg-green-500'"
+                                                class="inline-block w-3 h-3 rounded-full"></span>
+                                        </div>
+                                        <span x-text="active ? 'Deactivate tag' : 'Activate tag'"></span>
                                     </button>
 
-                                    <form action=" {{ route('admin.languages.toggle', $language->id )}}" method="POST">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit"
-                                            :class="active ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
-                                            class="px-4 py-2 text-sm font-medium text-white rounded-md transition-colors">
-                                            <span x-text="active ? 'Deactivate' : 'Activate'"></span>
-                                        </button>
-                                    </form>
-
                                 </div>
                             </div>
-                        </div>
-                    </template>
-
-                </tr>
+                        </td>
 
 
-                @endforeach
-            </tbody>
-        </table>
 
-        {{-- next page (pagenation) --}}
-        <div class="mt-4">
-            {{ $languages->links() }}
+                        {{-- --- Confirmation Modal --- --}}
+                        <template x-teleport="body">
+                            <div x-show="showModal"
+                                class="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black bg-opacity-50"
+                                x-cloak>
+
+                                {{-- Modal Content --}}
+                                <div @click.away="showModal = false"
+                                    class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden transform transition-all border border-gray-200">
+
+                                    {{-- Modal Header --}}
+                                    <div :class="active ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'"
+                                        class="px-4 py-3 border-b flex items-center font-bold">
+                                        <i :class="active ? 'fa-solid fa-ban' : 'fa-solid fa-circle-check'" class="mr-2"></i>
+                                        <span x-text="active ? 'Deactivate Tag' : 'Activate Tag'"></span>
+                                    </div>
+
+                                    {{-- Modal Body --}}
+                                    <div class="p-6 text-left">
+                                        <p class="text-gray-700">Are you sure you want to <span x-text="active ? 'deactivate' : 'activate'" class="font-bold"></span> <span class="font-bold text-black">tag</span>?</p>
+                                    </div>
+
+                                    {{-- Modal Footer --}}
+                                    <div class="px-4 py-3 bg-gray-50 flex justify-end space-x-3">
+
+                                        <button @click="showModal = false" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                            Cancel
+                                        </button>
+
+                                        <form action=" {{ route('admin.languages.toggle', $language->id )}}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                :class="active ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
+                                                class="px-4 py-2 text-sm font-medium text-white rounded-md transition-colors">
+                                                <span x-text="active ? 'Deactivate' : 'Activate'"></span>
+                                            </button>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                    </tr>
+
+
+                    @endforeach
+                </tbody>
+            </table>
         </div>
+    </div>
+
+    {{-- next page (pagenation) --}}
+    <div class="mt-4">
+        {{ $languages->links() }}
+    </div>
 
 </x-admin-layout>
