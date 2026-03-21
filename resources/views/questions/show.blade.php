@@ -12,6 +12,8 @@
             <div class="flex items-start space-x-4 w-full">
               <div class="flex-shrink-0">
                 <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-100 shadow-sm">
+
+                  {{-- avatar --}}
                   @if($question->user->avatar)
                   <img src="{{ $question->user->avatar }}" alt="user" class="w-16 h-16 rounded-full object-cover">
                   @else
@@ -22,30 +24,38 @@
 
               <div class="flex-1 min-w-0">
                 <div class="flex justify-between items-center mb-1">
+                  {{-- username --}}
                   <a href="{{ route('profile.show',$question->user->id )}}">
                     <h3 class="font-bold text-lg text-gray-800">{{ $question->user->name }}</h3>
                   </a>
 
-                  @if($question->answers->count() > 0)
-                  <x-answered-badge />
-                  @endif
+                  <div class="flex items-center gap-3 shrink-0">
+                    {{-- answer badge --}}
+                    @if($question->answers->count() > 0)
+                    <x-answered-badge />
+                    @endif
+
+                    {{-- delete button --}}
+                    @if(Auth::id() === $question->user_id)
+                    <form action="{{ route('questions.destroy', $question->id) }}" method="POST" onsubmit="return confirm('Really delete this question?');" class="shrink-0 me-10">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="bg-red-500 text-white text-sm px-3 py-1 rounded-full font-bold shadow-sm hover:bg-red-600 transition-colors">delete</button>
+                    </form>
+                    @endif
+                  </div>
+
 
                 </div>
 
                 {{-- question title --}}
-                <div class="flex justify-between items-start gap-3 mb-2">
-                  <h2 class="flex-1 min-w-0 text-[20px] font-extrabold text-gray-900 mb-2 break-all whitespace-pre-wrap">{{ $question->q_title }}</h2>
+                <h2 class="flex-1 min-w-0 text-[20px] font-extrabold text-gray-900 mb-2 break-all whitespace-pre-wrap">{{ $question->q_title }}</h2>
 
-                  {{-- delete button --}}
-                  @if(Auth::id() === $question->user_id)
-                  <form action="{{ route('questions.destroy', $question->id) }}" method="POST" onsubmit="return confirm('Really delete this question?');" class="shrink-0">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="bg-red-500 text-white text-sm px-3 py-1 rounded-full font-bold shadow-sm hover:bg-red-600 transition-colors">delete</button>
-                  </form>
-                  @endif
-
+                {{-- question body --}}
+                <div class="text-gray-700 leading-relaxed break-words whitespace-pre-wrap">{{ $question->q_content}}
                 </div>
+
+
 
 
                 {{-- footer(post date/tag/report) --}}
@@ -88,10 +98,8 @@
             </div>
           </div>
 
-          {{-- question body --}}
-          <div class="pb-2 mb-5 border-b">
-            <p class="text-gray-700 leading-relaxed  break-words whitespace-pre-wrap">{{ $question->q_content }}</p>
 
+          <div class="pb-2 mb-5 border-b">
             {{-- Start Discussion button --}}
             @if(auth()->check() && auth()->user()->role_id == 3)
             <div class="flex justify-end mt-4">
@@ -113,6 +121,7 @@
               <input type="hidden" name="question_id" value="{{ $question->id }}">
 
               <div class="flex items-start space-x-4">
+                {{-- avatar --}}
                 @if(auth()->user()->avatar)
                 <img src="{{ auth()->user()->avatar }}" alt="user" class="w-12 h-12 rounded-full object-cover">
                 @else
@@ -159,15 +168,16 @@
 
           {{-- display answers --}}
           @foreach($question->answers as $answer)
-          <div class="space-y-6">
+          <div class="space-y-1">
             <div class="flex items-start space-x-4 border-b py-4">
+              {{-- avatar --}}
               @if($answer->user->avatar)
               <img src="{{ $answer->user->avatar }}" alt="teacher" class="w-12 h-12 rounded-full object-cover">
               @else
               <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
               @endif
               <div class="flex-1 min-w-0">
-                <div class="flex justify-between items-center mb-4">
+                <div class="flex justify-between items-center mb-1">
                   <div class="flex items-center space-x-4">
                     <a href="{{ route('profile.show',$answer->user->id )}}">
                       <h4 class="font-bold text-[16px]">{{ $answer->user->name }}</h4>

@@ -9,8 +9,8 @@ $baseClass = "font-bold transition-all duration-300 active:translate-y-1 disable
 // choose class by type
 $styles = [
 'default' => [
-'following' => 'bg-gray-200 text-gray-700 px-3 py-1 rounded-full',
-'not_following' => 'bg-[#B178CC] text-white px-3 py-1 rounded-full'
+'following' => 'bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm',
+'not_following' => 'bg-[#B178CC] text-white px-3 py-1 rounded-full text-sm'
 ],
 'orange' => [ // for profile page
 'following' => 'bg-[#fda211] border border-[#fda211] text-white px-6 py-1 rounded-xl hover:bg-[#fdb211]',
@@ -66,7 +66,7 @@ $currentStyle = $styles[$type] ?? $styles['default'];
   <button
     @click="toggleFollow()"
     :class="following ? '{{ $currentStyle['following'] }}' : '{{ $currentStyle['not_following'] }}'"
-    class="{{ $baseClass }} min-w-[160px] inline-flex justify-center items-center"
+    class="{{ $baseClass }} min-w-[120px] sm:min-w-[140px] flex justify-center items-center"
     :disabled="loading">
 
     <span x-show="!loading" x-text="following ? '{{ $type === 'orange' ? 'Unfollow' : 'Following' }}' : 'Follow'"></span>

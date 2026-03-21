@@ -84,59 +84,67 @@
         <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-8">
 
           {{-- Section A: Discussion Header & Body --}}
-          <div class="pb-6 mb-6 border-b">
+          <div class="mb-3 border-b">
             <div class="flex items-start space-x-4 mb-4">
+
+              {{-- avatar --}}
               @if($discussion->user->avatar)
               <img src="{{ $discussion->user->avatar }}" alt="user" class="w-16 h-16 rounded-full object-cover">
               @else
               <i class="fa-solid fa-circle-user text-gray-400 text-[60px] leading-none"></i>
               @endif
 
-              <div class="flex-1">
+              <div class="flex-1 min-w-0">
                 <div class="flex justify-between items-center mb-1">
+                  {{-- username --}}
                   <a href="{{ route('profile.show',$discussion->user->id)}}">
                     <h3 class="font-bold text-lg text-gray-800">{{ $discussion->user->name }}</h3>
                   </a>
 
 
-                  @if($discussion->is_resolved)
-                  <x-resolved-badge />
-                  @endif
+                  <div class="flex items-center gap-3 shrink-0">
+                    @if($discussion->is_resolved)
+                    <x-resolved-badge />
+                    @endif
+
+                    {{-- Delete Button --}}
+                    @if(Auth::id() === $discussion->user_id)
+                    <form action="{{ route('discussions.destroy', $discussion->id) }}" method="POST" onsubmit="return confirm('Really delete this discussion?');" class="shrink-0 me-10">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="bg-red-500 text-white text-sm px-3 py-1 rounded-full font-bold shadow-sm hover:bg-red-600 transition-colors">
+                        delete
+                      </button>
+                    </form>
+                    @endif
+
+                  </div>
 
                 </div>
 
                 {{-- discussion title --}}
-                <div class="flex justify-between items-center mb-2">
-                  <h2 class="text-[20px] font-extrabold text-gray-900 leading-tight mb-2 break-words">
-                    {{ $discussion->d_title }}
-                  </h2>
+                <h2 class="flex-1 min-w-0 text-[20px] font-extrabold text-gray-900 leading-tight mb-2 break-words">
+                  {{ $discussion->d_title }}
+                </h2>
 
-                  {{-- Delete Button --}}
-                  @if(Auth::id() === $discussion->user_id)
-                  <form action="{{ route('discussions.destroy', $discussion->id) }}" method="POST" onsubmit="return confirm('Really delete this discussion?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="bg-red-500 text-white text-sm px-3 py-1.5 rounded-full font-bold shadow-sm hover:bg-red-600 transition-colors">
-                      delete
-                    </button>
-                  </form>
-                  @endif
-
+                {{-- discussion body --}}
+                <div class="text-gray-700 leading-relaxed break-words whitespace-pre-wrap">{{ $discussion->d_content }}
                 </div>
 
+
                 {{-- footer --}}
-                <div class="flex justify-between items-center text-[13px] text-gray-400">
+                <div class="flex justify-between items-center">
 
                   {{-- created at --}}
-                  <p>{{ $discussion->created_at->diffForHumans() }}</p>
+                  <p class="text-[13px] text-gray-400">{{ $discussion->created_at->diffForHumans() }}</p>
 
-                  <div class="flex items-center space-x-3">
+                  <div class="flex items-center space-x-4">
                     {{-- Mark resolved --}}
                     @if(Auth::id() === $discussion->user_id && !$discussion->is_resolved)
                     <form action="{{ route('discussions.resolve', $discussion->id) }}" method="POST">
                       @csrf
                       @method('PATCH')
-                      <button type="submit" class="bg-blue-500 text-white text-xs px-3 py-1 rounded-full font-bold hover:bg-blue-600">Mark Resolved</button>
+                      <button type="submit" class="bg-blue-500 text-white text-sm px-3 py-1 rounded-full font-bold hover:bg-blue-600">Mark Resolved</button>
                     </form>
                     @endif
 
@@ -168,17 +176,16 @@
                 </div>
               </div>
             </div>
-            <p class="text-gray-700 leading-relaxed break-words whitespace-pre-wrap">{{ $discussion->d_content }}</p>
+
           </div>
 
           {{-- Reply Form --}}
           @if(auth()->check() && auth()->user()->role_id == 3 || auth()->user()->role_id == 1)
-          <div class="pb-6 mb-1 border-b" x-data="commentForm">
+          <div class="pb-4 border-b" x-data="commentForm">
             <form action="{{ route('replies.store', $discussion->id) }}" method="POST" @submit="submit()">
               @csrf
               <div class="flex items-start space-x-4">
                 {{-- avatar --}}
-
                 @if( auth()->user()->avatar)
                 <img src="{{ auth()->user()->avatar }}" alt="user" class="w-12 h-12 rounded-full object-cover">
                 @else
@@ -194,7 +201,7 @@
                     x-model="content"
                     @input="resize($el)"
                     placeholder="write an insight here.."
-                    class="w-full border-gray-200 rounded-lg focus:ring-purple-400 focus:border-purple-400 text-sm resize-none overflow-hidden transition-all"
+                    class="w-full border-gray-200 rounded-lg focus:ring-purple-400 focus:border-purple-400 text-s resize-none overflow-hidden transition-all"
                     rows="2" required></textarea>
 
                   <div class="flex justify-end mt-2">
@@ -207,6 +214,7 @@
                         <i class="fa-solid fa-circle-notch animate-spin mr-2"></i>
                       </template>
                       <span x-text="isSubmitting ? 'Posting...' : 'Post'"></span>
+
                     </button>
                   </div>
 
@@ -220,17 +228,16 @@
           {{-- display replies --}}
           <div class="space-y-1">
             @foreach($discussion->replies as $reply)
-            <div class="flex items-start space-x-4 border-b last:border-0 py-4">
+            <div class="flex items-start space-x-4 border-b py-4">
               {{-- avatar --}}
               @if( $reply->user->avatar)
               <img src="{{ $reply->user->avatar }}" alt="user" class="w-12 h-12 rounded-full object-cover">
               @else
               <i class="fa-solid fa-circle-user text-gray-400 text-[50px] leading-none"></i>
               @endif
-
               <div class="flex-1 min-w-0">
-                <div class="flex justify-between items-center mb-2">
-                  <div class="flex items-center space-x-2">
+                <div class="flex justify-between items-center mb-1">
+                  <div class="flex items-center space-x-4">
                     <a href="{{ route('profile.show',$discussion->user->id)}}">
                       <h4 class="font-bold text-[16px]">{{ $reply->user->name }}</h4>
                     </a>
@@ -243,7 +250,7 @@
                     <form action="{{ route('replies.destroy', $reply->id) }}" method="POST" onsubmit="return confirm('Really delete this reply?');">
                       @csrf
                       @method('DELETE')
-                      <button type="submit" class="bg-red-500 text-white text-xs px-3 py-1.5 rounded-full font-bold shadow-sm hover:bg-red-600 transition-colors">
+                      <button type="submit" class="bg-red-500 text-white text-[14px] px-3 py-0.5 rounded-full font-bold shadow-sm hover:bg-red-600 transition-colors">
                         delete
                       </button>
                     </form>
@@ -267,7 +274,7 @@
 
 
                 </div>
-                <div class="text-sm text-gray-700 leading-relaxed break-words whitespace-pre-wrap">{{ $reply->r_content }}</div>
+                <div class="text-s text-gray-700 leading-relaxed break-words whitespace-pre-wrap">{{ $reply->r_content }}</div>
               </div>
             </div>
             @endforeach
