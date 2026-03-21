@@ -49,132 +49,134 @@
 
 
         {{-- Table --}}
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="border-b border-gray-200">
-                    <th class="px-6 py-4 font-bold text-gray-700 text-center">user name</th>
-                    <th class="px-6 py-4 font-bold text-gray-700 text-center">e-mail</th>
-                    <th class="px-6 py-4 font-bold text-gray-700 text-center">created-at</th>
-                    <th class="px-6 py-4 font-bold text-gray-700 text-center">status</th>
-                    <th class="px-6 py-4 text-gray-400"></th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[900px] text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-gray-200">
+                        <th class="px-6 py-4 font-bold text-gray-700 text-center">user name</th>
+                        <th class="px-6 py-4 font-bold text-gray-700 text-center">e-mail</th>
+                        <th class="px-6 py-4 font-bold text-gray-700 text-center">created-at</th>
+                        <th class="px-6 py-4 font-bold text-gray-700 text-center">status</th>
+                        <th class="px-6 py-4 text-gray-400"></th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
 
-                @foreach($users as $user)
+                    @foreach($users as $user)
 
 
-                {{-- display user--}}
-                <tr x-data="{ active: {{ $user->status ? 'true' : 'false'}}, open: false, showModal: false}" class="hover:bg-gray-50 transition-colors">
+                    {{-- display user--}}
+                    <tr x-data="{ active: {{ $user->status ? 'true' : 'false'}}, open: false, showModal: false}" class="hover:bg-gray-50 transition-colors">
 
-                    {{-- username--}}
-                    <td class="px-6 py-4">
-                        <div class="flex items-center space-x-3 justify-center">
-                            @if($user->avatar)
-                            <img src="{{ $user->avatar }}" alt="user" class="w-10 h-10 rounded-full object-cover">
-                            @else
-                            <i class="fa-solid fa-circle-user text-gray-400 text-[35px] leading-none"></i>
-                            @endif
-                            <span class="font-medium text-gray-800">{{ $user->name }}</span>
-                        </div>
-                    </td>
+                        {{-- username--}}
+                        <td class="px-6 py-4">
+                            <div class="flex items-center space-x-3 justify-center">
+                                @if($user->avatar)
+                                <img src="{{ $user->avatar }}" alt="user" class="w-10 h-10 rounded-full object-cover">
+                                @else
+                                <i class="fa-solid fa-circle-user text-gray-400 text-[35px] leading-none"></i>
+                                @endif
+                                <span class="font-medium text-gray-800">{{ $user->name }}</span>
+                            </div>
+                        </td>
 
-                    {{-- e-mail--}}
-                    <td class="px-6 py-4 text-gray-600 text-center text-sm">{{ $user->email }}</td>
+                        {{-- e-mail--}}
+                        <td class="px-6 py-4 text-gray-600 text-center text-sm">{{ $user->email }}</td>
 
-                    {{-- created-at --}}
-                    <td class="px-6 py-4 text-gray-500 text-center text-sm">{{ $user->created_at->format('Y-m-d') }}</td>
+                        {{-- created-at --}}
+                        <td class="px-6 py-4 text-gray-500 text-center text-sm">{{ $user->created_at->format('Y-m-d') }}</td>
 
-                    {{-- status--}}
-                    <td class="px-6 py-4 text-center">
-                        <div class="flex items-center justify-center space-x-2">
-                            <span :class="active ? 'text-green-600' : 'text-gray-400'">●</span>
-                            <span class="text-gray-800" x-text="active ? 'Active' : 'Inactive'"></span>
-                        </div>
-                    </td>
+                        {{-- status--}}
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex items-center justify-center space-x-2">
+                                <span :class="active ? 'text-green-600' : 'text-gray-400'">●</span>
+                                <span class="text-gray-800" x-text="active ? 'Active' : 'Inactive'"></span>
+                            </div>
+                        </td>
 
-                    <td class="px-6 py-4 text-right">
-                        <div class="relative inline-block text-left">
+                        <td class="px-6 py-4 text-right">
+                            <div class="relative inline-block text-left">
 
-                            {{-- menu button --}}
-                            <button @click="open = !open" class="text-gray-400 hover:text-gray-600 transition-colors p-2">
-                                <i class="fa-solid fa-ellipsis"></i>
-                            </button>
-
-                            {{-- dorp down menu --}}
-                            <div x-show="open" @click.away="open = false"
-                                class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg z-50 py-1">
-
-                                {{--1 view profile --}}
-                                <a href="{{ route('profile.show',$user->id)}}" class="group block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
-                                    <i class="fa-regular fa-eye mr-3 w-5 text-center text-gray-400 group-hover:text-blue-500"></i> View Profile
-                                </a>
-
-                                {{--2 Change status--}}
-                                <button @click="showModal = true" type="button"
-                                    class="group w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center transition-colors focus:outline-none">
-                                    <div class="mr-3 w-5 flex justify-center items-center">
-                                        <span :class="active ? 'bg-red-500' : 'bg-green-500'"
-                                            class="inline-block w-3 h-3 rounded-full"></span>
-                                    </div>
-                                    <span x-text="active ? 'Deactivate {{ $user->name }}' : 'Activate {{ $user->name }}'"></span>
+                                {{-- menu button --}}
+                                <button @click="open = !open" class="text-gray-400 hover:text-gray-600 transition-colors p-2">
+                                    <i class="fa-solid fa-ellipsis"></i>
                                 </button>
 
-                            </div>
-                        </div>
-                    </td>
+                                {{-- dorp down menu --}}
+                                <div x-show="open" @click.away="open = false"
+                                    class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg z-50 py-1">
 
+                                    {{--1 view profile --}}
+                                    <a href="{{ route('profile.show',$user->id)}}" class="group block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                                        <i class="fa-regular fa-eye mr-3 w-5 text-center text-gray-400 group-hover:text-blue-500"></i> View Profile
+                                    </a>
 
-
-                    {{-- --- Confirmation Modal --- --}}
-                    <template x-teleport="body">
-                        <div x-show="showModal"
-                            class="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black bg-opacity-50"
-                            x-cloak>
-
-                            {{-- Modal Content --}}
-                            <div @click.away="showModal = false"
-                                class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden transform transition-all border border-gray-200">
-
-                                {{-- Modal Header --}}
-                                <div :class="active ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'"
-                                    class="px-4 py-3 border-b flex items-center font-bold">
-                                    <i :class="active ? 'fa-solid fa-user-slash' : 'fa-solid fa-user-check'" class="mr-2"></i>
-                                    <span x-text="active ? 'Deactivate {{ $user->name }}' : 'Activate {{ $user->name }}'"></span>
-                                </div>
-
-                                {{-- Modal Body --}}
-                                <div class="p-6 text-left">
-                                    <p class="text-gray-700">Are you sure you want to <span x-text="active ? 'deactivate' : 'activate'" class="font-bold"></span> <span class="font-bold text-black">{{ $user->name }}</span>?</p>
-                                </div>
-
-                                {{-- Modal Footer --}}
-                                <div class="px-4 py-3 bg-gray-50 flex justify-end space-x-3">
-
-                                    <button @click="showModal = false" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                                        Cancel
+                                    {{--2 Change status--}}
+                                    <button @click="showModal = true" type="button"
+                                        class="group w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center transition-colors focus:outline-none">
+                                        <div class="mr-3 w-5 flex justify-center items-center">
+                                            <span :class="active ? 'bg-red-500' : 'bg-green-500'"
+                                                class="inline-block w-3 h-3 rounded-full"></span>
+                                        </div>
+                                        <span x-text="active ? 'Deactivate {{ $user->name }}' : 'Activate {{ $user->name }}'"></span>
                                     </button>
 
-                                    <form action="{{ route('admin.users.toggle' , $user->id) }}" method="POST">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit"
-                                            :class="active ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
-                                            class="px-4 py-2 text-sm font-medium text-white rounded-md transition-colors">
-                                            <span x-text="active ? 'Deactivate' : 'Activate'"></span>
-                                        </button>
-                                    </form>
-
                                 </div>
                             </div>
-                        </div>
-                    </template>
+                        </td>
 
-                </tr>
-                @endforeach
 
-            </tbody>
-        </table>
+
+                        {{-- --- Confirmation Modal --- --}}
+                        <template x-teleport="body">
+                            <div x-show="showModal"
+                                class="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black bg-opacity-50"
+                                x-cloak>
+
+                                {{-- Modal Content --}}
+                                <div @click.away="showModal = false"
+                                    class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden transform transition-all border border-gray-200">
+
+                                    {{-- Modal Header --}}
+                                    <div :class="active ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'"
+                                        class="px-4 py-3 border-b flex items-center font-bold">
+                                        <i :class="active ? 'fa-solid fa-user-slash' : 'fa-solid fa-user-check'" class="mr-2"></i>
+                                        <span x-text="active ? 'Deactivate {{ $user->name }}' : 'Activate {{ $user->name }}'"></span>
+                                    </div>
+
+                                    {{-- Modal Body --}}
+                                    <div class="p-6 text-left">
+                                        <p class="text-gray-700">Are you sure you want to <span x-text="active ? 'deactivate' : 'activate'" class="font-bold"></span> <span class="font-bold text-black">{{ $user->name }}</span>?</p>
+                                    </div>
+
+                                    {{-- Modal Footer --}}
+                                    <div class="px-4 py-3 bg-gray-50 flex justify-end space-x-3">
+
+                                        <button @click="showModal = false" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                            Cancel
+                                        </button>
+
+                                        <form action="{{ route('admin.users.toggle' , $user->id) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                :class="active ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
+                                                class="px-4 py-2 text-sm font-medium text-white rounded-md transition-colors">
+                                                <span x-text="active ? 'Deactivate' : 'Activate'"></span>
+                                            </button>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                    </tr>
+                    @endforeach
+
+                </tbody>
+            </table>
+        </div>
 
         {{-- next page (pagenation) --}}
         <div class="mt-4">
