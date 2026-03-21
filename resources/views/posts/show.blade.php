@@ -21,7 +21,6 @@
                     <h3 class="font-bold text-lg text-gray-800">{{ $post->user->name }}</h3>
                   </a>
 
-
                   {{-- delete --}}
                   @if(Auth::id() === $post->user_id)
                   <form action="{{ route('posts.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Really delete this post?');">
@@ -40,6 +39,10 @@
                 <h2 class="text-[20px] font-extrabold text-gray-900 mb-2 break-words">
                   {{ $post->p_title }}
                 </h2>
+
+                {{-- post body --}}
+                <div class="text-gray-700 leading-relaxed break-words whitespace-pre-wrap">{{ $post->p_content}}
+                </div>
 
                 {{-- footer(post date/tag/report) --}}
                 <div class="flex justify-between items-center w-full">
@@ -75,16 +78,17 @@
 
                   </div>
                 </div>
+
+                
+
               </div>
             </div>
           </div>
 
-          {{-- post body --}}
-          <p class="text-gray-700 leading-relaxed pb-2 mb-5 border-b break-words whitespace-pre-wrap">{{ $post->p_content}}
-          </p>
+
 
           {{-- comment form --}}
-          <div class="pb-4 border-b" x-data="commentForm">
+          <div class="py-4 border-y" x-data="commentForm">
             <form action="{{ route('comments.store') }}" method="POST" @submit="submit()">
               @csrf
               <div class="flex items-start space-x-4">
@@ -131,8 +135,8 @@
             </form>
           </div>
 
-          {{-- comments --}}
-          <div class="space-y-6">
+          {{-- display comments --}}
+          <div class="space-y-1">
             @foreach($post->comments as $comment)
             <div class="flex items-start space-x-4 border-b py-4">
               @if($comment->user->avatar)

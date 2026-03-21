@@ -1,77 +1,76 @@
- {{--@php for see more  --}}
+{{-- @php for see more --}}
 @php
-  $isAll = request('suggested') === 'all';
+    $isAll = request('suggested') === 'all';
 @endphp
 
-{{-- begining of layout --}}
+{{-- beginning of layout --}}
 <div class="space-y-3">
 
-  <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100">
-    <div class="flex justify-between items-end m-4">
-      <h2 class="text-[24px] font-bold">Suggested Users</h2>
-      @if($isAll)
-        <a href="{{ url()->current() }}" class="text-sm hover:underline">
-          see less
-        </a>
-      @else
-        <a href="{{ request()->fullUrlWithQuery(['suggested' => 'all']) }}"
-          class="text-sm hover:underline">
-          see more
-        </a>
-      @endif
-    </div>
-  </div>
-
-  <div class="space-y-2">
-
-    <!-- user profile -->
-    @forelse($users as $user)
-    <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-3">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-          <div class="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center">
-            @if($user->avatar)
-              <img src="{{ $user->avatar }}" class="w-full h-full object-cover">
+    <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100">
+        <div class="flex justify-between items-end m-4">
+            <h2 class="text-[24px] font-bold">Suggested Users</h2>
+            @if($isAll)
+                <a href="{{ url()->current() }}" class="text-sm hover:underline">
+                    see less
+                </a>
             @else
-              <i class="fa-solid fa-circle-user text-gray-400 text-[56px]"></i>
+                <a href="{{ request()->fullUrlWithQuery(['suggested' => 'all']) }}"
+                   class="text-sm hover:underline">
+                    see more
+                </a>
             @endif
-          </div>
-
-          <div>
-            <p class="text-[16px] font-bold">
-              <a href="{{ route('profile.show', $user) }}">
-                {{ $user->name }}
-              </a>
-            </p>
-            <p class="text-[16px]">
-              <i class="fa-solid fa-message text-gray-600"></i>
-              <span>{{ $user->firstLanguage->name ?? $user->f_lang }}</span>
-            </p>
-            <p class="text-[15px]">
-              <i class="fa-solid fa-pen text-gray-600"></i>
-              <span>{{ $user->studyLanguage->name ?? $user->s_lang }}</span>
-            </p>
-          </div>
         </div>
-
-        <x-follow-button :user="$user" />
-
-       {{-- <form method="POST" action="{{ route('follow.store', $user) }}">
-          @csrf
-          <button
-            class="bg-[#B178CC] text-white text-[13px] font-bold px-3 py-1 rounded-full hover:bg-[#a068ba] transition-all hover:scale-105 active:scale-95">
-            Follow
-          </button>
-        </form> --}}
-
-      </div>
     </div>
-  @empty
-    <p class="text-gray-400 text-sm text-center py-4">
-      No suggestions yet.
-    </p>
-  @endforelse
 
-  </div>
+    <div class="space-y-2">
+
+        {{-- user profile --}}
+        @forelse($users as $user)
+            <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-3 overflow-hidden">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+
+                    {{-- left: avatar + user info --}}
+                    <div class="flex items-center gap-3 min-w-0 flex-1">
+                        <div class="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center shrink-0">
+                            @if($user->avatar)
+                                <img src="{{ $user->avatar }}" class="w-full h-full object-cover">
+                            @else
+                                <i class="fa-solid fa-circle-user text-gray-400 text-[56px]"></i>
+                            @endif
+                        </div>
+
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[16px] font-bold leading-tight truncate">
+                                <a href="{{ route('profile.show', $user) }}">
+                                    {{ $user->name }}
+                                </a>
+                            </p>
+
+                            <p class="text-[16px] leading-tight truncate">
+                                <i class="fa-solid fa-message text-gray-600"></i>
+                                <span>{{ $user->firstLanguage->name ?? $user->f_lang }}</span>
+                            </p>
+
+                            <p class="text-[15px] leading-tight truncate">
+                                <i class="fa-solid fa-pen text-gray-600"></i>
+                                <span>{{ $user->studyLanguage->name ?? $user->s_lang }}</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    {{-- right: follow button --}}
+                    <div class="w-full lg:w-auto">
+                        <x-follow-button :user="$user" />
+                    </div>
+
+                </div>
+            </div>
+        @empty
+            <p class="text-gray-400 text-sm text-center py-4">
+                No suggestions yet.
+            </p>
+        @endforelse
+
+    </div>
 
 </div>

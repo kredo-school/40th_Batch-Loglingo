@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('Loglingo', 'Admin') }}</title>
+    <title>{{ config('Loglingo', 'Log Lingo - Admin') }}</title>
+
+       <link rel="icon" type="image/png" href="{{ asset('images/zoomed-octopus.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
