@@ -25,7 +25,10 @@ class SearchController extends Controller
 
         // 2. search by word
         $query->when($request->search, function ($q, $search) {
-            $q->where('p_content', 'like', "%{$search}%");
+            $q->where(function ($sub) use ($search) {
+                $sub->where('p_title', 'like', "%{$search}%")
+                    ->orWhere('p_content', 'like', "%{$search}%");
+            });
         });
 
         $posts = $query->latest()->paginate(10)->withQueryString();
