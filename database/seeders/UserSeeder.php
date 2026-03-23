@@ -24,8 +24,8 @@ class UserSeeder extends Seeder
         // 1. create admin
         $this->createAdminUsers($allLanguages);
 
-        // 2. create 20 teachers
-        for ($i = 1; $i <= 20; $i++) {
+        // 2. create 30 teachers
+        for ($i = 1; $i <= 30; $i++) {
             // puck up 2 languages at random
             $langs = $allLanguages->random(2);
 

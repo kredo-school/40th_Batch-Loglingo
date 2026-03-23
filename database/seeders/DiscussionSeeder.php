@@ -17,30 +17,30 @@ class DiscussionSeeder extends Seeder
         $users = User::all();
         $languages = Language::all();
 
-        // 1. 通常のディスカッションを 90件 生成（合計100にするため）
-        Discussion::factory(90)
+        // 1. generate normal 90discussions
+        Discussion::factory(150)
             ->make()
             ->each(function ($discussion) use ($users, $languages) {
 
-                // 3割の確率で引用(question_id)をなしにする
+                // 30% without quoted question
                 if (rand(1, 10) <= 3) {
                     $discussion->question_id = null;
-                    // タイトルを少し変えて「一般トピック」感を出す
+                    // change title
                     $discussion->d_title = "Topic: " . $discussion->d_title;
                 }
                 $discussion->save();
 
-                // 言語タグの紐付け
+                // link language tag
                 $discussion->tags()->attach(
                     $languages->random(1)->pluck('id')->toArray()
                 );
 
-                // 返信データの作成（1〜5件でバラけさせる）
+                // generate replies 1 to 5
                 Reply::factory(rand(1, 5))->create([
                     'discussion_id' => $discussion->id,
                 ]);
 
-                // 20%の確率で通報
+                // 20% with reports
                 if (rand(1, 10) > 8) {
                     $discussion->reports()->create([
                         'user_id' => $users->random()->id,
@@ -48,12 +48,12 @@ class DiscussionSeeder extends Seeder
                 }
             });
 
-        // 2. 通報が多いテスト用データを 10件 生成
+        // 2. 10 discussions with report
         Discussion::factory(10)
             ->make(['d_title' => '⚠️ HIGH REPORT TEST'])
             ->each(function ($discussion) use ($users, $languages) {
 
-                // ここも3割の確率で引用なし
+                // 30% without quoted question
                 if (rand(1, 10) <= 3) {
                     $discussion->question_id = null;
                 }
@@ -63,7 +63,7 @@ class DiscussionSeeder extends Seeder
                     $languages->random(1)->pluck('id')->toArray()
                 );
 
-                // 5人から通報
+                // 5 people report
                 $shuffledUsers = $users->shuffle();
                 for ($i = 0; $i < min(5, $shuffledUsers->count()); $i++) {
                     $discussion->reports()->create([
@@ -71,7 +71,7 @@ class DiscussionSeeder extends Seeder
                     ]);
                 }
 
-                // 返信にも通報
+                // report its reply as well
                 Reply::factory(3)->create([
                     'discussion_id' => $discussion->id,
                 ])->each(function ($reply) use ($users) {
