@@ -84,8 +84,8 @@
         <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-8">
 
           {{-- Section A: Discussion Header & Body --}}
-          <div class="mb-3 border-b">
-            <div class="flex items-start space-x-4 mb-4">
+          <div class="mb-4 border-b">
+            <div class="flex items-start space-x-4 mb-3">
 
               {{-- avatar --}}
               @if($discussion->user->avatar)
@@ -123,7 +123,7 @@
                 </div>
 
                 {{-- discussion title --}}
-                <h2 class="flex-1 min-w-0 text-[20px] font-extrabold text-gray-900 leading-tight mb-2 break-words">
+                <h2 class="flex-1 min-w-0 text-[20px] font-extrabold text-gray-900 leading-tight border-b mb-4 break-words">
                   {{ $discussion->d_title }}
                 </h2>
 
@@ -266,7 +266,7 @@
                     : false;
                     @endphp
 
-                    <x-report-button :model="$discussion" :reported="$reportedByMe" />
+                    <x-report-button :model="$reply" :reported="$reportedByMe" />
 
 
 

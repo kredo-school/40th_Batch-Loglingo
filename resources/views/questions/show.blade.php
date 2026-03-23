@@ -8,7 +8,7 @@
 
 
           {{-- question header --}}
-          <div class="mb-3">
+          <div class="mb-1">
             <div class="flex items-start space-x-4 w-full">
               <div class="flex-shrink-0">
                 <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-100 shadow-sm">
@@ -49,7 +49,7 @@
                 </div>
 
                 {{-- question title --}}
-                <h2 class="flex-1 min-w-0 text-[20px] font-extrabold text-gray-900 mb-2 break-all whitespace-pre-wrap">{{ $question->q_title }}</h2>
+                <h2 class="flex-1 min-w-0 text-[20px] font-extrabold text-gray-900 mb-4 border-b break-all whitespace-pre-wrap">{{ $question->q_title }}</h2>
 
                 {{-- question body --}}
                 <div class="text-gray-700 leading-relaxed break-words whitespace-pre-wrap">{{ $question->q_content}}
@@ -202,7 +202,7 @@
                     : false;
                     @endphp
 
-                    <x-report-button :model="$question" :reported="$reportedByMe" />
+                    <x-report-button :model="$answer" :reported="$reportedByMe" />
 
 
                   </div>

@@ -7,7 +7,7 @@
         <div class="bg-white rounded-[1rem] shadow-sm border border-gray-100 p-8">
 
           {{-- post header --}}
-          <div class="mb-6">
+          <div class="mb-3">
             <div class="flex items-start space-x-4 w-full">
               @if($post->user->avatar)
               <img src="{{ $post->user->avatar }}" alt="user" class="w-16 h-16 rounded-full object-cover">
@@ -33,16 +33,23 @@
                 </div>
 
                 {{-- event date --}}
-                <p class="text-[15px] text-gray-600 block mb-1">{{ $post->event_date->format('m/d/Y') }}</p>
+                <p class="text-[15px] text-gray-600 block mb-2">{{ $post->event_date->format('m/d/Y') }}</p>
 
                 {{-- post title --}}
-                <h2 class="text-[20px] font-extrabold text-gray-900 mb-2 break-words">
-                  {{ $post->p_title }}
+                <h2 class="text-[20px] font-extrabold text-gray-900 mb-3 break-words pb-2 border-b">{{ $post->p_title }}
                 </h2>
 
                 {{-- post body --}}
-                <div class="text-gray-700 leading-relaxed break-words whitespace-pre-wrap">{{ $post->p_content}}
-                </div>
+                <!-- <div class="text-gray-700 leading-relaxed break-words whitespace-pre-wrap">{{ $post->p_content}}
+                </div> -->
+
+                {{-- post body --}}
+                <div
+                  class="mt-2 px-4 pt-1 pb-6 text-gray-700 text-base leading-8 break-words whitespace-pre-wrap rounded-[1rem] border border-gray-100 bg-white"
+                  style="
+                    background-image: linear-gradient(to bottom, transparent 31px, #dbe4f0 32px);
+                    background-size: 100% 32px;
+                "><p class="text-[15px] text-gray-600 block mb-1"><br>{{ $post->p_content }}</p></div>
 
                 {{-- footer(post date/tag/report) --}}
                 <div class="flex justify-between items-center w-full">
@@ -51,7 +58,7 @@
                   <p class="text-[13px] text-gray-400">{{ $post->created_at->diffForHumans() }}</p>
 
                   {{-- footer --}}
-                  <div class="flex items-center space-x-3">
+                  <div class="flex items-center space-x-3 mt-3">
 
                     {{-- bookmark --}}
                     <x-bookmark-button :model="$post" />
@@ -79,7 +86,7 @@
                   </div>
                 </div>
 
-                
+
 
               </div>
             </div>
@@ -174,7 +181,7 @@
                     : false;
                     @endphp
 
-                    <x-report-button :model="$post" :reported="$reportedByMe" />
+                    <x-report-button :model="$comment" :reported="$reportedByMe" />
 
                   </div>
                 </div>

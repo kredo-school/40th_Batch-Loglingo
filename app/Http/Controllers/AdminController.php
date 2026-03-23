@@ -9,6 +9,8 @@ use App\Models\Post;
 use App\Models\Question;
 use App\Models\Language;
 use App\Models\Discussion;
+use App\Models\Answer;
+use App\Models\Reply;
 
 class AdminController extends Controller
 {
@@ -65,63 +67,90 @@ class AdminController extends Controller
 
     public function indexPosts(Request $request)
     {
-        $posts = Post::with(['user', 'tags', 'reports', 'comments.reports'])
-            ->withCount('reports')
-            // 1. search
-            ->when($request->search, function ($q, $search) {
-                $q->where(function ($sub) use ($search) {
-                    $sub->where('p_title', 'like', "%{$search}%") // カラム名が p_title の場合
-                        ->orWhere('p_content', 'like', "%{$search}%"); // カラム名が p_content の場合
-                });
-            })
-            // 2. status filter
-            ->when($request->status, function ($q, $status) {
-                if ($status === 'active') {
-                    $q->where('status', true);
-                } elseif ($status === 'inactive') {
-                    $q->where('status', false);
-                }
-            })
-            // 3. sort by
-            ->when($request->sort === 'reports', function ($q) {
-                $q->orderBy('reports_count', 'desc');
-            }, function ($q) {
-                $q->latest();
-            })
-            ->paginate(20)
-            ->withQueryString();
+        $query = Post::with(['user', 'tags', 'reports', 'comments.reports'])
+            ->withCount('reports as p_reports_count')
+            ->addSelect([
+                'comments_reports_count' => \App\Models\Comment::selectRaw('count(*)')
+                    ->join('reports', 'comments.id', '=', 'reports.reportable_id')
+                    ->where('reports.reportable_type', \App\Models\Comment::class)
+                    ->whereColumn('comments.post_id', 'posts.id')
+            ]);
 
+        // 1. search
+        $query->when($request->search, function ($q, $search) {
+            $q->where(function ($sub) use ($search) {
+                $sub->where('p_title', 'like', "%{$search}%")
+                    ->orWhere('p_content', 'like', "%{$search}%");
+            });
+        });
+
+        // 2. status filter
+        $query->when($request->status, function ($q, $status) {
+            if ($status === 'active') {
+                $q->where('status', true);
+            } elseif ($status === 'inactive') {
+                $q->where('status', false);
+            }
+        });
+
+        // 3. sort by
+        if ($request->sort === 'reports') {
+            $query->orderByRaw('(p_reports_count + COALESCE(comments_reports_count, 0)) DESC');
+        } else {
+            $query->latest();
+        }
+
+        $posts = $query->paginate(20)->withQueryString();
+
+        foreach ($posts as $post) {
+            $post->total_reports_count =
+                ($post->p_reports_count ?? 0) + ($post->comments_reports_count ?? 0);
+        }
 
         return view('admin.posts.index', compact('posts'));
     }
 
     public function indexQna(Request $request)
     {
-        $questions = Question::with(['user', 'tags', 'reports', 'answers.reports'])
-            ->withCount('reports')
-            // 1. search
-            ->when($request->search, function ($q, $search) {
-                $q->where(function ($sub) use ($search) {
-                    $sub->where('q_title', 'like', "%{$search}%") // カラム名が p_title の場合
-                        ->orWhere('q_content', 'like', "%{$search}%"); // カラム名が p_content の場合
-                });
-            })
-            // 2. status filter
-            ->when($request->status, function ($q, $status) {
-                if ($status === 'active') {
-                    $q->where('status', true);
-                } elseif ($status === 'inactive') {
-                    $q->where('status', false);
-                }
-            })
-            // 3. sort by
-            ->when($request->sort === 'reports', function ($q) {
-                $q->orderBy('reports_count', 'desc');
-            }, function ($q) {
-                $q->latest();
-            })
-            ->paginate(20)
-            ->withQueryString();
+        $query = Question::with(['user', 'tags', 'reports', 'answers.reports'])
+            ->withCount('reports as q_reports_count')
+            ->addSelect([
+                'answers_reports_count' => Answer::selectRaw('count(*)')
+                    ->join('reports', 'answers.id', '=', 'reports.reportable_id')
+                    ->where('reports.reportable_type', Answer::class)
+                    ->whereColumn('answers.question_id', 'questions.id')
+            ]);
+
+        // 1. search
+        $query->when($request->search, function ($q, $search) {
+            $q->where(function ($sub) use ($search) {
+                $sub->where('q_title', 'like', "%{$search}%")
+                    ->orWhere('q_content', 'like', "%{$search}%");
+            });
+        });
+
+        // 2. status filter
+        $query->when($request->status, function ($q, $status) {
+            if ($status === 'active') {
+                $q->where('status', true);
+            } elseif ($status === 'inactive') {
+                $q->where('status', false);
+            }
+        });
+
+        // 3. sort by
+        if ($request->sort === 'reports') {
+            $query->orderByRaw('(q_reports_count + COALESCE(answers_reports_count, 0)) DESC');
+        } else {
+            $query->latest();
+        }
+
+        $questions = $query->paginate(20)->withQueryString();
+
+        foreach ($questions as $question) {
+            $question->total_reports_count =
+                ($question->q_reports_count ?? 0) + ($question->answers_reports_count ?? 0);
+        }
 
         return view('admin.qna.index', compact('questions'));
     }
@@ -133,9 +162,9 @@ class AdminController extends Controller
             ->withCount('reports as d_reports_count')
             // 2. total report count
             ->addSelect([
-                'replies_reports_count' => \App\Models\Reply::selectRaw('count(*)')
+                'replies_reports_count' => Reply::selectRaw('count(*)')
                     ->join('reports', 'replies.id', '=', 'reports.reportable_id')
-                    ->where('reports.reportable_type', \App\Models\Reply::class)
+                    ->where('reports.reportable_type', Reply::class)
                     ->whereColumn('replies.discussion_id', 'discussions.id')
             ]);
 

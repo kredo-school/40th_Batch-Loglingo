@@ -21,7 +21,7 @@
                         {{-- title --}}
                         <div class="px-4">
                             <label for="q_title" class="block text-xl mb-2">Title</label>
-                            <input type="text" name="q_title" maxlength="255" id="q_title" value="{{ old('q_title') }}" required placeholder="What's this about?" class="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition outline-none">
+                            <input type="text" name="q_title" maxlength="100" id="q_title" value="{{ old('q_title') }}" required placeholder="What's this about?" class="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition outline-none">
 
                             @error('q_title')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
