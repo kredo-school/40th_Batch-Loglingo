@@ -7,7 +7,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                  'resources/js/app.js',
-                 'resources/js/admin-tag-preview.js',
+                 'public/js/admin-tag-preview.js',
                 ],
             refresh: true,
         }),
