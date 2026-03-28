@@ -31,7 +31,7 @@
                 <div class="w-full md:w-1/2 flex justify-center">
                     <div class="relative w-full max-w-md rounded-[2rem] flex flex-col items-center text-center">
                         <div class="w-full mb-6 flex items-center justify-center">
-                            <img src="{{ asset('/images/logo.png') }}" alt="LogLingo Logo">
+                            <img src="{{ asset('/images/Logo.png') }}" alt="LogLingo Logo">
                         </div>
                         <div class="space-y-4">
                             <p>This app is for language learners. You can log your day in the language you are studying, and interact with your friends and teachers! <br> Let's enjoy and practice together!!</p>
